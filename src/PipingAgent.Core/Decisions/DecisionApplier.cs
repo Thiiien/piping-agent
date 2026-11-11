@@ -43,8 +43,6 @@ namespace PipingAgent.Core.Decisions
 
         public DecisionStats Stats { get; } = new DecisionStats();
 
-        public bool Any => _decisions.Count > 0;
-
         private IEnumerable<Decision> Of(DecisionOp op) => _decisions.Where(d => d.Op == op);
 
         private static string? Source(Decision d) => d.Target.TryGetValue("source", out var s) ? s : null;

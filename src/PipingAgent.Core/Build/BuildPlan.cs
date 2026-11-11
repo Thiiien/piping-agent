@@ -12,20 +12,8 @@ namespace PipingAgent.Core.Build
     {
         public string LayerPattern { get; set; } = "PA-{line}-{kind}";
 
-        /// <summary>Dựng vào bản vẽ mới có tham chiếu bản 2D làm nền, hay vào chính bản đang mở.</summary>
-        public BuildTarget Target { get; set; } = BuildTarget.NewDrawing;
-
-        /// <summary>Bỏ qua phần tử thiếu đường kính ngoài thay vì dừng.</summary>
-        public bool SkipWithoutOd { get; set; } = true;
-
         /// <summary>Chỉ để kiểm thử nhóm hoàn tác: ném lỗi sau khi dựng chừng này phần tử.</summary>
         public int? FailAfterItems { get; set; }
-    }
-
-    public enum BuildTarget
-    {
-        NewDrawing,
-        CurrentDrawing,
     }
 
     public abstract class BuildItem

@@ -111,10 +111,6 @@ peer.AsyncRequestHandler = async (method, parameters) =>
     lastActivity = DateTime.UtcNow;
     switch (method)
     {
-        case "host.ping":
-            return JsonRpcPeer.ToElement(new { ok = true, model = provider.Model, tools = registry.Tools.Select(t => t.Name) });
-        case "tools.list":
-            return JsonRpcPeer.ToElement(registry.Tools.Select(t => new { t.Name, t.Description, tier = t.Tier.ToString(), schema = t.InputSchema }));
         case "session.start":
             {
                 var request = JsonRpcPeer.FromElement<SessionRequest>(parameters) ?? new SessionRequest();

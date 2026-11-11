@@ -85,17 +85,6 @@ public class GeometryOpsTests
         Assert.Throws<ArgumentException>(() => Box2.FromPoints(Array.Empty<Point2>()));
     }
 
-    [Fact]
-    public void Box3_union_and_plan()
-    {
-        var a = Box3.FromPoints(new Point3(0, 0, 0), new Point3(1, 1, 1));
-        var b = Box3.FromPoints(new Point3(2, -1, 5), new Point3(3, 0, 6));
-        var u = a.Union(b);
-        Assert.Equal(new Point3(0, -1, 0), u.Min);
-        Assert.Equal(new Point3(3, 1, 6), u.Max);
-        Assert.Equal(new Box2(new Point2(0, -1), new Point2(3, 1)), u.Plan);
-    }
-
     [Theory]
     [InlineData(5, 3, 3)]      // hình chiếu trong đoạn
     [InlineData(-4, 3, 5)]     // hình chiếu trước A, đo tới A

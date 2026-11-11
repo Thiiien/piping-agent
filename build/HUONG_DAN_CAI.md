@@ -29,7 +29,7 @@ Nếu không thấy dòng đã nạp, kiểm tra biến `SECURELOAD`: gõ `SECUR
 
 Sau khi nạp, ribbon có thêm thẻ `Piping Agent` với ba panel theo đúng kiểu panel chuẩn của AutoCAD: nút lớn cho lệnh chính, cột nút nhỏ ba hàng cho lệnh phụ, biểu tượng nét phẳng đổi màu theo theme sáng tối (`COLORTHEME`).
 
-- Isometric sang 3D: nút lớn `Đọc tờ ISO`; nút tách `Dựng 3D` (bấm phần trên dựng vào bản vẽ mới, mũi tên chọn Bản đang mở hoặc Xem trước); cột nhỏ `Cổng nối`, `Nạp IR`, `Xuất JSON`.
+- Isometric sang 3D: nút lớn `Đọc tờ ISO`; nút tách `Dựng 3D` (bấm phần trên dựng vào bản vẽ mới, mũi tên chọn Bản đang mở hoặc Xem trước); cột nhỏ `Cổng nối`, `Nạp IR`.
 - Mặt bằng: nút tách `Nhận diện` (cả bản vẽ hoặc trong cửa sổ); nút lớn `Kiểm tra`; cột nhỏ `Sửa`, `Bỏ qua`, `Chạy lại`.
 - Trợ lý: nút lớn `Bảng điều khiển`; cột nhỏ `Hỏi agent`, `Cấu hình agent`, `Kiểm tra plug-in`.
 

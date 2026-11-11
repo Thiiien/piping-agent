@@ -22,8 +22,6 @@ namespace PipingAgent.AutoCAD.Session
             _document = document ?? throw new ArgumentNullException(nameof(document));
         }
 
-        public int Count => _transients.Count;
-
         /// <summary>Tô sáng các đối tượng theo handle. Handle không tồn tại thì bỏ qua.</summary>
         public int Highlight(IEnumerable<string> handles, short colorIndex = 1)
         {

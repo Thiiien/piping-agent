@@ -93,9 +93,7 @@ namespace PipingAgent.AutoCAD.Commands
                 string? preview = null;
                 try
                 {
-                    var options = new PipingAgent.Core.Build.BuildOptions();
-                    var plan = PipingAgent.Core.Build.BuildPlan.FromModel(session.LastResult.Model, options);
-                    PipingAgent.Core.Build.BuildPlanExtras.AddExtras(plan, session.LastResult.Model, options, PluginApp.Sessions?.Equipment, session.Profile?.Tolerances.DefaultSectionSize ?? 300);
+                    var plan = BuildCommand.Plan(session.LastResult.Model, new PipingAgent.Core.Build.BuildOptions(), session);
                     var blockers = session.LastResult.Model.Issues.Count(i => i.Severity == PipingAgent.Core.Ir.Severity.Blocker && i.Status == PipingAgent.Core.Ir.IssueStatus.Open);
                     preview = plan.Summary() + (blockers > 0 ? $". Còn {blockers} vấn đề chặn, PA_BUILD bị khoá" : ". Sẵn sàng PA_BUILD");
                 }
@@ -181,10 +179,7 @@ namespace PipingAgent.AutoCAD.Commands
             var choice = model?.SelectedProfile;
             if (model == null || session == null || choice == null) return;
             session.ProfilePath = choice.Path;
-            var loaded = ProfileStore.Load(choice.Path);
-            session.Profile = loaded.Profile;
-            session.ProfileErrors.Clear();
-            session.ProfileErrors.AddRange(loaded.Errors);
+            var loaded = session.LoadProfile();
             model.ShowProfile(session.Profile, session.ProfileErrors, choice.Path);
             if (loaded.Ok) ProfileStore.RememberProfile(choice.Path);
             model.Status = loaded.Ok ? $"Đã chọn hồ sơ {loaded.Profile!.Id}. Bấm Quét để chạy lại." : "Hồ sơ có lỗi, xem thẻ Hồ sơ.";

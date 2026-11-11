@@ -67,9 +67,6 @@ namespace PipingAgent.Core.Catalog
             return value;
         }
 
-        /// <summary>Cỡ inch của một DN, ví dụ 150 ra <c>6</c>. Null nếu DN không có trong bảng.</summary>
-        public static string? DnToNpsText(int dn) => DnToNps.TryGetValue(dn, out var s) ? s : null;
-
         public static bool IsStandardDn(int dn) => DnToNps.ContainsKey(dn);
 
         private static Dictionary<int, string> BuildDnToNps()

@@ -202,7 +202,7 @@ namespace PipingAgent.UI
             Host = host;
         }
 
-        public IHostActions? Host { get; set; }
+        public IHostActions? Host { get; }
 
         public string Status { get => _status; set => Set(ref _status, value); }
 
@@ -505,12 +505,6 @@ namespace PipingAgent.UI
             }
 
             Status = result.Cancelled ? "Đã hủy giữa chừng, kết quả không đầy đủ." : $"Đã quét {drawingName}.";
-        }
-
-        public void AppendLog(string line)
-        {
-            LogLines.Add(line);
-            while (LogLines.Count > 500) LogLines.RemoveAt(0);
         }
 
         public void SetLog(IEnumerable<string> lines)

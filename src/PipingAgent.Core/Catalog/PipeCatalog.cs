@@ -24,8 +24,6 @@ namespace PipingAgent.Core.Catalog
         /// <summary>Đã được chuyên gia đối chiếu với tiêu chuẩn gốc chưa, S2-16. Chưa thì mọi kết quả tra kèm cảnh báo.</summary>
         public bool Verified { get; set; }
 
-        public string? VerifiedBy { get; set; }
-
         public string? Note { get; set; }
 
         /// <summary>Kích thước ống theo DN: đường kính ngoài và chiều dày theo schedule.</summary>
@@ -144,19 +142,6 @@ namespace PipingAgent.Core.Catalog
             return new CatalogLookup<PipeSize>(size, file.Verified);
         }
 
-        /// <summary>Chiều dày thành theo schedule. Thiếu schedule thì không tìm thấy.</summary>
-        public CatalogLookup<double> Wall(string standard, int dn, string schedule)
-        {
-            var p = Pipe(standard, dn);
-            if (!p.Found) return new CatalogLookup<double>(p.Reason!);
-            if (p.Value.Wall == null || !p.Value.Wall.TryGetValue(schedule, out var t))
-            {
-                return new CatalogLookup<double>($"DN{dn} không có chiều dày cho schedule '{schedule}'.");
-            }
-
-            return new CatalogLookup<double>(t, p.Verified);
-        }
-
         public CatalogLookup<FittingSize> Fitting(string standard, string type, int dn, int? dn2 = null)
         {
             if (!_files.TryGetValue(standard ?? string.Empty, out var file))
@@ -214,6 +199,5 @@ namespace PipingAgent.Core.Catalog
         public const string Elbow45LR = "ELL45LR";
         public const string Tee = "TEE";
         public const string ReducerConcentric = "RED";
-        public const string Cap = "CAP";
     }
 }

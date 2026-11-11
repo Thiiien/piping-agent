@@ -100,8 +100,7 @@ namespace PipingAgent.AutoCAD.Ribbon
             }));
             iso.Items.Add(Column(
                 new Spec { Command = "PA_PORT", Icon = "port", Title = "Cổng nối", KeyTip = "CN", Tip = "Chọn một khối hoặc vòng cổng để xem nối với khối nào.", More = "Vòng xanh là cổng đã nối, vòng đỏ là cổng hở." },
-                new Spec { Command = "PA_BUILDIR", Icon = "ir", Title = "Nạp IR", KeyTip = "IR", Tip = "Nạp tệp IR JSON, ví dụ bản gộp nhiều tờ từ iso-merge." },
-                new Spec { Command = "PA_EXPORT", Icon = "export", Title = "Xuất JSON", KeyTip = "XJ", Tip = "Ghi đối tượng đã nhận diện ra tệp JSON." }));
+                new Spec { Command = "PA_BUILDIR", Icon = "ir", Title = "Nạp IR", KeyTip = "IR", Tip = "Nạp tệp IR JSON, ví dụ bản gộp nhiều tờ từ iso-merge." }));
             tab.Panels.Add(new RibbonPanel { Source = iso });
 
             // Mặt bằng 2D: chức năng phụ, giữ nguyên quy trình Nhận diện, Kiểm tra, Sửa.

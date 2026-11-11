@@ -53,10 +53,6 @@ namespace PipingAgent.AutoCAD.Session
             return session;
         }
 
-        public DocumentSession? Find(Document document) => _sessions.TryGetValue(document, out var s) ? s : null;
-
-        public int Count => _sessions.Count;
-
         /// <summary>Danh mục ống nạp một lần cho cả tiến trình, vì không phụ thuộc bản vẽ.</summary>
         public PipeCatalog Catalog => _catalog ??= CatalogFiles.LoadDirectory(ProfileStore.CatalogDirectory);
 

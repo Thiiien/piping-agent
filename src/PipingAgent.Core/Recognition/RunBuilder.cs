@@ -12,9 +12,6 @@ namespace PipingAgent.Core.Recognition
     public static class RecognitionRules
     {
         public const string RunFromChain = "REC-RUN-01";
-        public const string TagByLeader = "REC-TAG-01";
-        public const string TagAdjacent = "REC-TAG-02";
-        public const string TagNearest = "REC-TAG-03";
         public const string LineFromTag = "REC-LINE-01";
         public const string TagInherited = "REC-TAG-04";
         public const string SegmentFromRun = "REC-SEG-01";

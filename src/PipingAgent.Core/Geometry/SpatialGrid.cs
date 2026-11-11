@@ -27,10 +27,6 @@ namespace PipingAgent.Core.Geometry
             _cellSize = cellSize;
         }
 
-        public int Count => _entries.Count;
-
-        public double CellSize => _cellSize;
-
         /// <summary>Chọn cạnh ô từ hộp bao tổng và số phần tử, nhắm khoảng 4 phần tử mỗi ô.</summary>
         public static double SuggestCellSize(Box2 extent, int itemCount)
         {
@@ -105,36 +101,6 @@ namespace PipingAgent.Core.Geometry
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Phần tử gần điểm nhất theo khoảng cách thật do hàm đo cung cấp. Tìm theo vòng tròn nở dần.
-        /// Trả về false nếu lưới rỗng.
-        /// </summary>
-        public bool TryFindNearest(Point2 point, Func<T, double> distance, double maxRadius, out T nearest, out double nearestDistance)
-        {
-            nearest = default!;
-            nearestDistance = double.PositiveInfinity;
-            if (_entries.Count == 0) return false;
-
-            var radius = _cellSize;
-            while (true)
-            {
-                foreach (var item in QueryNear(point, radius))
-                {
-                    var d = distance(item);
-                    if (d < nearestDistance)
-                    {
-                        nearestDistance = d;
-                        nearest = item;
-                    }
-                }
-
-                // Mọi phần tử gần hơn nearestDistance đều có hộp bao trong bán kính đã quét.
-                if (nearestDistance <= radius) return nearestDistance <= maxRadius;
-                if (radius >= maxRadius) return nearestDistance <= maxRadius;
-                radius = Math.Min(radius * 2, maxRadius);
-            }
         }
 
         private (long, long) CellOf(Point2 p) => ((long)Math.Floor(p.X / _cellSize), (long)Math.Floor(p.Y / _cellSize));

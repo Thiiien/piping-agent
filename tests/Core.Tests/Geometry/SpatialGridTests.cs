@@ -82,37 +82,6 @@ public class SpatialGridTests
     }
 
     [Fact]
-    public void Nearest_by_true_distance_matches_brute_force()
-    {
-        var segments = MakeSegments(5_000, seed: 5);
-        var grid = Build(segments);
-        var random = new Random(13);
-
-        for (var i = 0; i < 200; i++)
-        {
-            var p = new Point2(random.NextDouble() * 180_000, random.NextDouble() * 80_000);
-            var expected = segments.Min(s => s.DistanceTo(p));
-
-            var found = grid.TryFindNearest(p, s => s.DistanceTo(p), maxRadius: 50_000, out var nearest, out var distance);
-            Assert.True(found);
-            Assert.Equal(expected, distance, 6);
-            Assert.Equal(expected, nearest.DistanceTo(p), 6);
-        }
-    }
-
-    [Fact]
-    public void Nearest_respects_max_radius_and_empty_grid()
-    {
-        var grid = new SpatialGrid<Segment2>(1000);
-        Assert.False(grid.TryFindNearest(Point2.Origin, s => 0, 100, out _, out _));
-
-        grid.Insert(new Segment2(new Point2(5_000, 0), new Point2(6_000, 0)), Box2.FromPoints(new Point2(5_000, 0), new Point2(6_000, 0)));
-        Assert.False(grid.TryFindNearest(Point2.Origin, s => s.DistanceTo(Point2.Origin), 1_000, out _, out _));
-        Assert.True(grid.TryFindNearest(Point2.Origin, s => s.DistanceTo(Point2.Origin), 10_000, out _, out var d));
-        Assert.Equal(5_000, d, 9);
-    }
-
-    [Fact]
     public void Item_spanning_many_cells_is_returned_once()
     {
         var grid = new SpatialGrid<string>(100);

@@ -13,13 +13,6 @@ namespace PipingAgent.UI
     /// </summary>
     public sealed class MainPanel : UserControl
     {
-        private readonly ProgressBar _progress;
-        private readonly Button _cancel;
-
-        public MainPanel() : this(new PanelViewModel(null))
-        {
-        }
-
         public MainPanel(PanelViewModel model)
         {
             Model = model ?? throw new ArgumentNullException(nameof(model));
@@ -46,13 +39,13 @@ namespace PipingAgent.UI
             footer.Children.Add(status);
             var progressRow = new DockPanel();
             progressRow.SetBinding(VisibilityProperty, new Binding(nameof(PanelViewModel.Busy)) { Converter = new BoolToVisibilityConverter() });
-            _cancel = new Button { Content = "Hủy", Padding = new Thickness(8, 0, 8, 0), Margin = new Thickness(6, 0, 0, 0) };
-            _cancel.Click += (_, __) => CancelRequested?.Invoke(this, EventArgs.Empty);
-            DockPanel.SetDock(_cancel, Dock.Right);
-            progressRow.Children.Add(_cancel);
-            _progress = new ProgressBar { Height = 14, Minimum = 0, Maximum = 1 };
-            _progress.SetBinding(System.Windows.Controls.Primitives.RangeBase.ValueProperty, new Binding(nameof(PanelViewModel.Progress)));
-            progressRow.Children.Add(_progress);
+            var cancel = new Button { Content = "Hủy", Padding = new Thickness(8, 0, 8, 0), Margin = new Thickness(6, 0, 0, 0) };
+            cancel.Click += (_, __) => CancelRequested?.Invoke(this, EventArgs.Empty);
+            DockPanel.SetDock(cancel, Dock.Right);
+            progressRow.Children.Add(cancel);
+            var progress = new ProgressBar { Height = 14, Minimum = 0, Maximum = 1 };
+            progress.SetBinding(System.Windows.Controls.Primitives.RangeBase.ValueProperty, new Binding(nameof(PanelViewModel.Progress)));
+            progressRow.Children.Add(progress);
             footer.Children.Add(progressRow);
             var progressText = new TextBlock { FontSize = 11, Foreground = SystemColors.GrayTextBrush };
             progressText.SetBinding(TextBlock.TextProperty, new Binding(nameof(PanelViewModel.ProgressText)));
@@ -75,9 +68,6 @@ namespace PipingAgent.UI
 
         /// <summary>Người dùng bấm Hủy khi đang quét.</summary>
         public event EventHandler? CancelRequested;
-
-        /// <summary>Giữ tương thích với Sprint 1.</summary>
-        public void SetStatus(string text) => Model.Status = text;
 
         private UIElement BuildOverview()
         {

@@ -52,6 +52,16 @@ namespace PipingAgent.Iso
                     foreach (var path in pdfPage.Paths)
                     {
                         var width = path.LineWidth;
+                        void AddLine(PdfPoint from, PdfPoint to) => page.Entities.Add(new SourceEntity
+                        {
+                            Handle = "P" + (++n).ToString("X", CultureInfo.InvariantCulture),
+                            Kind = SourceKind.Line,
+                            NativeType = "PDFLINE",
+                            Layer = width >= 2.0 ? "THICK" : (width <= 0.01 ? "HAIR" : "THIN"),
+                            LineWidth = width,
+                            Points = new List<Point3> { new Point3(from.X, from.Y, 0), new Point3(to.X, to.Y, 0) },
+                        });
+
                         foreach (var sub in path)
                         {
                             PdfPoint? current = null;
@@ -65,19 +75,7 @@ namespace PipingAgent.Iso
                                         first = m.Location;
                                         break;
                                     case PdfSubpath.Line l:
-                                        if (current.HasValue)
-                                        {
-                                            page.Entities.Add(new SourceEntity
-                                            {
-                                                Handle = "P" + (++n).ToString("X", CultureInfo.InvariantCulture),
-                                                Kind = SourceKind.Line,
-                                                NativeType = "PDFLINE",
-                                                Layer = width >= 2.0 ? "THICK" : (width <= 0.01 ? "HAIR" : "THIN"),
-                                                LineWidth = width,
-                                                Points = new List<Point3> { new Point3(l.From.X, l.From.Y, 0), new Point3(l.To.X, l.To.Y, 0) },
-                                            });
-                                        }
-
+                                        if (current.HasValue) AddLine(l.From, l.To);
                                         current = l.To;
                                         break;
                                     case PdfSubpath.BezierCurve b:
@@ -85,19 +83,7 @@ namespace PipingAgent.Iso
                                         break;
                                     case PdfSubpath.Close _:
                                         // Cạnh khép của hình chữ nhật, cần để nhận ra ô số thứ tự phụ kiện.
-                                        if (current.HasValue && first.HasValue && !current.Value.Equals(first.Value))
-                                        {
-                                            page.Entities.Add(new SourceEntity
-                                            {
-                                                Handle = "P" + (++n).ToString("X", CultureInfo.InvariantCulture),
-                                                Kind = SourceKind.Line,
-                                                NativeType = "PDFLINE",
-                                                Layer = width >= 2.0 ? "THICK" : (width <= 0.01 ? "HAIR" : "THIN"),
-                                                LineWidth = width,
-                                                Points = new List<Point3> { new Point3(current.Value.X, current.Value.Y, 0), new Point3(first.Value.X, first.Value.Y, 0) },
-                                            });
-                                        }
-
+                                        if (current.HasValue && first.HasValue && !current.Value.Equals(first.Value)) AddLine(current.Value, first.Value);
                                         break;
                                 }
                             }

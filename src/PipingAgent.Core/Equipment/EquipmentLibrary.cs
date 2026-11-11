@@ -284,7 +284,5 @@ namespace PipingAgent.Core.Equipment
 
             return errors;
         }
-
-        public static string Serialize(EquipmentDefinition def) => JsonSerializer.Serialize(def, Options);
     }
 }

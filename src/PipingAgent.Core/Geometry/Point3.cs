@@ -70,8 +70,6 @@ namespace PipingAgent.Core.Geometry
             Z * other.X - X * other.Z,
             X * other.Y - Y * other.X);
 
-        public bool IsZero(Tolerance tolerance) => Length <= tolerance.Length;
-
         public Vector3 Normalized()
         {
             var length = Length;

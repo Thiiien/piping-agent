@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using PipingAgent.Core.Geometry;
@@ -37,7 +36,6 @@ namespace PipingAgent.Core.Ir.Json
             options.Converters.Add(new Vector2Converter());
             options.Converters.Add(new Vector3Converter());
             options.Converters.Add(new Box2Converter());
-            options.Converters.Add(new Box3Converter());
             return options;
         }
 
@@ -45,14 +43,6 @@ namespace PipingAgent.Core.Ir.Json
         {
             if (model == null) throw new ArgumentNullException(nameof(model));
             return JsonSerializer.Serialize(model, indented ? WriteOptions : CompactOptions);
-        }
-
-        public static void Serialize(PipingModel model, Stream output, bool indented = true)
-        {
-            if (model == null) throw new ArgumentNullException(nameof(model));
-            if (output == null) throw new ArgumentNullException(nameof(output));
-            using var writer = new Utf8JsonWriter(output, new JsonWriterOptions { Indented = indented });
-            JsonSerializer.Serialize(writer, model, WriteOptions);
         }
 
         /// <summary>Đọc IR. Ném <see cref="IrFormatException"/> khi JSON sai cú pháp hoặc phiên bản lược đồ không đọc được.</summary>
@@ -63,22 +53,6 @@ namespace PipingAgent.Core.Ir.Json
             try
             {
                 model = JsonSerializer.Deserialize<PipingModel>(json, WriteOptions);
-            }
-            catch (JsonException exception)
-            {
-                throw new IrFormatException("JSON của IR không hợp lệ: " + exception.Message, exception);
-            }
-
-            return CheckVersion(model);
-        }
-
-        public static PipingModel Deserialize(Stream input)
-        {
-            if (input == null) throw new ArgumentNullException(nameof(input));
-            PipingModel? model;
-            try
-            {
-                model = JsonSerializer.Deserialize<PipingModel>(input, WriteOptions);
             }
             catch (JsonException exception)
             {

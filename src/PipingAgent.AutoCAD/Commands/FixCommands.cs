@@ -9,7 +9,6 @@ using Autodesk.AutoCAD.Runtime;
 using PipingAgent.AutoCAD.Session;
 using PipingAgent.Core.Decisions;
 using PipingAgent.Core.Ir;
-using PipingAgent.Core.Recognition;
 
 namespace PipingAgent.AutoCAD.Commands
 {
@@ -196,24 +195,8 @@ namespace PipingAgent.AutoCAD.Commands
     {
         public static void Run(CommandContext context, DocumentSession session)
         {
-            var sessions = PluginApp.Sessions;
-            if (sessions == null || session.Profile == null || session.LastEntities == null || session.LastResult == null) return;
-            var source = session.LastResult.Model.Source;
-            var model = PanelHost.Model;
-            RecognitionResult result;
-            using (var progress = new AcadProgress("Piping Agent đang chạy lại", info => model?.ReportProgress(info)))
-            {
-                PanelHost.SetRunning(progress);
-                try
-                {
-                    result = RecognitionPipeline.Run(session.LastEntities, session.Profile, sessions.Catalog, source, sessions.Equipment, progress, session.Decisions, progress.Token);
-                }
-                finally
-                {
-                    PanelHost.SetRunning(null);
-                }
-            }
-
+            if (PluginApp.Sessions == null || session.Profile == null || session.LastEntities == null || session.LastResult == null) return;
+            var result = ScanCommand.RunPipeline("Piping Agent đang chạy lại", session.LastEntities, session, session.LastResult.Model.Source);
             session.StoreScan(session.LastEntities, result, session.ScaleToMm, session.LastFingerprint);
             session.SaveSessionFile();
             var open = result.Model.Issues.Count(i => i.Status == IssueStatus.Open);

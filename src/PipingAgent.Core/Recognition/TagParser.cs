@@ -79,11 +79,6 @@ namespace PipingAgent.Core.Recognition
     /// </summary>
     public sealed class TagParser
     {
-        private static readonly string[] StandardGroups =
-        {
-            "line", "dn", "el", "datum", "service", "unit", "seq", "spec", "insul", "insulThk", "tag",
-        };
-
         private readonly (TagPattern Pattern, Regex Regex)[] _patterns;
 
         public TagParser(ConventionProfile profile)
@@ -99,8 +94,6 @@ namespace PipingAgent.Core.Recognition
                 .Select(p => (p, new Regex(p.Regex, RegexOptions.CultureInvariant, TimeSpan.FromSeconds(1))))
                 .ToArray();
         }
-
-        public int PatternCount => _patterns.Length;
 
         public ParsedTag? Parse(string? text)
         {
@@ -213,7 +206,5 @@ namespace PipingAgent.Core.Recognition
                     return ElevationDatum.Unknown;
             }
         }
-
-        public static bool IsStandardGroup(string name) => Array.IndexOf(StandardGroups, name) >= 0;
     }
 }

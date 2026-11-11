@@ -45,7 +45,7 @@ dotnet run -c Release --project src\PipingAgent.Cli -- batch <thư mục bản v
 | `data/catalog` | ASME B36.10, B16.9, B16.10, DN15 đến DN600. Số liệu chép tay, chưa được chuyên gia ký, tệp ghi `verified: false`. Bảng JIS 10K trong mã chưa kiểm chứng |
 | `data/profiles`, `data/equipment` | Hồ sơ quy ước và thư viện thiết bị cho mặt bằng 2D, chép cạnh DLL khi dựng |
 | `tests/*` | xUnit cho lõi, bộ đọc DXF và kiến trúc. Chưa có test cho Iso, plug-in, CLI |
-| `tools` | `dxf_survey.py` khảo sát một DXF, `analyze_tags.py` liệt kê chữ chưa khớp mẫu nhãn |
+| `tools` | `dxf_survey.py` khảo sát layer, loại đối tượng, block, chữ của một DXF mới |
 | `data/private`, `docs/dataTemplate` | Bản vẽ khách hàng chưa ẩn danh. Đã loại khỏi kho mã. Không bao giờ commit |
 
 Prototype Python, bộ slide và video gọi vốn thời kỳ mặt bằng 2D đã chuyển ra ngoài kho mã.

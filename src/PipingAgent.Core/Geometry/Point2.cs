@@ -68,8 +68,6 @@ namespace PipingAgent.Core.Geometry
         /// <summary>Góc so với trục X, radian, trong [0, 2π).</summary>
         public double AngleRad => Tolerance.NormalizeRad(Math.Atan2(Y, X));
 
-        public bool IsZero(Tolerance tolerance) => Length <= tolerance.Length;
-
         public Vector2 Normalized()
         {
             var length = Length;

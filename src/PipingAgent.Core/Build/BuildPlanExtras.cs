@@ -70,9 +70,6 @@ namespace PipingAgent.Core.Build
 
         public List<PrimitiveItem> Primitives { get; } = new List<PrimitiveItem>();
 
-        /// <summary>Đường dẫn block 3D do người dùng cung cấp, cách 3 ở mục 7.8.5. Null thì dựng từ khối cơ bản.</summary>
-        public string? Block3d { get; set; }
-
         public override string Kind => "EQUIPMENT";
     }
 
@@ -100,8 +97,6 @@ namespace PipingAgent.Core.Build
         {
             if (plan == null) throw new ArgumentNullException(nameof(plan));
             if (model == null) throw new ArgumentNullException(nameof(model));
-            var lines = model.Lines.ToDictionary(l => l.Id, l => l.Tag, StringComparer.Ordinal);
-            string Tag(string lineId) => lines.TryGetValue(lineId, out var t) ? t : string.Empty;
 
             foreach (var c in model.Components)
             {
@@ -158,7 +153,6 @@ namespace PipingAgent.Core.Build
                 {
                     if (def != null)
                     {
-                        item.Block3d = Block3dOf(def);
                         foreach (var b in def.Body) item.Primitives.Add(Evaluate(b, eq.Geometry.Params));
                     }
                     else
@@ -329,14 +323,7 @@ namespace PipingAgent.Core.Build
             return pipe.Start.DistanceTo(p) <= pipe.End.DistanceTo(p) ? dir : dir * -1;
         }
 
-        private static double DistanceToPipe(PipeItem pipe, Point3 p)
-        {
-            var axis = pipe.End - pipe.Start;
-            var total = axis.Length;
-            if (total <= 0) return pipe.Start.DistanceTo(p);
-            var t = Math.Max(0, Math.Min(total, (p - pipe.Start).Dot(axis.Normalized())));
-            return (pipe.Start + axis.Normalized() * t).DistanceTo(p);
-        }
+        private static double DistanceToPipe(PipeItem pipe, Point3 p) => BuildPorts.DistanceToSegment(p, pipe.Start, pipe.End);
 
         private static void SplitPipe(BuildPlan plan, PipeItem pipe, ComponentItem c)
         {
@@ -395,13 +382,6 @@ namespace PipingAgent.Core.Build
             if (item.Shape == "sphere" && item.Length <= 0) item.Length = item.Diameter;
             if (item.Shape == "dished_head" && item.Length <= 0) item.Length = item.Diameter / 4;
             return item;
-        }
-
-        private static string? Block3dOf(EquipmentDefinition def)
-        {
-            if (def.Hosts == null || !def.Hosts.TryGetValue("autocad", out var host)) return null;
-            if (host.ValueKind != System.Text.Json.JsonValueKind.Object || !host.TryGetProperty("block3d", out var b)) return null;
-            return b.ValueKind == System.Text.Json.JsonValueKind.String ? b.GetString() : null;
         }
 
         private static double SectionSize(string? section, double fallback)

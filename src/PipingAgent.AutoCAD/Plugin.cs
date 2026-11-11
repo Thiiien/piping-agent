@@ -14,10 +14,8 @@ using AcApp = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 [assembly: CommandClass(typeof(PipingAgent.AutoCAD.Commands.HelloCommand))]
 [assembly: CommandClass(typeof(PipingAgent.AutoCAD.Commands.ScanCommand))]
 [assembly: CommandClass(typeof(PipingAgent.AutoCAD.Commands.ScanWindowCommand))]
-[assembly: CommandClass(typeof(PipingAgent.AutoCAD.Commands.ExportCommand))]
 [assembly: CommandClass(typeof(PipingAgent.AutoCAD.Commands.PanelCommand))]
 [assembly: CommandClass(typeof(PipingAgent.AutoCAD.Commands.BuildCommand))]
-[assembly: CommandClass(typeof(PipingAgent.AutoCAD.Commands.ConvertCommand))]
 [assembly: CommandClass(typeof(PipingAgent.AutoCAD.Commands.CheckCommand))]
 [assembly: CommandClass(typeof(PipingAgent.AutoCAD.Commands.FixCommand))]
 [assembly: CommandClass(typeof(PipingAgent.AutoCAD.Commands.WaiveCommand))]
@@ -67,7 +65,7 @@ namespace PipingAgent.AutoCAD
             }
 
             var doc = AcApp.DocumentManager.MdiActiveDocument;
-            doc?.Editor.WriteMessage($"\nPiping Agent {Version} đã nạp. Lệnh: PA_ISO, PA_BUILD, PA_PORT, PA_CONVERT, PA_CHECK, PA_FIX, PA_WAIVE, PA_ASK, PA_AGENTCONFIG, PA_SCAN, PA_SCANWINDOW, PA_EXPORT, PA_PANEL, PA_HELLO.\n");
+            doc?.Editor.WriteMessage($"\nPiping Agent {Version} đã nạp. Lệnh: PA_ISO, PA_BUILD, PA_BUILDIR, PA_PORT, PA_CONVERT, PA_SCAN, PA_SCANWINDOW, PA_CHECK, PA_FIX, PA_WAIVE, PA_RERUN, PA_PANEL, PA_ASK, PA_AGENTCONFIG, PA_RIBBON, PA_HELLO.\n");
         }
 
         /// <summary>Tách riêng để JIT không nạp AdWindows trong accoreconsole.</summary>

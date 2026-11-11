@@ -72,7 +72,7 @@ public sealed class AgentLoop
     {
         var watch = Stopwatch.StartNew();
         var result = new SessionResult { Model = _provider.Model };
-        var tools = _tools.ForTiers(ToolTier.ReadOnly).ToList();
+        var tools = _tools.Tools.ToList();
         var messages = new List<object> { new { role = "system", content = SystemPrompt } };
         if (!string.IsNullOrEmpty(request.Context)) messages.Add(new { role = "system", content = "Ngữ cảnh phiên:\n" + request.Context });
         messages.Add(new { role = "user", content = request.Question });

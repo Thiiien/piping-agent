@@ -29,11 +29,17 @@
         <Command Global="PA_BUILD" Local="PA_BUILD" />
         <Command Global="PA_BUILDIR" Local="PA_BUILDIR" />
         <Command Global="PA_PORT" Local="PA_PORT" />
-        <Command Global="PA_RIBBON" Local="PA_RIBBON" />
+        <Command Global="PA_CONVERT" Local="PA_CONVERT" />
         <Command Global="PA_SCAN" Local="PA_SCAN" />
         <Command Global="PA_SCANWINDOW" Local="PA_SCANWINDOW" />
-        <Command Global="PA_EXPORT" Local="PA_EXPORT" />
+        <Command Global="PA_CHECK" Local="PA_CHECK" />
+        <Command Global="PA_FIX" Local="PA_FIX" />
+        <Command Global="PA_WAIVE" Local="PA_WAIVE" />
+        <Command Global="PA_RERUN" Local="PA_RERUN" />
         <Command Global="PA_PANEL" Local="PA_PANEL" />
+        <Command Global="PA_ASK" Local="PA_ASK" />
+        <Command Global="PA_AGENTCONFIG" Local="PA_AGENTCONFIG" />
+        <Command Global="PA_RIBBON" Local="PA_RIBBON" />
         <Command Global="PA_HELLO" Local="PA_HELLO" />
       </Commands>
     </ComponentEntry>
@@ -51,11 +57,17 @@
         <Command Global="PA_BUILD" Local="PA_BUILD" />
         <Command Global="PA_BUILDIR" Local="PA_BUILDIR" />
         <Command Global="PA_PORT" Local="PA_PORT" />
-        <Command Global="PA_RIBBON" Local="PA_RIBBON" />
+        <Command Global="PA_CONVERT" Local="PA_CONVERT" />
         <Command Global="PA_SCAN" Local="PA_SCAN" />
         <Command Global="PA_SCANWINDOW" Local="PA_SCANWINDOW" />
-        <Command Global="PA_EXPORT" Local="PA_EXPORT" />
+        <Command Global="PA_CHECK" Local="PA_CHECK" />
+        <Command Global="PA_FIX" Local="PA_FIX" />
+        <Command Global="PA_WAIVE" Local="PA_WAIVE" />
+        <Command Global="PA_RERUN" Local="PA_RERUN" />
         <Command Global="PA_PANEL" Local="PA_PANEL" />
+        <Command Global="PA_ASK" Local="PA_ASK" />
+        <Command Global="PA_AGENTCONFIG" Local="PA_AGENTCONFIG" />
+        <Command Global="PA_RIBBON" Local="PA_RIBBON" />
         <Command Global="PA_HELLO" Local="PA_HELLO" />
       </Commands>
     </ComponentEntry>

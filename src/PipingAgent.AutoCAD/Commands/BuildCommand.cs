@@ -63,10 +63,9 @@ namespace PipingAgent.AutoCAD.Commands
                 context.Write($"Dựng mô hình 3D: {mode}");
             }
 
-            var options = new BuildOptions { Target = mode == "Moi" ? BuildTarget.NewDrawing : BuildTarget.CurrentDrawing };
+            var options = new BuildOptions();
             if (mode == "Loithu") options.FailAfterItems = 3;
-            var plan = BuildPlan.FromModel(model, options);
-            plan.AddExtras(model, options, PluginApp.Sessions?.Equipment, session.Profile?.Tolerances.DefaultSectionSize ?? 300);
+            var plan = Plan(model, options, session);
             context.Write($"Piping Agent: kế hoạch dựng {plan.Summary()}. {blockers} vấn đề mức chặn đang mở.");
             foreach (var s in plan.Skipped.Take(5)) context.Write("  Bỏ qua " + s);
             if (mode == "Xemtruoc") return;
@@ -109,6 +108,14 @@ namespace PipingAgent.AutoCAD.Commands
             });
         }
 
+        /// <summary>Kế hoạch dựng kèm cấu kiện, thiết bị, kết cấu; dùng chung cho lệnh dựng và bản xem trước ở bảng điều khiển.</summary>
+        internal static BuildPlan Plan(PipingModel model, BuildOptions options, Session.DocumentSession session)
+        {
+            var plan = BuildPlan.FromModel(model, options);
+            plan.AddExtras(model, options, PluginApp.Sessions?.Equipment, session.Profile?.Tolerances.DefaultSectionSize ?? 300);
+            return plan;
+        }
+
         private static BuildStats BuildIntoNewDrawing(CommandContext context, Session.DocumentSession session, BuildPlan plan, BuildOptions options, out string path)
         {
             var sourcePath = context.Document.Name;
@@ -138,46 +145,44 @@ namespace PipingAgent.AutoCAD.Commands
 
         private static BuildStats BuildInto(CommandContext context, Session.DocumentSession session, BuildPlan plan, BuildOptions options, Database db, string sourcePath, string path)
         {
+            using (var tr = db.TransactionManager.StartTransaction())
             {
-                using (var tr = db.TransactionManager.StartTransaction())
+                // Tham chiếu ngoài chỉ nhận tệp DWG. Không gắn được thì vẫn dựng, chỉ không có nền.
+                // Tờ isometric là giấy, không trùng hệ toạ độ với mô hình nên không làm nền.
+                if (session.FromIsometric)
                 {
-                    // Tham chiếu ngoài chỉ nhận tệp DWG. Không gắn được thì vẫn dựng, chỉ không có nền.
-                    // Tờ isometric là giấy, không trùng hệ toạ độ với mô hình nên không làm nền.
-                    if (session.FromIsometric)
-                    {
-                        context.Write("Piping Agent: nguồn là tờ isometric nên bản 3D không gắn nền 2D.");
-                    }
-                    else if (string.Equals(Path.GetExtension(sourcePath), ".dwg", StringComparison.OrdinalIgnoreCase))
-                    {
-                        try
-                        {
-                            var xrefId = db.AttachXref(sourcePath, "NEN_2D");
-                            if (!xrefId.IsNull)
-                            {
-                                var bt = (BlockTable)tr.GetObject(db.BlockTableId, OpenMode.ForRead);
-                                var ms = (BlockTableRecord)tr.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
-                                var br = new BlockReference(Autodesk.AutoCAD.Geometry.Point3d.Origin, xrefId);
-                                ms.AppendEntity(br);
-                                tr.AddNewlyCreatedDBObject(br, true);
-                            }
-                        }
-                        catch (System.Exception ex)
-                        {
-                            context.Write($"Piping Agent: không tham chiếu được bản 2D làm nền ({ex.Message}), bản 3D không có nền.");
-                        }
-                    }
-                    else
-                    {
-                        context.Write("Piping Agent: bản 2D không phải DWG nên không tham chiếu làm nền được.");
-                    }
-
-                    var builder = new AcadBuilder(db, tr, session.ScaleToMm);
-                    var stats = builder.Build(plan, options);
-                    PresentAs3D(db, tr, null);
-                    tr.Commit();
-                    db.SaveAs(path, DwgVersion.Current);
-                    return stats;
+                    context.Write("Piping Agent: nguồn là tờ isometric nên bản 3D không gắn nền 2D.");
                 }
+                else if (string.Equals(Path.GetExtension(sourcePath), ".dwg", StringComparison.OrdinalIgnoreCase))
+                {
+                    try
+                    {
+                        var xrefId = db.AttachXref(sourcePath, "NEN_2D");
+                        if (!xrefId.IsNull)
+                        {
+                            var bt = (BlockTable)tr.GetObject(db.BlockTableId, OpenMode.ForRead);
+                            var ms = (BlockTableRecord)tr.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
+                            var br = new BlockReference(Autodesk.AutoCAD.Geometry.Point3d.Origin, xrefId);
+                            ms.AppendEntity(br);
+                            tr.AddNewlyCreatedDBObject(br, true);
+                        }
+                    }
+                    catch (System.Exception ex)
+                    {
+                        context.Write($"Piping Agent: không tham chiếu được bản 2D làm nền ({ex.Message}), bản 3D không có nền.");
+                    }
+                }
+                else
+                {
+                    context.Write("Piping Agent: bản 2D không phải DWG nên không tham chiếu làm nền được.");
+                }
+
+                var builder = new AcadBuilder(db, tr, session.ScaleToMm);
+                var stats = builder.Build(plan, options);
+                PresentAs3D(db, tr, null);
+                tr.Commit();
+                db.SaveAs(path, DwgVersion.Current);
+                return stats;
             }
         }
 

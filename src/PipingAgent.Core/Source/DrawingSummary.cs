@@ -31,9 +31,6 @@ namespace PipingAgent.Core.Source
 
         public Box2? Extents { get; set; }
 
-        /// <summary>Các khung tên tìm thấy, mỗi khung là một tờ. Xem KHAO_SAT_BAN_VE_THAT.md mục 3.5.</summary>
-        public List<SheetInfo> Sheets { get; set; } = new List<SheetInfo>();
-
         public bool HasXrefs { get; set; }
 
         public bool HasProxyEntities { get; set; }
@@ -67,22 +64,5 @@ namespace PipingAgent.Core.Source
         public bool HasAttributes { get; set; }
 
         public int NestedDepth { get; set; }
-    }
-
-    /// <summary>Một tờ vẽ trong không gian mô hình, nhận ra từ khung tên.</summary>
-    public sealed class SheetInfo
-    {
-        public string Id { get; set; } = string.Empty;
-
-        /// <summary>Handle lần chèn khung tên.</summary>
-        public string? TitleBlockHandle { get; set; }
-
-        public Box2 Frame { get; set; }
-
-        /// <summary>Tỉ lệ vẽ suy ra từ khung, ví dụ 60 với tờ 1/60.</summary>
-        public double? Scale { get; set; }
-
-        /// <summary>Thuộc tính khung tên: tên bản vẽ, số tờ, đơn vị.</summary>
-        public Dictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
     }
 }

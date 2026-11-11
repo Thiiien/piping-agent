@@ -40,6 +40,16 @@ namespace PipingAgent.AutoCAD.Session
 
         public List<ProfileError> ProfileErrors { get; } = new List<ProfileError>();
 
+        /// <summary>Nạp hồ sơ quy ước từ <see cref="ProfilePath"/> vào phiên, thay cả danh sách lỗi.</summary>
+        public ProfileLoadResult LoadProfile()
+        {
+            var loaded = ProfileStore.Load(ProfilePath!);
+            Profile = loaded.Profile;
+            ProfileErrors.Clear();
+            ProfileErrors.AddRange(loaded.Errors);
+            return loaded;
+        }
+
         public RecognitionResult? LastResult { get; set; }
 
         public IReadOnlyList<SourceEntity>? LastEntities { get; set; }

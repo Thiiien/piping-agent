@@ -27,10 +27,6 @@ namespace PipingAgent.AutoCAD.Session
             _peer = peer;
         }
 
-        public int ProcessId => _process.Id;
-
-        public bool IsAlive => !_process.HasExited && _pipe.IsConnected;
-
         /// <summary>Đường dẫn tệp thực thi Agent Host: cấu hình, hoặc thư mục <c>agenthost</c> cạnh plug-in.</summary>
         public static string ResolveExe(AgentConfig config)
         {
@@ -102,8 +98,6 @@ namespace PipingAgent.AutoCAD.Session
             var reply = _peer.RequestAndPump("session.start", new { mode, question, context = sessionContext }, timeout);
             return reply.Result ?? JsonDocument.Parse("{}").RootElement;
         }
-
-        public JsonElement Ping(TimeSpan timeout) => _peer.RequestAndPump("host.ping", null, timeout).Result ?? JsonDocument.Parse("{}").RootElement;
 
         public void Dispose()
         {

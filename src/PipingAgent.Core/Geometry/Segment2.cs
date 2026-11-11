@@ -57,10 +57,6 @@ namespace PipingAgent.Core.Geometry
 
         public bool TouchesEndpoint(Point2 p, Tolerance tolerance) => A.IsSame(p, tolerance) || B.IsSame(p, tolerance);
 
-        public Segment2 Reversed() => new Segment2(B, A);
-
-        public bool IsParallelTo(Segment2 other, Tolerance tolerance) => Direction.IsParallelTo(other.Direction, tolerance);
-
         /// <summary>
         /// Hai đoạn nằm trên cùng một đường thẳng trong dung sai độ dài: mọi đầu mút của đoạn này cách đường thẳng
         /// chứa đoạn kia không quá dung sai, và ngược lại. Không dùng dung sai góc, vì đoạn ngắn lệch vài phần trăm mm

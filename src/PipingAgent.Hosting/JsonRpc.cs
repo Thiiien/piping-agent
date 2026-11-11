@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,10 +25,13 @@ namespace PipingAgent.Hosting
 
         public RpcError? Error { get; set; }
 
+        [JsonIgnore]
         public bool IsRequest => Method != null && Id.HasValue;
 
+        [JsonIgnore]
         public bool IsNotification => Method != null && !Id.HasValue;
 
+        [JsonIgnore]
         public bool IsResponse => Method == null && Id.HasValue;
     }
 
@@ -36,8 +40,6 @@ namespace PipingAgent.Hosting
         public int Code { get; set; }
 
         public string Message { get; set; } = string.Empty;
-
-        public JsonElement? Data { get; set; }
     }
 
     public sealed class RpcException : Exception

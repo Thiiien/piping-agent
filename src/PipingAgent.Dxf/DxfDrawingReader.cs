@@ -178,9 +178,6 @@ namespace PipingAgent.Dxf
             return source.ApplyFilter(filter);
         }
 
-        /// <summary>Bộ đọc ngoài CAD không vẽ ảnh. Trả mảng rỗng theo hợp đồng.</summary>
-        public byte[] RenderRegion(Box2 region, RenderOptions options) => Array.Empty<byte>();
-
         private List<SourceEntity> ModelSpace()
         {
             if (_modelSpaceCache != null) return _modelSpaceCache;

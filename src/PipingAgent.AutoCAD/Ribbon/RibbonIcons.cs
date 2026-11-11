@@ -138,15 +138,7 @@ namespace PipingAgent.AutoCAD.Ribbon
                 ("M10,12 H22 V20 C22,24 19,26 16,26 C13,26 10,24 10,20 Z", Paint.Shape),
                 ("M16,26 V31", Paint.Accent),
             },
-            // Hộp và mũi tên đi ra.
-            ["export"] = new[]
-            {
-                ("M4,13 V28 H28 V13", Paint.Stroke),
-                ("M16,22 V4 M10,10 L16,4 L22,10", Paint.Accent),
-            },
         };
-
-        public static bool Has(string key) => Icons.ContainsKey(key);
 
         /// <summary>Vẽ biểu tượng <paramref name="key"/> ở kích thước 16 hoặc 32 px.</summary>
         public static ImageSource Render(string key, Palette palette, int size)

@@ -8,13 +8,7 @@ using PipingAgent.Core.Source;
 using PipingAgent.Dxf;
 using PipingAgent.Hosting;
 
-// Công cụ dòng lệnh của Piping Agent. Mức tích hợp B và C ở mục 6.12.1: chạy lõi ngoài CAD.
-// Lệnh hiện có:
-//   dump <bản vẽ.dxf|.dwg> <ra.json> [--explode] [--unit-scale <hệ số>]   xuất đối tượng trung lập
-//   compare <a.json> <b.json> [--max <n>]                                   so hai bộ đọc, việc S1-16
-//   summary <bản vẽ.dxf|.dwg>                                              in bản tóm tắt
-//   recognize <bản vẽ> <hồ sơ.json> [--out <ir.json>] [--catalog <thư mục>] [--unit-scale <hệ số>]
-//                                                                          chạy chuỗi nhận diện Sprint 2, in báo cáo
+// Công cụ dòng lệnh của Piping Agent. Mức tích hợp B và C ở mục 6.12.1: chạy lõi ngoài CAD. Xem PrintUsage.
 
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 
@@ -28,9 +22,6 @@ try
 {
     switch (args[0].ToLowerInvariant())
     {
-        case "dump": return Dump(args.Skip(1).ToArray());
-        case "compare": return Compare(args.Skip(1).ToArray());
-        case "summary": return Summary(args.Skip(1).ToArray());
         case "recognize": return Recognize(args.Skip(1).ToArray());
         case "batch": return Batch(args.Skip(1).ToArray());
         case "iso": return Iso(args.Skip(1).ToArray());
@@ -49,9 +40,6 @@ catch (Exception exception)
 static void PrintUsage()
 {
     Console.WriteLine("PipingAgent.Cli");
-    Console.WriteLine("  dump <bản vẽ> <ra.json> [--explode] [--unit-scale <hệ số>]");
-    Console.WriteLine("  compare <a.json> <b.json> [--max <n>]");
-    Console.WriteLine("  summary <bản vẽ>");
     Console.WriteLine("  recognize <bản vẽ> <hồ sơ.json> [--out <ir.json>] [--bom <ra.csv>] [--report <ra.md>] [--expected <expected.json>] [--catalog <thư mục>] [--unit-scale <hệ số>]");
     Console.WriteLine("  batch <thư mục hoặc tệp...> --profile <hồ sơ.json> --out <thư mục ra> [--expected-dir <thư mục đáp án>]");
     Console.WriteLine("  iso <iso.pdf|.dwg|.dxf> [--out <ir.json>] [--report <kiem-ke.md>] [--force]   I1, I3: bước 1 kiểm kê và đối chiếu, bước 2 ghi IR 3D khi đủ");
@@ -101,7 +89,7 @@ static int IsoMergeCommand(string[] a)
         sheets.Add(new PipingAgent.Iso.MergeSheet
         {
             Name = Path.GetFileName(path).Replace(".ir.json", string.Empty),
-            Model = IrJson.Deserialize(File.ReadAllText(path)),
+            Model = IrFiles.Load(path),
             Offset = offset,
             OffsetBy = by,
         });
@@ -244,22 +232,12 @@ static int Batch(string[] a)
         var name = Path.GetFileNameWithoutExtension(input);
         try
         {
-            var reader = DxfDrawingReader.Open(input);
-            var entities = reader.ReadEntities(EntityFilter.All);
-            var sum = reader.GetSummary();
-            var source = new SourceInfo { File = Path.GetFileName(input), Fingerprint = sum.Fingerprint, ReadAt = DateTimeOffset.Now.ToString("o", CultureInfo.InvariantCulture), EntityCount = entities.Count, UnitsNeedConfirmation = reader.Units.NeedsConfirmation };
-            var sessionPath = PipingAgent.Core.Decisions.SessionFile.PathFor(input);
-            var decisions = File.Exists(sessionPath) ? PipingAgent.Core.Decisions.SessionFile.Deserialize(File.ReadAllText(sessionPath)).Decisions : null;
-            var result = RecognitionPipeline.Run(entities, profileResult.Profile!, catalog, source, equipment, null, decisions);
-            File.WriteAllText(Path.Combine(outDir, name + ".ir.json"), IrJson.Serialize(result.Model));
-            File.WriteAllText(Path.Combine(outDir, name + ".bom.csv"), PipingAgent.Core.Export.QuantityExport.ToCsv(result.Model));
-            File.WriteAllText(Path.Combine(outDir, name + ".report.md"), PipingAgent.Core.Export.ConversionReport.ToMarkdown(result));
-            var score = "-";
             var expectedPath = new[] { Path.Combine(Option("--expected-dir") ?? Path.GetDirectoryName(input)!, name + ".expected.json"), Path.ChangeExtension(input, ".expected.json") }.FirstOrDefault(File.Exists);
-            if (expectedPath != null)
+            var (result, sc) = RecognizeOne(input, profileResult.Profile!, catalog, equipment, null, null,
+                Path.Combine(outDir, name + ".ir.json"), Path.Combine(outDir, name + ".bom.csv"), Path.Combine(outDir, name + ".report.md"), expectedPath);
+            var score = "-";
+            if (sc != null)
             {
-                var expected = System.Text.Json.JsonSerializer.Deserialize<PipingAgent.Core.Export.RegressionScorer.Expected>(File.ReadAllText(expectedPath), IrJson.CreateOptions(false))!;
-                var sc = PipingAgent.Core.Export.RegressionScorer.Compare(result.Model, expected);
                 score = $"{sc.Passed}/{sc.Passed + sc.Failed}" + (sc.MissingLines.Count > 0 ? $" thiếu {sc.MissingLines.Count} tuyến" : string.Empty);
                 File.WriteAllLines(Path.Combine(outDir, name + ".score.txt"), sc.Checks.Concat(sc.MissingLines.Select(l => "THIẾU tuyến " + l)).Concat(sc.ExtraLines.Select(l => "THỪA tuyến " + l)));
                 if (!sc.Ok) anyFail = true;
@@ -312,58 +290,17 @@ static int Recognize(string[] a)
     double? unitScale = null;
     var unitText = Option("--unit-scale");
     if (unitText != null) unitScale = double.Parse(unitText, CultureInfo.InvariantCulture);
-    var reader = DxfDrawingReader.Open(a[0], unitScale);
-    if (reader.Units.NeedsConfirmation) Console.WriteLine("CẦN XÁC NHẬN đơn vị: " + reader.Units.Note);
-    var entities = reader.ReadEntities(EntityFilter.All);
-    var summary = reader.GetSummary();
-    var source = new SourceInfo
-    {
-        File = Path.GetFileName(a[0]),
-        Fingerprint = summary.Fingerprint,
-        ReadAt = DateTimeOffset.Now.ToString("o", CultureInfo.InvariantCulture),
-        EntityCount = entities.Count,
-    };
-
-    source.UnitsNeedConfirmation = reader.Units.NeedsConfirmation;
-    var sessionPath = Option("--session") ?? PipingAgent.Core.Decisions.SessionFile.PathFor(a[0]);
-    List<Decision>? decisions = null;
-    if (File.Exists(sessionPath))
-    {
-        decisions = PipingAgent.Core.Decisions.SessionFile.Deserialize(File.ReadAllText(sessionPath)).Decisions;
-        Console.WriteLine($"Đọc {decisions.Count} quyết định từ {sessionPath}.");
-    }
-
-    var result = RecognitionPipeline.Run(entities, profileResult.Profile!, catalog, source, equipment, null, decisions);
-    Console.WriteLine($"{source.File}: {entities.Count} đối tượng, hồ sơ {profileResult.Profile!.Id} v{profileResult.Profile.Version}, danh mục: {string.Join(", ", catalog.Standards)}");
-    Console.Write(RecognitionReport.ToText(result));
-
     var outPath = Option("--out");
-    if (outPath != null)
-    {
-        Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(outPath))!);
-        File.WriteAllText(outPath, IrJson.Serialize(result.Model));
-        Console.WriteLine($"Đã ghi IR vào {outPath}.");
-    }
-
     var bomPath = Option("--bom");
-    if (bomPath != null)
-    {
-        File.WriteAllText(bomPath, PipingAgent.Core.Export.QuantityExport.ToCsv(result.Model));
-        Console.WriteLine($"Đã ghi bảng khối lượng vào {bomPath}.");
-    }
-
     var reportPath = Option("--report");
-    if (reportPath != null)
+    var (result, score) = RecognizeOne(a[0], profileResult.Profile!, catalog, equipment, unitScale, Option("--session"), outPath, bomPath, reportPath, Option("--expected"));
+    Console.WriteLine($"{result.Model.Source.File}: {result.Model.Source.EntityCount} đối tượng, hồ sơ {profileResult.Profile!.Id} v{profileResult.Profile.Version}, danh mục: {string.Join(", ", catalog.Standards)}");
+    Console.Write(RecognitionReport.ToText(result));
+    if (outPath != null) Console.WriteLine($"Đã ghi IR vào {outPath}.");
+    if (bomPath != null) Console.WriteLine($"Đã ghi bảng khối lượng vào {bomPath}.");
+    if (reportPath != null) Console.WriteLine($"Đã ghi báo cáo vào {reportPath}.");
+    if (score != null)
     {
-        File.WriteAllText(reportPath, PipingAgent.Core.Export.ConversionReport.ToMarkdown(result));
-        Console.WriteLine($"Đã ghi báo cáo vào {reportPath}.");
-    }
-
-    var expectedPath = Option("--expected");
-    if (expectedPath != null)
-    {
-        var expected = System.Text.Json.JsonSerializer.Deserialize<PipingAgent.Core.Export.RegressionScorer.Expected>(File.ReadAllText(expectedPath), IrJson.CreateOptions(false))!;
-        var score = PipingAgent.Core.Export.RegressionScorer.Compare(result.Model, expected);
         foreach (var c in score.Checks) Console.WriteLine("  " + c);
         foreach (var l in score.MissingLines) Console.WriteLine("  THIẾU tuyến " + l);
         foreach (var l in score.ExtraLines) Console.WriteLine("  THỪA tuyến " + l);
@@ -374,73 +311,39 @@ static int Recognize(string[] a)
     return result.Model.Issues.Any(i => i.Severity == Severity.Blocker) ? 1 : 0;
 }
 
-static int Dump(string[] a)
+// Một bản vẽ: đọc, nạp quyết định từ tệp phiên, chạy lõi, ghi IR, khối lượng, báo cáo (đường dẫn null thì bỏ), chấm điểm nếu có đáp án.
+static (RecognitionResult Result, PipingAgent.Core.Export.RegressionScorer.Score? Score) RecognizeOne(string drawingPath, ConventionProfile profile, PipeCatalog catalog,
+    PipingAgent.Core.Equipment.EquipmentLibrary equipment, double? unitScale, string? sessionPath, string? outIr, string? outBom, string? outReport, string? expectedPath)
 {
-    if (a.Length < 2) { PrintUsage(); return 2; }
-    var explode = a.Contains("--explode");
-    double? unitScale = null;
-    var unitIndex = Array.IndexOf(a, "--unit-scale");
-    if (unitIndex >= 0 && unitIndex + 1 < a.Length) unitScale = double.Parse(a[unitIndex + 1], CultureInfo.InvariantCulture);
-
-    var reader = DxfDrawingReader.Open(a[0], unitScale);
-    var entities = reader.ReadEntities(new EntityFilter { ExplodeBlocks = explode });
-    var dump = new SourceDump
+    var reader = DxfDrawingReader.Open(drawingPath, unitScale);
+    if (reader.Units.NeedsConfirmation) Console.WriteLine("CẦN XÁC NHẬN đơn vị: " + reader.Units.Note);
+    var entities = reader.ReadEntities(EntityFilter.All);
+    var source = new SourceInfo
     {
-        Reader = "dxf",
+        File = Path.GetFileName(drawingPath),
+        Fingerprint = reader.GetSummary().Fingerprint,
         ReadAt = DateTimeOffset.Now.ToString("o", CultureInfo.InvariantCulture),
-        Summary = reader.GetSummary(),
-        Entities = entities.ToList(),
+        EntityCount = entities.Count,
+        UnitsNeedConfirmation = reader.Units.NeedsConfirmation,
     };
-    Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(a[1]))!);
-    using (var stream = File.Create(a[1])) SourceJson.Serialize(dump, stream);
-    Console.WriteLine($"Đã ghi {entities.Count} đối tượng vào {a[1]}. Bỏ qua: {reader.Skipped.Count}. Đơn vị: {reader.Units.Note}");
-    if (reader.Units.NeedsConfirmation) Console.WriteLine("CẦN XÁC NHẬN đơn vị. Dùng --unit-scale để đặt hệ số.");
-    return 0;
-}
-
-static int Summary(string[] a)
-{
-    if (a.Length < 1) { PrintUsage(); return 2; }
-    var reader = DxfDrawingReader.Open(a[0]);
-    var summary = reader.GetSummary();
-    Console.WriteLine($"{summary.File}: {summary.EntityCount} đối tượng, {summary.Layers.Count} layer, {summary.Blocks.Count} block, định dạng {summary.FormatVersion}");
-    Console.WriteLine($"Đơn vị: {reader.Units.Note}");
-    foreach (var pair in summary.CountsByKind.OrderByDescending(p => p.Value)) Console.WriteLine($"  {pair.Key,-12} {pair.Value,6}");
-    Console.WriteLine($"Dấu vân tay: {summary.Fingerprint}");
-    return 0;
-}
-
-static int Compare(string[] a)
-{
-    if (a.Length < 2) { PrintUsage(); return 2; }
-    var max = 20;
-    var maxIndex = Array.IndexOf(a, "--max");
-    if (maxIndex >= 0 && maxIndex + 1 < a.Length) max = int.Parse(a[maxIndex + 1], CultureInfo.InvariantCulture);
-
-    var left = SourceJson.Deserialize(File.ReadAllText(a[0]));
-    var right = SourceJson.Deserialize(File.ReadAllText(a[1]));
-    var result = ReaderComparison.Compare(left, right);
-
-    Console.WriteLine($"A: {left.Reader} {left.Entities.Count} đối tượng, dấu vân tay {left.Summary.Fingerprint}");
-    Console.WriteLine($"B: {right.Reader} {right.Entities.Count} đối tượng, dấu vân tay {right.Summary.Fingerprint}");
-    Console.WriteLine($"Trùng hoàn toàn: {result.Identical}. Chỉ có ở A: {result.OnlyInLeft.Count}. Chỉ có ở B: {result.OnlyInRight.Count}. Khác nội dung: {result.Different.Count}.");
-
-    foreach (var group in result.Different.GroupBy(d => d.Field).OrderByDescending(g => g.Count()))
+    sessionPath ??= PipingAgent.Core.Decisions.SessionFile.PathFor(drawingPath);
+    List<Decision>? decisions = null;
+    if (File.Exists(sessionPath))
     {
-        Console.WriteLine($"  Khác ở trường {group.Key}: {group.Count()}, theo loại: " +
-            string.Join(", ", group.GroupBy(d => d.Kind).Select(k => $"{k.Key} {k.Count()}")));
+        decisions = PipingAgent.Core.Decisions.SessionFile.Deserialize(File.ReadAllText(sessionPath)).Decisions;
+        Console.WriteLine($"Đọc {decisions.Count} quyết định từ {sessionPath}.");
     }
 
-    foreach (var handle in result.OnlyInLeft.Take(max)) Console.WriteLine($"  Chỉ A: {handle}");
-    foreach (var handle in result.OnlyInRight.Take(max)) Console.WriteLine($"  Chỉ B: {handle}");
-    foreach (var d in result.Different.Take(max))
+    var result = RecognitionPipeline.Run(entities, profile, catalog, source, equipment, null, decisions);
+    if (outIr != null)
     {
-        Console.WriteLine($"  {d.Handle} {d.Kind} {d.Field}:");
-        Console.WriteLine($"     A: {Truncate(d.Left)}");
-        Console.WriteLine($"     B: {Truncate(d.Right)}");
+        Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(outIr))!);
+        File.WriteAllText(outIr, IrJson.Serialize(result.Model));
     }
 
-    return result.Identical ? 0 : 1;
+    if (outBom != null) File.WriteAllText(outBom, PipingAgent.Core.Export.QuantityExport.ToCsv(result.Model));
+    if (outReport != null) File.WriteAllText(outReport, PipingAgent.Core.Export.ConversionReport.ToMarkdown(result));
+    if (expectedPath == null) return (result, null);
+    var expected = System.Text.Json.JsonSerializer.Deserialize<PipingAgent.Core.Export.RegressionScorer.Expected>(File.ReadAllText(expectedPath), IrJson.CreateOptions(false))!;
+    return (result, PipingAgent.Core.Export.RegressionScorer.Compare(result.Model, expected));
 }
-
-static string Truncate(string s) => s.Length <= 160 ? s : s.Substring(0, 157) + "...";

@@ -57,8 +57,6 @@ namespace PipingAgent.Core.Diagnostics
 
         public void Warning(string eventName, IDictionary<string, object?>? data = null) => Write(LogLevel.Warning, eventName, data);
 
-        public void Debug(string eventName, IDictionary<string, object?>? data = null) => Write(LogLevel.Debug, eventName, data);
-
         public void Error(string eventName, Exception exception, IDictionary<string, object?>? data = null)
         {
             var payload = data ?? new Dictionary<string, object?>();
@@ -66,18 +64,6 @@ namespace PipingAgent.Core.Diagnostics
             payload["exceptionMessage"] = exception.Message;
             payload["stackTrace"] = exception.StackTrace;
             Write(LogLevel.Error, eventName, payload);
-        }
-
-        /// <summary>Đo thời gian một bước. Dispose thì ghi bản ghi kết thúc kèm số mili giây.</summary>
-        public IDisposable Step(string stepName, IDictionary<string, object?>? data = null)
-        {
-            Write(LogLevel.Info, stepName + "_start", data);
-            var started = _clock.Elapsed;
-            return new StepScope(() =>
-            {
-                var payload = new Dictionary<string, object?> { ["elapsedMs"] = Math.Round((_clock.Elapsed - started).TotalMilliseconds, 1) };
-                Write(LogLevel.Info, stepName + "_end", payload);
-            });
         }
 
         public void Write(LogLevel level, string eventName, IDictionary<string, object?>? data)
@@ -107,19 +93,6 @@ namespace PipingAgent.Core.Diagnostics
         {
             Write(LogLevel.Info, "session_end", new Dictionary<string, object?> { ["uptimeMs"] = Math.Round(_clock.Elapsed.TotalMilliseconds, 1) });
             if (_ownsWriter) _writer.Dispose();
-        }
-
-        private sealed class StepScope : IDisposable
-        {
-            private Action? _onDispose;
-
-            public StepScope(Action onDispose) => _onDispose = onDispose;
-
-            public void Dispose()
-            {
-                _onDispose?.Invoke();
-                _onDispose = null;
-            }
         }
     }
 }

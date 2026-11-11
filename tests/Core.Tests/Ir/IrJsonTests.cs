@@ -122,18 +122,6 @@ public class IrJsonTests
     }
 
     [Fact]
-    public void Stream_round_trip()
-    {
-        var model = IrJson.Deserialize(File.ReadAllText(SamplePath));
-        using var stream = new MemoryStream();
-        IrJson.Serialize(model, stream);
-        stream.Position = 0;
-        var reread = IrJson.Deserialize(stream);
-        Assert.Equal(model.Nodes.Count, reread.Nodes.Count);
-        Assert.Equal(IrJson.Serialize(model), IrJson.Serialize(reread));
-    }
-
-    [Fact]
     public void Unknown_schema_version_is_rejected_with_clear_message()
     {
         var ex = Assert.Throws<IrFormatException>(() => IrJson.Deserialize("""{ "schemaVersion": "9.7", "units": "mm" }"""));

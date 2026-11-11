@@ -7,23 +7,6 @@ using PipingAgent.Core.Rules;
 
 namespace PipingAgent.AutoCAD.Commands
 {
-    /// <summary>PA_CONVERT: tên theo quy trình UC-01, làm đúng việc của PA_SCAN: đọc, nhận diện, chạy luật, hiện bảng. S4-15.</summary>
-    public sealed class ConvertCommand : CommandBase
-    {
-        protected override string Name => "PA_CONVERT";
-
-        [CommandMethod("PA_CONVERT", CommandFlags.UsePickSet)]
-        public void Convert() => Execute();
-
-        protected override void Run(CommandContext context)
-        {
-            var selected = ScanCommand.SelectedHandles(context.Editor);
-            var reader = new AcadDrawingReader(context.Database, context.Transaction, onlyHandles: selected);
-            var entities = ScanCommand.Report(context, reader, selected == null ? "cả không gian mô hình" : $"{selected.Count} đối tượng đã chọn", null);
-            ScanCommand.Recognize(context, reader, entities);
-        }
-    }
-
     /// <summary>
     /// PA_CHECK: chạy lại bộ luật trên IR của lần quét gần nhất và in tóm tắt vấn đề theo mức, S4-15.
     /// Vấn đề do các luật mặc định tạo ra được thay mới, vấn đề do bộ nhận diện tạo ra giữ nguyên.
@@ -82,7 +65,7 @@ namespace PipingAgent.AutoCAD.Commands
             var path = FixCommand.Ask(context, "\nĐường dẫn tệp IR JSON: ");
             if (path == null) return;
             var full = System.IO.Path.GetFullPath(path.Trim('"'));
-            var model = PipingAgent.Core.Ir.Json.IrJson.Deserialize(System.IO.File.ReadAllText(full));
+            var model = PipingAgent.Hosting.IrFiles.Load(full);
             session.StoreIso(model);
             context.Write($"Piping Agent: đã nạp IR {System.IO.Path.GetFileName(full)}: {model.Segments.Count} đoạn ống, {model.Nodes.Count} nút, {model.Issues.Count} vấn đề. Gõ PA_BUILD để dựng.");
         }

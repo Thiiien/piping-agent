@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -50,6 +49,7 @@ namespace PipingAgent.AutoCAD.Commands
     /// <summary>
     /// PA_SCAN: đọc bản vẽ thành đối tượng trung lập, in bản tóm tắt (S1-13), rồi chạy chuỗi nhận diện của lõi
     /// và hiện kết quả ở bảng điều khiển (S2-12). Tập chọn trước thì chỉ đọc tập đó (S1-14). Có tiến độ và hủy (S2-14).
+    /// PA_CONVERT là tên theo quy trình UC-01 của cùng lệnh, S4-15.
     /// </summary>
     public sealed class ScanCommand : CommandBase
     {
@@ -57,6 +57,9 @@ namespace PipingAgent.AutoCAD.Commands
 
         [CommandMethod("PA_SCAN", CommandFlags.UsePickSet)]
         public void Scan() => Execute();
+
+        [CommandMethod("PA_CONVERT", CommandFlags.UsePickSet)]
+        public void Convert() => Execute();
 
         protected override void Run(CommandContext context)
         {
@@ -72,14 +75,7 @@ namespace PipingAgent.AutoCAD.Commands
             var sessions = PluginApp.Sessions;
             if (sessions == null) return;
             var session = sessions.GetOrCreate(context.Document);
-            if (session.Profile == null && session.ProfilePath != null)
-            {
-                var loaded = ProfileStore.Load(session.ProfilePath);
-                session.Profile = loaded.Profile;
-                session.ProfileErrors.Clear();
-                session.ProfileErrors.AddRange(loaded.Errors);
-            }
-
+            if (session.Profile == null && session.ProfilePath != null) session.LoadProfile();
             if (session.Profile == null)
             {
                 context.Write("Piping Agent: chưa có hồ sơ quy ước nào nạp được, bỏ qua bước nhận diện. Chọn hồ sơ ở thẻ Hồ sơ của PA_PANEL.");
@@ -98,21 +94,7 @@ namespace PipingAgent.AutoCAD.Commands
             };
             if (session.SessionLoadError != null) context.Write($"Piping Agent: tệp phiên hỏng, bắt đầu phiên trống ({session.SessionLoadError}).");
 
-            RecognitionResult result;
-            var model = PanelHost.Model;
-            using (var progress = new AcadProgress("Piping Agent đang nhận diện", info => model?.ReportProgress(info)))
-            {
-                PanelHost.SetRunning(progress);
-                try
-                {
-                    result = RecognitionPipeline.Run(entities, session.Profile, sessions.Catalog, source, sessions.Equipment, progress, session.Decisions, progress.Token);
-                }
-                finally
-                {
-                    PanelHost.SetRunning(null);
-                }
-            }
-
+            var result = RunPipeline("Piping Agent đang nhận diện", entities, session, source);
             session.StoreScan(entities, result, reader.ScaleToMm, summary.Fingerprint);
             try
             {
@@ -140,6 +122,25 @@ namespace PipingAgent.AutoCAD.Commands
                 ["cancelled"] = result.Cancelled,
                 ["elapsedMs"] = (long)result.Elapsed.TotalMilliseconds,
             });
+        }
+
+        /// <summary>Chạy chuỗi nhận diện với thước tiến độ và nút Hủy của bảng; dùng cho quét lần đầu và chạy lại. Gọi khi phiên đã có hồ sơ.</summary>
+        internal static RecognitionResult RunPipeline(string title, IReadOnlyList<SourceEntity> entities, DocumentSession session, SourceInfo source)
+        {
+            var sessions = PluginApp.Sessions!;
+            var model = PanelHost.Model;
+            using (var progress = new AcadProgress(title, info => model?.ReportProgress(info)))
+            {
+                PanelHost.SetRunning(progress);
+                try
+                {
+                    return RecognitionPipeline.Run(entities, session.Profile!, sessions.Catalog, source, sessions.Equipment, progress, session.Decisions, progress.Token);
+                }
+                finally
+                {
+                    PanelHost.SetRunning(null);
+                }
+            }
         }
 
         internal static List<string>? SelectedHandles(Editor editor)
@@ -225,53 +226,6 @@ namespace PipingAgent.AutoCAD.Commands
                 new Point2(second.Value.X * scale, second.Value.Y * scale));
             var entities = ScanCommand.Report(context, reader, "vùng cửa sổ", region);
             ScanCommand.Recognize(context, reader, entities);
-        }
-    }
-
-    /// <summary>
-    /// PA_EXPORT: ghi toàn bộ đối tượng trung lập ra tệp JSON để so với bộ đọc DXF, việc S1-16,
-    /// hoặc để chạy lõi ngoài AutoCAD. Hỏi đường dẫn tệp. Thêm từ khoá NO để nổ block.
-    /// </summary>
-    public sealed class ExportCommand : CommandBase
-    {
-        protected override string Name => "PA_EXPORT";
-
-        [CommandMethod("PA_EXPORT", CommandFlags.UsePickSet)]
-        public void Export() => Execute();
-
-        protected override void Run(CommandContext context)
-        {
-            var pathPrompt = new PromptStringOptions("\nĐường dẫn tệp JSON đầu ra: ") { AllowSpaces = true };
-            var path = context.Editor.GetString(pathPrompt);
-            if (path.Status != PromptStatus.OK || string.IsNullOrWhiteSpace(path.StringResult)) return;
-
-            var explodePrompt = new PromptKeywordOptions("\nNổ block? ") { AllowNone = true };
-            explodePrompt.Keywords.Add("Co");
-            explodePrompt.Keywords.Add("Khong");
-            explodePrompt.Keywords.Default = "Khong";
-            var explode = context.Editor.GetKeywords(explodePrompt);
-            var explodeBlocks = explode.Status == PromptStatus.OK && explode.StringResult == "Co";
-
-            var selected = ScanCommand.SelectedHandles(context.Editor);
-            var reader = new AcadDrawingReader(context.Database, context.Transaction, onlyHandles: selected);
-            var entities = reader.ReadEntities(new EntityFilter { ExplodeBlocks = explodeBlocks });
-            var dump = new SourceDump
-            {
-                Reader = "autocad",
-                ReadAt = DateTimeOffset.Now.ToString("o", CultureInfo.InvariantCulture),
-                Summary = reader.GetSummary(),
-                Entities = entities.ToList(),
-            };
-
-            var fullPath = Path.GetFullPath(path.StringResult.Trim().Trim('"'));
-            Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
-            using (var stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write))
-            {
-                SourceJson.Serialize(dump, stream);
-            }
-
-            context.Write($"Piping Agent đã ghi {entities.Count} đối tượng{(explodeBlocks ? ", đã nổ block," : string.Empty)} vào {fullPath}. Bỏ qua: {reader.Skipped.Count}.\n");
-            context.Log?.Info("export", new Dictionary<string, object?> { ["entities"] = entities.Count, ["explode"] = explodeBlocks, ["skipped"] = reader.Skipped.Count });
         }
     }
 

@@ -7,12 +7,10 @@ using System.Text.Json.Serialization;
 
 namespace PipingAgent.Tools
 {
-    /// <summary>Lớp quyền của công cụ, mục 8.2. Agent Host chỉ nạp nhóm phù hợp với chế độ đang chạy.</summary>
+    /// <summary>Lớp quyền của công cụ, mục 8.2. Mới có lớp chỉ đọc; lớp đề xuất và tương tác thêm khi có công cụ của chúng.</summary>
     public enum ToolTier
     {
         ReadOnly,
-        Propose,
-        Interact,
     }
 
     /// <summary>Kết quả một lệnh gọi công cụ. Lỗi cũng là kết quả, có cờ và hướng dẫn để agent tự sửa, mục 8.3.</summary>
@@ -140,8 +138,6 @@ namespace PipingAgent.Tools
         }
 
         public ToolDefinition? Find(string name) => _tools.FirstOrDefault(t => t.Name == name);
-
-        public IEnumerable<ToolDefinition> ForTiers(params ToolTier[] tiers) => _tools.Where(t => tiers.Contains(t.Tier));
 
         public ToolResult Invoke(string name, JsonElement input, ToolContext context)
         {

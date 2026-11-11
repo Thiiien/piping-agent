@@ -29,16 +29,6 @@ namespace PipingAgent.Core.Geometry
 
         public double AngleRad => AngleDeg * Math.PI / 180.0;
 
-        public bool IsZero(double value) => Math.Abs(value) <= Length;
-
-        public bool Equal(double a, double b) => Math.Abs(a - b) <= Length;
-
-        public bool AnglesEqualRad(double a, double b)
-        {
-            var d = Math.Abs(NormalizeRad(a - b));
-            return d <= AngleRad || Math.Abs(d - 2 * Math.PI) <= AngleRad;
-        }
-
         public bool Equals(Tolerance other) => Length.Equals(other.Length) && AngleDeg.Equals(other.AngleDeg);
         public override bool Equals(object? obj) => obj is Tolerance t && Equals(t);
         public override int GetHashCode() => unchecked(Length.GetHashCode() * 397 ^ AngleDeg.GetHashCode());

@@ -121,35 +121,4 @@ namespace PipingAgent.Core.Ir.Json
             writer.WriteEndObject();
         }
     }
-
-    public sealed class Box3Converter : JsonConverter<Box3>
-    {
-        public override Box3 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            Point3? min = null, max = null;
-            if (reader.TokenType != JsonTokenType.StartObject) throw new JsonException("Hộp bao phải là đối tượng có min và max.");
-            while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
-            {
-                var name = reader.GetString();
-                reader.Read();
-                var v = NumberArray.Read(ref reader, 3);
-                if (string.Equals(name, "min", StringComparison.OrdinalIgnoreCase)) min = new Point3(v[0], v[1], v[2]);
-                else if (string.Equals(name, "max", StringComparison.OrdinalIgnoreCase)) max = new Point3(v[0], v[1], v[2]);
-                else throw new JsonException($"Hộp bao không có trường {name}.");
-            }
-
-            if (min == null || max == null) throw new JsonException("Hộp bao thiếu min hoặc max.");
-            return new Box3(min.Value, max.Value);
-        }
-
-        public override void Write(Utf8JsonWriter writer, Box3 value, JsonSerializerOptions options)
-        {
-            writer.WriteStartObject();
-            writer.WritePropertyName("min");
-            NumberArray.Write(writer, value.Min.X, value.Min.Y, value.Min.Z);
-            writer.WritePropertyName("max");
-            NumberArray.Write(writer, value.Max.X, value.Max.Y, value.Max.Z);
-            writer.WriteEndObject();
-        }
-    }
 }

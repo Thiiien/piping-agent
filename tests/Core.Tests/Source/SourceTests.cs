@@ -91,43 +91,6 @@ public class DrawingFingerprintTests
     }
 }
 
-public class ReaderComparisonTests
-{
-    [Fact]
-    public void Comparison_reports_missing_and_different_entities_with_field()
-    {
-        var left = new SourceDump { Reader = "a" };
-        var right = new SourceDump { Reader = "b" };
-        left.Entities.Add(new SourceEntity { Handle = "1", Kind = SourceKind.Circle, Center = new Point3(0, 0, 0), Radius = 5 });
-        right.Entities.Add(new SourceEntity { Handle = "1", Kind = SourceKind.Circle, Center = new Point3(0, 0, 0), Radius = 6 });
-        left.Entities.Add(new SourceEntity { Handle = "2", Kind = SourceKind.Point, Center = new Point3(1, 1, 0) });
-        right.Entities.Add(new SourceEntity { Handle = "3", Kind = SourceKind.Point, Center = new Point3(1, 1, 0) });
-
-        var result = ReaderComparison.Compare(left, right);
-        Assert.False(result.Identical);
-        Assert.Equal(new[] { "2" }, result.OnlyInLeft);
-        Assert.Equal(new[] { "3" }, result.OnlyInRight);
-        var d = Assert.Single(result.Different);
-        Assert.Equal("radius", d.Field);
-    }
-
-    [Fact]
-    public void Identical_dumps_compare_equal_and_round_trip_through_json()
-    {
-        var dump = new SourceDump { Reader = "a" };
-        dump.Entities.Add(new SourceEntity
-        {
-            Handle = "1F3", Kind = SourceKind.Insert, Name = "VALVE_GATE", Center = new Point3(1, 2, 0),
-            Scale = new Vector3(1, 1, 1), RotationDeg = 90, Attributes = new() { ["TAG"] = "V-1" }, BlockPath = new() { "AB" },
-        });
-        dump.Summary.CountsByKind["Insert"] = 1;
-        var json = SourceJson.Serialize(dump);
-        var back = SourceJson.Deserialize(json);
-        Assert.True(ReaderComparison.Compare(dump, back).Identical);
-        Assert.Equal(1, back.Summary.CountsByKind["Insert"]);
-    }
-}
-
 public class JsonLineLoggerTests
 {
     [Fact]
@@ -139,13 +102,11 @@ public class JsonLineLoggerTests
         {
             session = log.SessionId;
             log.Info("scan", new Dictionary<string, object?> { ["entities"] = 80 });
-            using (log.Step("read")) { }
             log.Error("boom", new InvalidOperationException("hỏng"));
-            log.Debug("hidden");
         }
 
         var lines = writer.ToString().Split('\n', StringSplitOptions.RemoveEmptyEntries);
-        Assert.Equal(6, lines.Length); // start, scan, read_start, read_end, boom, end. Debug bị lọc.
+        Assert.Equal(4, lines.Length); // start, scan, boom, end.
         foreach (var line in lines)
         {
             using var doc = System.Text.Json.JsonDocument.Parse(line);
@@ -155,7 +116,6 @@ public class JsonLineLoggerTests
 
         Assert.Contains("\"event\":\"scan\"", lines[1]);
         Assert.Contains("\"entities\":80", lines[1]);
-        Assert.Contains("elapsedMs", lines[3]);
-        Assert.Contains("InvalidOperationException", lines[4]);
+        Assert.Contains("InvalidOperationException", lines[2]);
     }
 }

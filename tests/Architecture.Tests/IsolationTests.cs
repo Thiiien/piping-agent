@@ -39,7 +39,7 @@ public class IsolationTests
         // System.Text.Json là thư viện bên thứ ba duy nhất của lõi, quyết định ngày 10/11/2026, xem csproj của lõi.
         // System.Memory là gói nền mà System.Text.Json kéo theo trên .NET Standard 2.0 (Span), không phải thư viện mới.
         { typeof(CoreInfo).Assembly.Location, new[] { "netstandard", "System.Text.Json", "System.Memory" } },
-        { typeof(ToolsInfo).Assembly.Location, new[] { "netstandard", "System.Text.Json", "System.Memory", "PipingAgent.Core" } },
+        { typeof(ToolRegistry).Assembly.Location, new[] { "netstandard", "System.Text.Json", "System.Memory", "PipingAgent.Core" } },
     };
 
     public static TheoryData<string, string[], string[]> IsolatedProjects => new()

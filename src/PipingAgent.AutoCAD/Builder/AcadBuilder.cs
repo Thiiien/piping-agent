@@ -35,8 +35,6 @@ namespace PipingAgent.AutoCAD.Builder
 
         public List<string> Failures { get; } = new List<string>();
 
-        public int Total => Pipes + Elbows + Tees + Components + Equipment + Structures;
-
         public override string ToString() => $"{Pipes} ống, {Elbows} co, {Tees} tê, {Components} cấu kiện, {Equipment} thiết bị, {Structures} kết cấu trên {Layers} layer, {Connections} mối nối, {OpenPorts} cổng hở" + (Failures.Count > 0 ? $", {Failures.Count} phần tử lỗi" : string.Empty);
     }
 
@@ -62,9 +60,6 @@ namespace PipingAgent.AutoCAD.Builder
             var bt = (BlockTable)tr.GetObject(db.BlockTableId, OpenMode.ForRead);
             _space = (BlockTableRecord)tr.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
             EnsureRegApp();
-            // Khung dây mặc định vẽ mỗi trụ bằng 4 đường sinh nên ống tròn trông như ống vuông. Tăng số đường sinh và độ mịn mặt.
-            if (db.Isolines < 24) db.Isolines = 24;
-            if (db.Facetres < 8) db.Facetres = 8;
         }
 
         public double ScaleToMm { get; }
@@ -106,7 +101,6 @@ namespace PipingAgent.AutoCAD.Builder
                 solid.LayerId = Layer(item.Layer, item.LineTag);
                 _space.AppendEntity(solid);
                 _tr.AddNewlyCreatedDBObject(solid, true);
-                solid.XData = XData(item);
                 placed.Add((item, solid));
                 built++;
             }
@@ -118,7 +112,6 @@ namespace PipingAgent.AutoCAD.Builder
             stats.OpenPorts = BuildPorts.OpenPorts(plan);
             foreach (var (item, solid) in placed)
             {
-                if (item.Ports.Count == 0) continue;
                 solid.XData = XData(item);
                 foreach (var port in item.Ports) PortRing(item, port);
             }

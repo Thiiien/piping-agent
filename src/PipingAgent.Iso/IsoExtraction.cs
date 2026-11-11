@@ -95,7 +95,7 @@ namespace PipingAgent.Iso
                     continue;
                 }
 
-                status = qty == null ? "warn" : built >= qty ? "ok" : found >= qty ? "gap" : "gap";
+                status = qty == null ? "warn" : built >= qty ? "ok" : "gap";
                 if (qty != null && found < qty) note = $"thiếu {qty - found} ô trên hình";
                 else if (qty != null && built < qty) note = $"{found - built} ô không trỏ tới ống nào";
                 else if (qty != null && found > qty) { status = "warn"; note = $"dư {found - qty} ô, có thể ô cỡ ống hoặc số đoạn cắt bị nhận nhầm"; }
@@ -115,7 +115,7 @@ namespace PipingAgent.Iso
             {
                 var used = usedByComponent.Contains(d.Handle);
                 x.Dimensions.Add($"{d.Value} | {d.Axis} | {(used ? "chiều dài cấu kiện" : "chưa dùng")} | {d.By}");
-                if (!used) x.Checks.Add(new ExtractionCheck { Group = "Kích thước", Subject = $"Số {d.Value} tại ({d.TextAt.X:0}, {d.TextAt.Y:0})", Expected = "gán cho ống hoặc cấu kiện", Found = "chưa dùng", Status = d.By.Contains("_ref") ? "warn" : "warn", Note = d.By.Contains("_ref") ? "kích thước tham khảo (*)" : "có thể là cỡ lệch của hộp chéo hoặc kích thước phụ kiện không đặt được" });
+                if (!used) x.Checks.Add(new ExtractionCheck { Group = "Kích thước", Subject = $"Số {d.Value} tại ({d.TextAt.X:0}, {d.TextAt.Y:0})", Expected = "gán cho ống hoặc cấu kiện", Found = "chưa dùng", Status = "warn", Note = d.By.Contains("_ref") ? "kích thước tham khảo (*)" : "có thể là cỡ lệch của hộp chéo hoặc kích thước phụ kiện không đặt được" });
             }
 
             // Một chuỗi thẳng hàng không có kích thước nào thì chiều dài bằng 0 khi dựng.

@@ -158,7 +158,7 @@ namespace PipingAgent.Core.Build
 
         private static Vector3 Dir(Vector3 v) => v.Length > 0 ? v.Normalized() : Vector3.UnitX;
 
-        private static double DistanceToSegment(Point3 p, Point3 a, Point3 b)
+        internal static double DistanceToSegment(Point3 p, Point3 a, Point3 b)
         {
             var ab = b - a;
             var len2 = ab.Dot(ab);
