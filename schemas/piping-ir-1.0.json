@@ -113,10 +113,14 @@
         "lineId": { "$ref": "#/$defs/id" },
         "dn": { "type": "integer", "minimum": 0 },
         "elevation": { "$ref": "#/$defs/elevation" },
-        "planPoints": { "type": "array", "items": { "$ref": "#/$defs/point2" }, "minItems": 2 },
+        "endElevation": { "type": "number", "description": "Cao độ tâm tại đầu cuối của ống đứng từ tờ isometric, mm; khi có, planPoints chỉ cần một điểm." },
+        "planPoints": { "type": "array", "items": { "$ref": "#/$defs/point2" }, "minItems": 1 },
         "tagRef": { "$ref": "#/$defs/tagRef" },
         "prov": { "$ref": "#/$defs/prov" }
-      }
+      },
+      "if": { "required": ["endElevation"] },
+      "then": { "properties": { "planPoints": { "minItems": 1 } } },
+      "else": { "properties": { "planPoints": { "minItems": 2 } } }
     },
     "segment": {
       "type": "object", "additionalProperties": false,

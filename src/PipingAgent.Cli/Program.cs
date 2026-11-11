@@ -110,25 +110,23 @@ static int IsoMergeCommand(string[] a)
     if (sheets.Count < 1 || outPath == null) { PrintUsage(); return 2; }
     var merged = PipingAgent.Iso.IsoMerge.Merge(sheets, stubs, Path.GetFileName(outPath));
     var catalog = CatalogFiles.LoadDirectory(Path.Combine(AppContext.BaseDirectory, "catalog"));
-    var profile = new ConventionProfile { Id = "iso-default", PipeStandard = "ASME-B36.10", FittingStandard = "ASME-B16.9" };
-    var stats = new PipingAgent.Core.Graph.GraphBuilder(profile, catalog).Build(merged);
+    var (stats, _) = PipingAgent.Iso.IsoPipeline.Complete(merged, catalog);
     Console.WriteLine($"Gộp {sheets.Count} tờ, {stubs.Count} ống tham chiếu. Đồ thị 3D: {stats}");
-    LinkComponents(merged, verbose: false);
     foreach (var issue in merged.Issues.Where(x => x.Severity != Severity.Info)) Console.WriteLine($"  [{issue.Severity}] {issue.RuleId} {issue.Message}");
     File.WriteAllText(outPath, IrJson.Serialize(merged));
-    var reportPath = Path.ChangeExtension(outPath, null).Replace(".ir", "") + ".kiem-ke.md";
+    var reportPath = KiemKePath(outPath);
     File.WriteAllText(reportPath, PipingAgent.Iso.IsoMerge.Report(sheets, stubs, merged, Path.GetFileName(outPath)));
     Console.WriteLine($"Đã ghi IR gộp vào {outPath} và bản kiểm kê vào {reportPath}.");
     foreach (var s in sheets.Skip(1).Where(s => s.OffsetBy == "giả định")) Console.WriteLine($"  [xem] {s.Name}: phép dời giả định ({s.Offset.X:0}, {s.Offset.Y:0}, {s.Offset.Z:0}); cần tờ ống góp chung hoặc người cho toạ độ.");
     return 0;
 }
 
-// Gắn cấu kiện vào đoạn ống chứa nó sau khi có đồ thị. Cấu kiện xếp chồng ngoài đầu hở cách đoạn ống tới nửa chiều dài của nó.
-static void LinkComponents(PipingModel model, bool verbose)
+// <tên>.ir.json hoặc <tên>.json thành <tên>.kiem-ke.md cạnh tệp IR.
+static string KiemKePath(string irPath)
 {
-    PipingAgent.Iso.IsoPipeline.LinkComponents(model);
-    if (!verbose) return;
-    foreach (var c in model.Components) Console.WriteLine($"  cấu kiện {c.Id} {c.Type} {c.Tag} DN{c.Dn} tại {c.Position} trên {c.SegmentId}");
+    var stem = Path.ChangeExtension(irPath, null);
+    if (stem.EndsWith(".ir", StringComparison.OrdinalIgnoreCase)) stem = stem.Substring(0, stem.Length - 3);
+    return stem + ".kiem-ke.md";
 }
 
 // I1: isometric PDF vector sang đồ thị và toạ độ thật, in để kiểm tra, ghi IR nếu có --out.
@@ -169,7 +167,7 @@ static int Iso(string[] a)
 
     var model = run.Model;
     Console.WriteLine($"Đồ thị 3D: {run.GraphStats}");
-    LinkComponents(model, verbose: true);
+    foreach (var c in model.Components) Console.WriteLine($"  cấu kiện {c.Id} {c.Type} {c.Tag} DN{c.Dn} tại {c.Position} trên {c.SegmentId}");
 
     Console.WriteLine($"Bảng vật tư: {r.Bom.Count} dòng; ô số thứ tự: {r.Callouts.Count}, có đường chỉ {r.Callouts.Count(x => x.Target.HasValue)}");
     if (Array.IndexOf(a, "--verbose") >= 0)
@@ -184,7 +182,7 @@ static int Iso(string[] a)
     // Bước 1: kiểm kê mọi thứ bản vẽ nói và đối chiếu. Bước 2 chỉ dựng khi kiểm kê không còn khoảng trống, trừ khi --force.
     var extraction = run.Extraction;
     var reportIndex = Array.IndexOf(a, "--report");
-    var reportPath = reportIndex >= 0 && reportIndex + 1 < a.Length ? a[reportIndex + 1] : outPath != null ? Path.ChangeExtension(outPath, null).Replace(".ir", "") + ".kiem-ke.md" : null;
+    var reportPath = reportIndex >= 0 && reportIndex + 1 < a.Length ? a[reportIndex + 1] : outPath != null ? KiemKePath(outPath) : null;
     if (reportPath != null)
     {
         File.WriteAllText(reportPath, extraction.ToMarkdown());
@@ -193,9 +191,10 @@ static int Iso(string[] a)
 
     Console.WriteLine($"Kiểm kê: {(extraction.Complete ? "đủ để dựng" : extraction.Gaps + " khoảng trống")}, {extraction.Warnings} điểm cần xem.");
     foreach (var c in extraction.Checks.Where(c => c.Status != "ok")) Console.WriteLine($"  [{(c.Status == "gap" ? "THIẾU" : "xem")}] {c.Group}: {c.Subject}, bản vẽ {c.Expected}, đọc được {c.Found}{(c.Note != null ? ", " + c.Note : "")}");
+    var forced = Array.IndexOf(a, "--force") >= 0;
     if (outPath != null)
     {
-        if (extraction.Complete || Array.IndexOf(a, "--force") >= 0)
+        if (extraction.Complete || forced)
         {
             File.WriteAllText(outPath, IrJson.Serialize(model));
             Console.WriteLine($"Đã ghi IR vào {outPath}.");
@@ -203,7 +202,7 @@ static int Iso(string[] a)
         else Console.WriteLine("Chưa ghi IR vì kiểm kê còn khoảng trống; thêm --force để ghi dù vậy.");
     }
 
-    return extraction.Complete ? 0 : 1;
+    return extraction.Complete || forced ? 0 : 1;
 }
 
 // S6-04: xử lý nhiều bản vẽ với một hồ sơ, ghi IR, khối lượng, báo cáo cho từng bản và một bảng tổng hợp.

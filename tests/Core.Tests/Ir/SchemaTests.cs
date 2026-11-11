@@ -126,6 +126,14 @@ public class SchemaTests
     }
 
     [Fact]
+    public void Vertical_run_from_isometric_needs_only_one_plan_point()
+    {
+        var json = """{ "schemaVersion": "1.0", "units": "mm", "source": {}, "runs": [ { "id": "R1", "lineId": "L1", "dn": 100, "elevation": { "raw": 1000, "datum": "CL" }, "endElevation": 2500, "planPoints": [[0, 0]] } ] }""";
+        var results = Evaluate(json);
+        Assert.True(results.IsValid, string.Join("\n", FailedPaths(results)));
+    }
+
+    [Fact]
     public void Schema_file_declares_version_1_0()
     {
         var node = JsonNode.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "schemas", "piping-ir-1.0.json")))!;

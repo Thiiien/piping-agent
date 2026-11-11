@@ -112,10 +112,11 @@ namespace PipingAgent.AutoCAD.Commands
 
             if (layer.Provider == "openai-compatible")
             {
-                var endpoint = AskDefault(context, "Điểm cuối kiểu OpenAI", current.Endpoint ?? "http://127.0.0.1:8645/v1");
+                // Load xuất phát từ Defaults nên hai giá trị này luôn có.
+                var endpoint = AskDefault(context, "Điểm cuối kiểu OpenAI", current.Endpoint!);
                 if (endpoint == null) return;
                 layer.Endpoint = endpoint;
-                var model = AskDefault(context, "Tên mô hình", current.Model ?? "meituan/longcat-2.5:free");
+                var model = AskDefault(context, "Tên mô hình", current.Model!);
                 if (model == null) return;
                 layer.Model = model;
                 var key = context.Editor.GetString(new PromptStringOptions("\nKhoá truy cập, để trống nếu giữ khoá cũ hoặc không cần: ") { AllowSpaces = false });

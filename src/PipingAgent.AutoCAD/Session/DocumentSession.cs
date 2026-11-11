@@ -122,6 +122,13 @@ namespace PipingAgent.AutoCAD.Session
             }
         }
 
+        /// <summary>Nạp IR của tờ isometric (PA_ISO, PA_BUILDIR): không có đối tượng 2D nào đi kèm và không gắn nền 2D khi dựng.</summary>
+        public void StoreIso(PipingModel model)
+        {
+            StoreScan(new List<SourceEntity>(), new RecognitionResult { Model = model }, 1.0, model.Source.Fingerprint);
+            FromIsometric = true;
+        }
+
         public void Dispose()
         {
             Highlight.Dispose();

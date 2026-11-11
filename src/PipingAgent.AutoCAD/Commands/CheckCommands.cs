@@ -83,8 +83,7 @@ namespace PipingAgent.AutoCAD.Commands
             if (path == null) return;
             var full = System.IO.Path.GetFullPath(path.Trim('"'));
             var model = PipingAgent.Core.Ir.Json.IrJson.Deserialize(System.IO.File.ReadAllText(full));
-            var result = new PipingAgent.Core.Recognition.RecognitionResult { Model = model };
-            session.StoreScan(session.LastEntities ?? new List<PipingAgent.Core.Source.SourceEntity>(), result, 1.0, model.Source.Fingerprint);
+            session.StoreIso(model);
             context.Write($"Piping Agent: đã nạp IR {System.IO.Path.GetFileName(full)}: {model.Segments.Count} đoạn ống, {model.Nodes.Count} nút, {model.Issues.Count} vấn đề. Gõ PA_BUILD để dựng.");
         }
     }

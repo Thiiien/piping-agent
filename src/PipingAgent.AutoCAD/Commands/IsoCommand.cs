@@ -39,7 +39,8 @@ namespace PipingAgent.AutoCAD.Commands
                 return;
             }
 
-            var run = IsoPipeline.Run(path, PluginApp.Sessions?.Catalog, session.Profile);
+            // Hồ sơ của phiên là hồ sơ mặt bằng 2D; tờ iso dùng hồ sơ iso-default như CLI để hai đường cho cùng kết quả.
+            var run = IsoPipeline.Run(path, PluginApp.Sessions?.Catalog);
             var r = run.Analysis;
             context.Write($"Piping Agent: {Path.GetFileName(path)} {(run.IsDwg ? "DWG/DXF" : "PDF")}{(run.Isogen ? " kiểu ISOGEN" : "")}, tuyến {r.LineTag}, DN{r.Dn}, nét ống {r.Segments.Count(s => !s.Bridged)}, góc co {r.Corners}, neo {r.Anchors.Count}.");
             context.Write($"Piping Agent: đồ thị 3D {run.GraphStats}; cấu kiện {run.Model.Components.Count}, bảng vật tư {r.Bom.Count} dòng.");
@@ -75,9 +76,7 @@ namespace PipingAgent.AutoCAD.Commands
 
             var irPath = IsoPipeline.IrPathFor(path);
             File.WriteAllText(irPath, PipingAgent.Core.Ir.Json.IrJson.Serialize(run.Model));
-            var result = new RecognitionResult { Model = run.Model };
-            session.StoreScan(new List<SourceEntity>(), result, 1.0, run.Model.Source.Fingerprint);
-            session.FromIsometric = true;
+            session.StoreIso(run.Model);
             context.Write($"Piping Agent: đã nạp IR {Path.GetFileName(irPath)}: {run.Model.Segments.Count} đoạn ống, {run.Model.Nodes.Count} nút, {run.Model.Components.Count} cấu kiện. Gõ PA_BUILD rồi chọn Hientai hoặc Moi để dựng 3D.");
             context.Log?.Info("iso", new Dictionary<string, object?>
             {

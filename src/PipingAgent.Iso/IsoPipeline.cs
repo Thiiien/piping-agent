@@ -6,6 +6,7 @@ using PipingAgent.Core.Geometry;
 using PipingAgent.Core.Graph;
 using PipingAgent.Core.Ir;
 using PipingAgent.Core.Profile;
+using PipingAgent.Core.Rules;
 using PipingAgent.Core.Source;
 
 namespace PipingAgent.Iso
@@ -29,8 +30,8 @@ namespace PipingAgent.Iso
 
         public IsoExtraction Extraction { get; set; } = new IsoExtraction();
 
-        /// <summary>Bước 1 xong và không còn khoảng trống, bước 2 được phép dựng.</summary>
-        public bool ReadyToBuild => Extraction.Complete;
+        /// <summary>Bộ luật chung đã chạy trên mô hình iso, vấn đề nằm trong <see cref="PipingModel.Issues"/>.</summary>
+        public RuleRunResult Rules { get; set; } = new RuleRunResult();
     }
 
     /// <summary>
@@ -47,16 +48,35 @@ namespace PipingAgent.Iso
             var result = new IsoPipelineResult { Path = path, IsDwg = IsDrawingFile(path) };
             result.Page = result.IsDwg ? IsoDxfReader.Read(path) : IsoPdfReader.Read(path)[0];
             result.Isogen = IsoDxfReader.LooksLikeIsogen(result.Page.Entities);
+            profile ??= DefaultProfile();
             var options = result.Isogen ? IsoOptions.ForIsogen() : new IsoOptions();
+            // Cùng một bảng OD với GraphBuilder, thay cho bảng chép tay trong IsoGraph.
+            if (catalog != null) options.OdLookup = dn => catalog.PipeOd(profile.PipeStandard, dn) is { Found: true } od ? od.Value : (double?)null;
             var graph = new IsoGraph(options);
             result.Analysis = graph.Analyze(result.Page.Entities, result.Page.Width, result.Page.Height);
             var file = System.IO.Path.GetFileName(path);
             result.Model = graph.ToModel(result.Analysis, file);
-            profile ??= new ConventionProfile { Id = "iso-default", PipeStandard = "ASME-B36.10", FittingStandard = "ASME-B16.9" };
-            result.GraphStats = new GraphBuilder(profile, catalog).Build(result.Model);
-            LinkComponents(result.Model);
+            (result.GraphStats, result.Rules) = Complete(result.Model, catalog, profile);
             result.Extraction = IsoExtraction.Build(result.Analysis, result.Model, file);
             return result;
+        }
+
+        public static ConventionProfile DefaultProfile() => new ConventionProfile
+        {
+            Id = "iso-default",
+            PipeStandard = "ASME-B36.10",
+            FittingStandard = "ASME-B16.9",
+            // Trên tờ iso, mặt bích sát co hay tê là bố trí thật, không phải nhận diện sai như trên mặt bằng.
+            Rules = { ["R-GEO-04"] = "off" },
+        };
+
+        /// <summary>Phần chung sau khi có mô hình từ một tờ hay từ nhiều tờ gộp: dựng đồ thị 3D, gắn cấu kiện, chạy bộ luật.</summary>
+        public static (GraphStats Stats, RuleRunResult Rules) Complete(PipingModel model, PipeCatalog? catalog, ConventionProfile? profile = null)
+        {
+            profile ??= DefaultProfile();
+            var stats = new GraphBuilder(profile, catalog).Build(model);
+            LinkComponents(model);
+            return (stats, RuleRunner.Run(model, profile));
         }
 
         /// <summary>Gắn mỗi cấu kiện vào đoạn ống gần nhất theo mặt bằng và cao độ, để kế hoạch dựng biết cắt ống chỗ nào.</summary>
