@@ -27,7 +27,13 @@ Nếu không thấy dòng đã nạp, kiểm tra biến `SECURELOAD`: gõ `SECUR
 
 ## 3a. Thẻ ribbon Piping Agent
 
-Sau khi nạp, ribbon có thêm thẻ `Piping Agent` với ba nhóm nút: Isometric sang 3D (Đọc tờ ISO, Dựng 3D, Cổng nối, Nạp IR), Mặt bằng (Nhận diện, Kiểm tra, Sửa, Bỏ qua), Trợ lý (Bảng điều khiển, Hỏi agent, Kiểm tra plug-in). Mỗi nút chỉ gửi lệnh tương ứng vào dòng lệnh, nên các bước hỏi đáp vẫn hiện ở dòng lệnh. Không thấy thẻ thì gõ `PA_RIBBON`; ribbon đang tắt thì gõ `RIBBON` trước.
+Sau khi nạp, ribbon có thêm thẻ `Piping Agent` với ba panel theo đúng kiểu panel chuẩn của AutoCAD: nút lớn cho lệnh chính, cột nút nhỏ ba hàng cho lệnh phụ, biểu tượng nét phẳng đổi màu theo theme sáng tối (`COLORTHEME`).
+
+- Isometric sang 3D: nút lớn `Đọc tờ ISO`; nút tách `Dựng 3D` (bấm phần trên dựng vào bản vẽ mới, mũi tên chọn Bản đang mở hoặc Xem trước); cột nhỏ `Cổng nối`, `Nạp IR`, `Xuất JSON`.
+- Mặt bằng: nút tách `Nhận diện` (cả bản vẽ hoặc trong cửa sổ); nút lớn `Kiểm tra`; cột nhỏ `Sửa`, `Bỏ qua`, `Chạy lại`.
+- Trợ lý: nút lớn `Bảng điều khiển`; cột nhỏ `Hỏi agent`, `Cấu hình agent`, `Kiểm tra plug-in`.
+
+Di chuột lên nút để xem chú thích, giữ thêm một chút để xem phần giải thích dài. Bấm `Alt` rồi `PA` để vào thẻ bằng bàn phím, mỗi nút có phím tắt riêng hiện khi bấm `Alt`. Nút chỉ gửi lệnh vào dòng lệnh, riêng nút tách đặt sẵn câu trả lời cho câu hỏi chế độ nên không hỏi lại. Không thấy thẻ thì gõ `PA_RIBBON`; ribbon đang tắt thì gõ `RIBBON` trước.
 
 ## 3b. Tờ isometric sang 3D
 

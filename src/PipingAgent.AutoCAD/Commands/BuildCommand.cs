@@ -28,6 +28,8 @@ namespace PipingAgent.AutoCAD.Commands
 
         protected override void Run(CommandContext context)
         {
+            // Lấy ngay từ đầu để chế độ nút ribbon không còn sót lại khi lệnh dừng sớm.
+            var preset = CommandPresets.Take("PA_BUILD");
             var session = PluginApp.Sessions?.GetOrCreate(context.Document);
             var model = session?.LastResult?.Model;
             if (session == null || model == null)
@@ -43,15 +45,23 @@ namespace PipingAgent.AutoCAD.Commands
             }
 
             var blockers = model.Issues.Count(i => i.Severity == Severity.Blocker && i.Status == IssueStatus.Open);
-            var prompt = new PromptKeywordOptions("\nDựng mô hình 3D [Xemtruoc/Moi/Hientai/Loithu] ") { AllowNone = true };
-            prompt.Keywords.Add("Xemtruoc");
-            prompt.Keywords.Add("Moi");
-            prompt.Keywords.Add("Hientai");
-            prompt.Keywords.Add("Loithu");
-            prompt.Keywords.Default = "Xemtruoc";
-            var choice = context.Editor.GetKeywords(prompt);
-            if (choice.Status != PromptStatus.OK && choice.Status != PromptStatus.None) return;
-            var mode = choice.Status == PromptStatus.None ? "Xemtruoc" : choice.StringResult;
+            var mode = preset;
+            if (mode == null)
+            {
+                var prompt = new PromptKeywordOptions("\nDựng mô hình 3D [Xemtruoc/Moi/Hientai/Loithu] ") { AllowNone = true };
+                prompt.Keywords.Add("Xemtruoc");
+                prompt.Keywords.Add("Moi");
+                prompt.Keywords.Add("Hientai");
+                prompt.Keywords.Add("Loithu");
+                prompt.Keywords.Default = "Xemtruoc";
+                var choice = context.Editor.GetKeywords(prompt);
+                if (choice.Status != PromptStatus.OK && choice.Status != PromptStatus.None) return;
+                mode = choice.Status == PromptStatus.None ? "Xemtruoc" : choice.StringResult;
+            }
+            else
+            {
+                context.Write($"Dựng mô hình 3D: {mode}");
+            }
 
             var options = new BuildOptions { Target = mode == "Moi" ? BuildTarget.NewDrawing : BuildTarget.CurrentDrawing };
             if (mode == "Loithu") options.FailAfterItems = 3;
