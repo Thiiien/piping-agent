@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="xunit" Version="2.5.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
+    <!-- Chỉ dùng trong kiểm thử để đối chiếu IR với lược đồ JSON. Lõi không tham chiếu gói này. -->
+    <PackageReference Include="JsonSchema.Net" Version="9.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\PipingAgent.Core\PipingAgent.Core.csproj" />
+    <ProjectReference Include="..\..\src\PipingAgent.Hosting\PipingAgent.Hosting.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\data\profiles\*.json" Link="profiles\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\data\catalog\*.json" Link="catalog\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\data\equipment\*.json" Link="equipment\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="Data\**\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\schemas\*.json" Link="schemas\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,274 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pipingagent.local/schemas/piping-ir-1.0.json",
+  "title": "Piping IR 1.0",
+  "description": "Mô hình trung gian trung lập với CAD của Piping Agent. Theo chương 7 của docs/TAI_LIEU_DU_AN.md. Toạ độ mm, trục Z hướng lên.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "units", "source"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "units": { "const": "mm" },
+    "source": { "$ref": "#/$defs/sourceInfo" },
+    "profile": { "$ref": "#/$defs/profileRef" },
+    "generator": { "$ref": "#/$defs/generatorInfo" },
+    "lines": { "type": "array", "items": { "$ref": "#/$defs/line" } },
+    "runs": { "type": "array", "items": { "$ref": "#/$defs/run" } },
+    "segments": { "type": "array", "items": { "$ref": "#/$defs/segment" } },
+    "nodes": { "type": "array", "items": { "$ref": "#/$defs/node" } },
+    "components": { "type": "array", "items": { "$ref": "#/$defs/component" } },
+    "equipment": { "type": "array", "items": { "$ref": "#/$defs/equipment" } },
+    "structures": { "type": "array", "items": { "$ref": "#/$defs/structure" } },
+    "issues": { "type": "array", "items": { "$ref": "#/$defs/issue" } },
+    "decisions": { "type": "array", "items": { "$ref": "#/$defs/decision" } }
+  },
+  "$defs": {
+    "id": { "type": "string", "minLength": 1 },
+    "point2": {
+      "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2,
+      "description": "[x, y] mm"
+    },
+    "point3": {
+      "type": "array", "items": { "type": "number" }, "minItems": 3, "maxItems": 3,
+      "description": "[x, y, z] mm"
+    },
+    "vector3": { "$ref": "#/$defs/point3" },
+    "box2": {
+      "type": "object", "additionalProperties": false, "required": ["min", "max"],
+      "properties": { "min": { "$ref": "#/$defs/point2" }, "max": { "$ref": "#/$defs/point2" } }
+    },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "decidedBy": { "enum": ["rule", "agent", "user"] },
+    "timestamp": { "type": "string", "description": "ISO 8601" },
+
+    "sourceInfo": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "file": { "type": "string" },
+        "fingerprint": { "type": "string" },
+        "readAt": { "$ref": "#/$defs/timestamp" },
+        "entityCount": { "type": "integer", "minimum": 0 },
+        "region": { "$ref": "#/$defs/box2" },
+        "sheet": { "type": "string" }
+      }
+    },
+    "profileRef": {
+      "type": "object", "additionalProperties": false, "required": ["id", "version"],
+      "properties": { "id": { "$ref": "#/$defs/id" }, "version": { "type": "integer", "minimum": 0 } }
+    },
+    "generatorInfo": {
+      "type": "object", "additionalProperties": false, "required": ["name", "version"],
+      "properties": { "name": { "type": "string" }, "version": { "type": "string" } }
+    },
+
+    "prov": {
+      "type": "object", "additionalProperties": false, "required": ["sources", "confidence", "decidedBy"],
+      "properties": {
+        "sources": { "type": "array", "items": { "type": "string" } },
+        "rule": { "type": "string" },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "decidedBy": { "$ref": "#/$defs/decidedBy" },
+        "inferred": { "type": "boolean" }
+      }
+    },
+    "tagRef": {
+      "type": "object", "additionalProperties": false, "required": ["text", "by"],
+      "properties": {
+        "text": { "type": "string" },
+        "by": { "enum": ["block_attribute", "leader", "adjacent", "nearest", "user"] },
+        "sourceHandle": { "type": "string" },
+        "mergedHandles": { "type": "array", "items": { "type": "string" } },
+        "position": { "$ref": "#/$defs/point2" },
+        "confidence": { "$ref": "#/$defs/confidence" }
+      }
+    },
+
+    "line": {
+      "type": "object", "additionalProperties": false, "required": ["id", "tag"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "tag": { "type": "string" },
+        "service": { "type": "string" },
+        "spec": { "type": "string" },
+        "insulation": {
+          "type": "object", "additionalProperties": false,
+          "properties": { "type": { "type": "string" }, "thickness": { "type": "number", "minimum": 0 } }
+        },
+        "prov": { "$ref": "#/$defs/prov" }
+      }
+    },
+    "elevation": {
+      "type": "object", "additionalProperties": false, "required": ["raw", "datum"],
+      "properties": {
+        "raw": { "type": "number" },
+        "datum": { "enum": ["CL", "BOP", "TOP", "TOS", "Unknown"] },
+        "centerline": { "type": "number" },
+        "supportHeight": { "type": "number", "minimum": 0 }
+      }
+    },
+    "run": {
+      "type": "object", "additionalProperties": false, "required": ["id", "lineId", "dn", "elevation", "planPoints"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "lineId": { "$ref": "#/$defs/id" },
+        "dn": { "type": "integer", "minimum": 0 },
+        "elevation": { "$ref": "#/$defs/elevation" },
+        "planPoints": { "type": "array", "items": { "$ref": "#/$defs/point2" }, "minItems": 2 },
+        "tagRef": { "$ref": "#/$defs/tagRef" },
+        "prov": { "$ref": "#/$defs/prov" }
+      }
+    },
+    "segment": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "lineId", "nodeA", "nodeB", "kind", "dn", "od", "length", "trimA", "trimB"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "lineId": { "$ref": "#/$defs/id" },
+        "runId": { "type": ["string", "null"] },
+        "nodeA": { "$ref": "#/$defs/id" },
+        "nodeB": { "$ref": "#/$defs/id" },
+        "kind": { "enum": ["horizontal", "riser", "sloped"] },
+        "dn": { "type": "integer", "minimum": 0 },
+        "od": { "type": "number", "minimum": 0 },
+        "length": { "type": "number", "minimum": 0 },
+        "trimA": { "type": "number", "minimum": 0 },
+        "trimB": { "type": "number", "minimum": 0 },
+        "prov": { "$ref": "#/$defs/prov" }
+      }
+    },
+    "node": {
+      "type": "object", "additionalProperties": false, "required": ["id", "position", "kind", "segments"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "position": { "$ref": "#/$defs/point3" },
+        "kind": { "enum": ["elbow", "tee", "reducer", "nozzle", "open_end", "continuation"] },
+        "segments": { "type": "array", "items": { "$ref": "#/$defs/id" } },
+        "params": { "type": "object", "additionalProperties": { "type": "number" } },
+        "equipmentId": { "$ref": "#/$defs/id" },
+        "nozzleId": { "$ref": "#/$defs/id" },
+        "catalogRef": { "type": "string" },
+        "prov": { "$ref": "#/$defs/prov" }
+      }
+    },
+    "attributeValue": {
+      "type": "object", "additionalProperties": false, "required": ["value", "by"],
+      "properties": {
+        "value": { "type": "string" },
+        "by": { "enum": ["block_attribute", "leader", "adjacent", "nearest", "legend", "user"] },
+        "sourceHandle": { "type": "string" },
+        "confidence": { "$ref": "#/$defs/confidence" }
+      }
+    },
+    "component": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "segmentId", "type", "position", "axis", "dn", "length"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "segmentId": { "$ref": "#/$defs/id" },
+        "type": { "type": "string", "minLength": 1, "description": "Danh sách mở, ví dụ valve_gate, flange_pair, unclassified" },
+        "position": { "$ref": "#/$defs/point3" },
+        "axis": { "$ref": "#/$defs/vector3" },
+        "dn": { "type": "integer", "minimum": 0 },
+        "length": { "type": "number", "minimum": 0 },
+        "tag": { "type": "string" },
+        "tagRef": { "$ref": "#/$defs/tagRef" },
+        "attributes": { "type": "object", "additionalProperties": { "$ref": "#/$defs/attributeValue" } },
+        "prov": { "$ref": "#/$defs/prov" }
+      }
+    },
+    "placement": {
+      "type": "object", "additionalProperties": false, "required": ["origin", "rotationDeg", "params"],
+      "properties": {
+        "origin": { "$ref": "#/$defs/point3" },
+        "rotationDeg": { "type": "number" },
+        "params": { "type": "object", "additionalProperties": { "type": "number" } }
+      }
+    },
+    "nozzle": {
+      "type": "object", "additionalProperties": false, "required": ["id", "position", "direction", "dn"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "position": { "$ref": "#/$defs/point3" },
+        "direction": { "$ref": "#/$defs/vector3" },
+        "dn": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "equipment": {
+      "type": "object", "additionalProperties": false, "required": ["id", "tag", "type", "geometry", "nozzles"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "tag": { "type": "string" },
+        "type": { "type": "string", "minLength": 1 },
+        "geometry": { "$ref": "#/$defs/placement" },
+        "nozzles": { "type": "array", "items": { "$ref": "#/$defs/nozzle" } },
+        "prov": { "$ref": "#/$defs/prov" }
+      }
+    },
+    "structure": {
+      "type": "object", "additionalProperties": false, "required": ["id", "type", "points"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "type": { "enum": ["column", "beam"] },
+        "points": { "type": "array", "items": { "$ref": "#/$defs/point3" }, "minItems": 2, "maxItems": 2 },
+        "section": { "type": "string" },
+        "tos": { "type": "number" },
+        "prov": { "$ref": "#/$defs/prov" }
+      }
+    },
+
+    "decisionOp": {
+      "enum": ["assign_tag", "set_dn", "set_elevation", "set_node_kind", "connect", "split_line", "ignore_source", "set_component_type", "waive_issue"]
+    },
+    "target": {
+      "type": "object", "minProperties": 1, "additionalProperties": { "type": "string" },
+      "description": "Khoá là loại phần tử: run, segment, node, component, issue, source"
+    },
+    "suggestion": {
+      "type": "object", "additionalProperties": false, "required": ["op", "target"],
+      "properties": {
+        "op": { "$ref": "#/$defs/decisionOp" },
+        "target": { "$ref": "#/$defs/target" },
+        "value": {},
+        "label": { "type": "string" }
+      }
+    },
+    "waiver": {
+      "type": "object", "additionalProperties": false, "required": ["by", "reason", "at"],
+      "properties": { "by": { "type": "string" }, "reason": { "type": "string" }, "at": { "$ref": "#/$defs/timestamp" } }
+    },
+    "issue": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "ruleId", "severity", "status", "elements", "sources", "message", "suggestions"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "ruleId": { "type": "string", "minLength": 1 },
+        "severity": { "enum": ["blocker", "warning", "info"] },
+        "status": { "enum": ["open", "fixed", "waived"] },
+        "elements": { "type": "array", "items": { "$ref": "#/$defs/id" } },
+        "sources": { "type": "array", "items": { "type": "string" } },
+        "position": { "$ref": "#/$defs/point3" },
+        "message": { "type": "string" },
+        "suggestions": { "type": "array", "items": { "$ref": "#/$defs/suggestion" } },
+        "waiver": { "$ref": "#/$defs/waiver" }
+      }
+    },
+    "decision": {
+      "type": "object", "additionalProperties": false, "required": ["id", "op", "target", "by", "status", "at"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "op": { "$ref": "#/$defs/decisionOp" },
+        "target": { "$ref": "#/$defs/target" },
+        "value": {},
+        "by": { "$ref": "#/$defs/decidedBy" },
+        "status": { "enum": ["pending", "approved", "rejected"] },
+        "rationale": { "type": "string" },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "at": { "$ref": "#/$defs/timestamp" },
+        "approvedBy": { "type": "string" },
+        "approvedAt": { "$ref": "#/$defs/timestamp" }
+      },
+      "if": { "properties": { "by": { "const": "agent" } } },
+      "then": { "required": ["rationale", "confidence"] }
+    }
+  }
+}

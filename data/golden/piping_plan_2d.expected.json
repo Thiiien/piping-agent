@@ -1,0 +1,26 @@
+{
+  "drawing": "piping_plan_2d.dxf",
+  "runs": 11,
+  "segments": 26,
+  "elbows": 15,
+  "tees": 3,
+  "risers": 3,
+  "nozzles": 8,
+  "valves": 7,
+  "equipment": 4,
+  "pipeLengthM": 115.9,
+  "lines": [
+    "P-1001",
+    "P-1002",
+    "P-1003",
+    "P-1011",
+    "P-1012",
+    "P-1021",
+    "P-1022",
+    "U-2001"
+  ],
+  "lineLengthM": {
+    "U-2001": 18.0
+  },
+  "lengthTolerance": 0.02
+}

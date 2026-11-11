@@ -1,0 +1,17 @@
+{
+  "id": "pump",
+  "name": "Bơm ly tâm, hộp bao",
+  "schemaVersion": "1.0",
+  "params": [
+    { "name": "L", "unit": "mm", "from": "footprint.length" },
+    { "name": "W", "unit": "mm", "from": "footprint.width" },
+    { "name": "H", "unit": "mm", "from": "tag", "pattern": "H\\s*=\\s*(?<v>\\d+(?:\\.\\d+)?)", "default": 800 }
+  ],
+  "body": [
+    { "shape": "box", "size": ["L", "W", "H * 0.4"], "center": [0, 0, "H * 0.2"] },
+    { "shape": "cylinder", "axis": "x", "diameter": "W * 0.8", "length": "L * 0.6", "center": ["-L * 0.1", 0, "H * 0.4 + W * 0.4"] },
+    { "shape": "cylinder", "axis": "x", "diameter": "W * 0.9", "length": "L * 0.3", "center": ["L * 0.3", 0, "H * 0.4 + W * 0.4"] }
+  ],
+  "nozzles": [],
+  "hosts": { "autocad": { "block3d": null } }
+}

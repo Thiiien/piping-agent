@@ -1,0 +1,22 @@
+name: build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+      - name: Restore
+        run: dotnet restore PipingAgent.sln
+      - name: Build
+        run: dotnet build PipingAgent.sln -c Release --no-restore
+      - name: Test
+        run: dotnet test PipingAgent.sln -c Release --no-build

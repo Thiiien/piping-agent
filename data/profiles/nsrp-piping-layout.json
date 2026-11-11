@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "1.0",
+  "id": "nsrp-piping-layout",
+  "version": 1,
+  "extends": "base-default",
+  "units": "mm",
+  "pipeStandard": "ASME-B36.10",
+  "fittingStandard": "ASME-B16.9",
+  "tolerances": {
+    "snap": 2.0,
+    "collinearDeg": 0.5,
+    "tagSearchRadius": 2500,
+    "leaderTouch": 25,
+    "tagAdjacentFactor": 2.5,
+    "minSegmentLength": 5,
+    "fittingReach": 300,
+    "gapTolerance": 60,
+    "defaultSupportHeight": 100,
+    "unclassifiedWarning": 0.30
+  },
+  "roles": [
+    { "role": "flow_arrow",      "match": { "block": "WL*" } },
+    { "role": "flow_arrow",      "match": { "block": "FlowLine*" } },
+    { "role": "flow_arrow",      "match": { "block": "yajirusi*" } },
+    { "role": "annotation",      "match": { "block": "A$C*" } },
+    { "role": "pipe_centerline", "match": { "layers": ["LINE-5", "LINE-2", "LINE-1", "LINE1", "LINE2"], "types": ["LINE", "LWPOLYLINE", "POLYLINE"] } },
+    { "role": "pipe_tag",        "match": { "layer": "TEXT", "types": ["TEXT", "MTEXT"] } },
+    { "role": "pipe_tag",        "match": { "layer": "DIMN", "types": ["TEXT", "MTEXT"] } },
+    { "role": "pipe_tag_leader", "match": { "layer": "LEADER", "types": ["LINE", "LEADER", "MULTILEADER"] } },
+    { "role": "pipe_tag_leader", "match": { "layer": "DIMN", "types": ["LINE", "LEADER", "MULTILEADER"] } },
+    { "role": "annotation",      "match": { "layer": "LEADER" } },
+    { "role": "annotation",      "match": { "layer": "DIMN" } },
+    { "role": "inline_component","match": { "layers": ["LINE-5", "LINE-2", "FITT2", "FITT", "SYM1", "SYM2"], "types": ["INSERT"] } },
+    { "role": "annotation",      "match": { "layers": ["FITT2", "FITT", "SYM1", "SYM2", "WELD"] } },
+    { "role": "annotation",      "match": { "layers": ["CENT", "CEN2", "Center", "S_CEN"] } },
+    { "role": "equipment",       "match": { "layers": ["EQUIP", "EQUIPMENT", "EQ", "EQPLIN"] } },
+    { "role": "structure",       "match": { "layers": ["STRUCTURE", "STRLIN", "BEAM", "SUPPORT"] } },
+    { "role": "annotation",      "match": { "layers": ["MREV", "MARK"] } },
+    { "role": "title_block",     "match": { "block": "NSRP_*" } },
+    { "role": "title_block",     "match": { "block": "nsrp*" } },
+    { "role": "equipment_tag",   "match": { "layer": "0", "types": ["TEXT", "MTEXT"] } }
+  ],
+  "tagPatterns": [
+    {
+      "name": "nps-service-unit-seq-spec-insul",
+      "regex": "^\\s*(?<dn>\\d+(?:[\\s-]\\d+/\\d+|/\\d+)?)\\s*\"\\s*-\\s*(?<line>(?<service>[A-Z0-9]+)\\s*-\\s*(?<unit>[A-Z0-9]+)\\s*-\\s*(?<seq>[A-Z0-9]*))\\s*-\\s*(?<spec>[A-Z0-9]+)(?:\\s*-\\s*(?<insul>[A-Z]+)\\s*\\(?\\s*(?<insulThk>\\d+)?\\s*[A-Z]*\\)?)?\\s*$",
+      "dnUnit": "inch"
+    }
+  ],
+  "elevationPatterns": [
+    { "name": "el-value-datum", "regex": "^\\s*EL\\.?\\s*(?<el>[+-]?\\d[\\d,]*(?:\\.\\d+)?)\\s*(?<datum>BOP|TOP|TOS|CL|C/L)\\s*$" },
+    { "name": "datum-el-value", "regex": "^\\s*(?<datum>BOP|TOP|TOS|CL|C/L)\\s*EL\\.?\\s*(?<el>[+-]?\\d[\\d,]*(?:\\.\\d+)?)\\s*$" },
+    { "name": "el-only", "regex": "^\\s*EL\\.?\\s*(?<el>[+-]?\\d[\\d,]*(?:\\.\\d+)?)\\s*$" }
+  ],
+  "blocks": [
+    { "name": "e*", "component": "elbow_symbol" },
+    { "name": "f*", "component": "flange" },
+    { "name": "t*x*", "component": "tee_symbol" },
+    { "name": "r*X*", "component": "reducer_symbol" },
+    { "name": "v*", "component": "valve" },
+    { "name": "x*", "component": "valve" },
+    { "name": "w*", "component": "valve" },
+    { "name": "pc*", "component": "cap" },
+    { "name": "olet*", "component": "olet" },
+    { "name": "WL*", "symbol": "flow_arrow" },
+    { "name": "FlowLine*", "symbol": "flow_arrow" },
+    { "name": "yajirusi*", "symbol": "flow_arrow" },
+    { "name": "sh*", "structure": "support" },
+    { "name": "su*", "structure": "support" },
+    { "name": "SUPPORT*", "structure": "support" }
+  ],
+  "componentTagPatterns": [],
+  "equipmentRules": [
+    { "match": { "shape": "circle", "layer": "EQUIP*" }, "type": "tank_vertical" }
+  ],
+  "structureRules": { "tosPattern": "EL\\.?\\s*(?<tos>\\d[\\d,]*)\\s*TOS" },
+  "rules": { "R-TAG-01": "warning" }
+}

@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Isometric sang 3D: bộ đọc PDF vector và đồ thị isometric. .NET Standard 2.0 để plug-in AutoCAD cả hai nền dùng được. -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PipingAgent.Core\PipingAgent.Core.csproj" />
+    <ProjectReference Include="..\PipingAgent.Dxf\PipingAgent.Dxf.csproj" />
+    <PackageReference Include="PdfPig" Version="0.1.11" />
+  </ItemGroup>
+
+</Project>

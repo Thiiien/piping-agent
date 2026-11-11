@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!--
+      Thư viện bên thứ ba duy nhất của lõi. Giữ ở dòng 8.0 cho cùng phiên bản với bản .NET 8
+      mà AutoCAD 2025 mang theo, để không xung đột khi nạp vào tiến trình AutoCAD. Quy tắc 6, mục 6.12.3.
+      Trên .NET Framework 4.8 gói này tự kèm các thư viện phụ trợ.
+    -->
+    <PackageReference Include="System.Text.Json" Version="8.0.6" />
+  </ItemGroup>
+
+</Project>

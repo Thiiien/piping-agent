@@ -1,0 +1,319 @@
+{
+  "schemaVersion": "1.0",
+  "standard": "ASME-B16.10",
+  "title": "Face-to-face van mặt bích class 150",
+  "units": "mm",
+  "verified": false,
+  "note": "Số liệu chép tay từ bảng tiêu chuẩn, chưa đối chiếu với bản gốc. Chuyên gia đối chiếu ở việc S2-16. L là khoảng cách mặt tới mặt.",
+  "pipes": [],
+  "fittings": [
+    {
+      "type": "VALVE_GATE",
+      "dn": 15,
+      "dims": {
+        "L": 108
+      }
+    },
+    {
+      "type": "VALVE_GATE",
+      "dn": 20,
+      "dims": {
+        "L": 117
+      }
+    },
+    {
+      "type": "VALVE_GATE",
+      "dn": 25,
+      "dims": {
+        "L": 127
+      }
+    },
+    {
+      "type": "VALVE_GATE",
+      "dn": 32,
+      "dims": {
+        "L": 140
+      }
+    },
+    {
+      "type": "VALVE_GATE",
+      "dn": 40,
+      "dims": {
+        "L": 165
+      }
+    },
+    {
+      "type": "VALVE_GATE",
+      "dn": 50,
+      "dims": {
+        "L": 178
+      }
+    },
+    {
+      "type": "VALVE_GATE",
+      "dn": 65,
+      "dims": {
+        "L": 190
+      }
+    },
+    {
+      "type": "VALVE_GATE",
+      "dn": 80,
+      "dims": {
+        "L": 203
+      }
+    },
+    {
+      "type": "VALVE_GATE",
+      "dn": 100,
+      "dims": {
+        "L": 229
+      }
+    },
+    {
+      "type": "VALVE_GATE",
+      "dn": 150,
+      "dims": {
+        "L": 267
+      }
+    },
+    {
+      "type": "VALVE_GATE",
+      "dn": 200,
+      "dims": {
+        "L": 292
+      }
+    },
+    {
+      "type": "VALVE_GATE",
+      "dn": 250,
+      "dims": {
+        "L": 330
+      }
+    },
+    {
+      "type": "VALVE_GATE",
+      "dn": 300,
+      "dims": {
+        "L": 356
+      }
+    },
+    {
+      "type": "VALVE_GATE",
+      "dn": 350,
+      "dims": {
+        "L": 381
+      }
+    },
+    {
+      "type": "VALVE_GATE",
+      "dn": 400,
+      "dims": {
+        "L": 406
+      }
+    },
+    {
+      "type": "VALVE_GATE",
+      "dn": 450,
+      "dims": {
+        "L": 432
+      }
+    },
+    {
+      "type": "VALVE_GATE",
+      "dn": 500,
+      "dims": {
+        "L": 457
+      }
+    },
+    {
+      "type": "VALVE_GATE",
+      "dn": 600,
+      "dims": {
+        "L": 508
+      }
+    },
+    {
+      "type": "VALVE_GLOBE",
+      "dn": 15,
+      "dims": {
+        "L": 108
+      }
+    },
+    {
+      "type": "VALVE_GLOBE",
+      "dn": 20,
+      "dims": {
+        "L": 117
+      }
+    },
+    {
+      "type": "VALVE_GLOBE",
+      "dn": 25,
+      "dims": {
+        "L": 127
+      }
+    },
+    {
+      "type": "VALVE_GLOBE",
+      "dn": 32,
+      "dims": {
+        "L": 140
+      }
+    },
+    {
+      "type": "VALVE_GLOBE",
+      "dn": 40,
+      "dims": {
+        "L": 165
+      }
+    },
+    {
+      "type": "VALVE_GLOBE",
+      "dn": 50,
+      "dims": {
+        "L": 203
+      }
+    },
+    {
+      "type": "VALVE_GLOBE",
+      "dn": 65,
+      "dims": {
+        "L": 216
+      }
+    },
+    {
+      "type": "VALVE_GLOBE",
+      "dn": 80,
+      "dims": {
+        "L": 241
+      }
+    },
+    {
+      "type": "VALVE_GLOBE",
+      "dn": 100,
+      "dims": {
+        "L": 292
+      }
+    },
+    {
+      "type": "VALVE_GLOBE",
+      "dn": 150,
+      "dims": {
+        "L": 406
+      }
+    },
+    {
+      "type": "VALVE_GLOBE",
+      "dn": 200,
+      "dims": {
+        "L": 495
+      }
+    },
+    {
+      "type": "VALVE_GLOBE",
+      "dn": 250,
+      "dims": {
+        "L": 622
+      }
+    },
+    {
+      "type": "VALVE_GLOBE",
+      "dn": 300,
+      "dims": {
+        "L": 698
+      }
+    },
+    {
+      "type": "VALVE_CHECK",
+      "dn": 15,
+      "dims": {
+        "L": 108
+      }
+    },
+    {
+      "type": "VALVE_CHECK",
+      "dn": 20,
+      "dims": {
+        "L": 117
+      }
+    },
+    {
+      "type": "VALVE_CHECK",
+      "dn": 25,
+      "dims": {
+        "L": 127
+      }
+    },
+    {
+      "type": "VALVE_CHECK",
+      "dn": 32,
+      "dims": {
+        "L": 140
+      }
+    },
+    {
+      "type": "VALVE_CHECK",
+      "dn": 40,
+      "dims": {
+        "L": 165
+      }
+    },
+    {
+      "type": "VALVE_CHECK",
+      "dn": 50,
+      "dims": {
+        "L": 203
+      }
+    },
+    {
+      "type": "VALVE_CHECK",
+      "dn": 65,
+      "dims": {
+        "L": 216
+      }
+    },
+    {
+      "type": "VALVE_CHECK",
+      "dn": 80,
+      "dims": {
+        "L": 241
+      }
+    },
+    {
+      "type": "VALVE_CHECK",
+      "dn": 100,
+      "dims": {
+        "L": 292
+      }
+    },
+    {
+      "type": "VALVE_CHECK",
+      "dn": 150,
+      "dims": {
+        "L": 406
+      }
+    },
+    {
+      "type": "VALVE_CHECK",
+      "dn": 200,
+      "dims": {
+        "L": 495
+      }
+    },
+    {
+      "type": "VALVE_CHECK",
+      "dn": 250,
+      "dims": {
+        "L": 622
+      }
+    },
+    {
+      "type": "VALVE_CHECK",
+      "dn": 300,
+      "dims": {
+        "L": 698
+      }
+    }
+  ]
+}

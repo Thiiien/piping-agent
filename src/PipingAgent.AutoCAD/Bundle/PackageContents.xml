@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Tệp khai báo gói ứng dụng của AutoCAD. Mục 11.3 của docs/TAI_LIEU_DU_AN.md.
+  Chép thư mục PipingAgent.bundle vào %APPDATA%\Autodesk\ApplicationPlugins hoặc %PROGRAMDATA%\Autodesk\ApplicationPlugins
+  thì AutoCAD tự nạp khi khởi động, chọn đúng bản .NET theo phiên bản AutoCAD. Thư mục này được tin cậy sẵn, không cần TRUSTEDPATHS.
+  Tên công ty và mã sản phẩm là tạm, chờ người sáng lập chốt. Dựng gói bằng build\pack_bundle.ps1, không sửa tay trong dist.
+-->
+<ApplicationPackage SchemaVersion="1.0"
+                    AutodeskProduct="AutoCAD"
+                    Name="Piping Agent"
+                    Description="Chuyển bản vẽ đường ống 2D thành mô hình 3D với trợ lý AI"
+                    AppVersion="@VERSION@"
+                    ProductCode="{B4C1E7A2-6D3F-4E9B-9C58-2F7A1D0E8B31}"
+                    UpgradeCode="{8E5F2C90-1A4B-4D7E-B6C3-9D0F4A2E7C15}"
+                    ProductType="Application"
+                    Author="Piping Agent"
+                    HelpFile="./Contents/README.txt">
+  <CompanyDetails Name="Piping Agent" Url="" Email="" />
+
+  <Components Description="AutoCAD 2021 đến 2024, .NET Framework 4.8">
+    <RuntimeRequirements OS="Win64" Platform="AutoCAD*" SeriesMin="R24.0" SeriesMax="R24.3" />
+    <ComponentEntry AppName="PipingAgent"
+                    ModuleName="./Contents/net48/PipingAgent.AutoCAD.dll"
+                    AppDescription="Piping Agent cho AutoCAD 2021 đến 2024"
+                    LoadOnAutoCADStartup="True"
+                    LoadOnCommandInvocation="True">
+      <Commands GroupName="PIPINGAGENT">
+        <Command Global="PA_ISO" Local="PA_ISO" />
+        <Command Global="PA_BUILD" Local="PA_BUILD" />
+        <Command Global="PA_BUILDIR" Local="PA_BUILDIR" />
+        <Command Global="PA_PORT" Local="PA_PORT" />
+        <Command Global="PA_RIBBON" Local="PA_RIBBON" />
+        <Command Global="PA_SCAN" Local="PA_SCAN" />
+        <Command Global="PA_SCANWINDOW" Local="PA_SCANWINDOW" />
+        <Command Global="PA_EXPORT" Local="PA_EXPORT" />
+        <Command Global="PA_PANEL" Local="PA_PANEL" />
+        <Command Global="PA_HELLO" Local="PA_HELLO" />
+      </Commands>
+    </ComponentEntry>
+  </Components>
+
+  <Components Description="AutoCAD 2025 trở lên, .NET 8">
+    <RuntimeRequirements OS="Win64" Platform="AutoCAD*" SeriesMin="R25.0" SeriesMax="R26.9" />
+    <ComponentEntry AppName="PipingAgent"
+                    ModuleName="./Contents/net8/PipingAgent.AutoCAD.dll"
+                    AppDescription="Piping Agent cho AutoCAD 2025 trở lên"
+                    LoadOnAutoCADStartup="True"
+                    LoadOnCommandInvocation="True">
+      <Commands GroupName="PIPINGAGENT">
+        <Command Global="PA_ISO" Local="PA_ISO" />
+        <Command Global="PA_BUILD" Local="PA_BUILD" />
+        <Command Global="PA_BUILDIR" Local="PA_BUILDIR" />
+        <Command Global="PA_PORT" Local="PA_PORT" />
+        <Command Global="PA_RIBBON" Local="PA_RIBBON" />
+        <Command Global="PA_SCAN" Local="PA_SCAN" />
+        <Command Global="PA_SCANWINDOW" Local="PA_SCANWINDOW" />
+        <Command Global="PA_EXPORT" Local="PA_EXPORT" />
+        <Command Global="PA_PANEL" Local="PA_PANEL" />
+        <Command Global="PA_HELLO" Local="PA_HELLO" />
+      </Commands>
+    </ComponentEntry>
+  </Components>
+</ApplicationPackage>

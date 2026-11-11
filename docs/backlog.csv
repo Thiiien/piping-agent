@@ -1,0 +1,322 @@
+﻿Mã,Sprint,Giai đoạn,Việc,Kết quả phải có,Vai trò,Công (ngày),Phụ thuộc,Truy vết
+S0-01,0,Chuẩn bị,"Trả lời người góp ý về demo. Nói rõ sản phẩm dựng lại tuyến đã thiết kế, không tự định tuyến. Xin một bản vẽ thật hoặc 30 phút rà bản vẽ mẫu",Đã gửi. Ghi lại câu trả lời của họ,KH,"0,5",,R1
+S0-02,0,Chuẩn bị,"Lập danh sách 10 công ty có thể thử nghiệm: nhà thầu thiết kế, xưởng gia công ống, công ty làm thuê bản vẽ. Liên hệ từng nơi","Bảng theo dõi: tên, người liên hệ, trạng thái, phần mềm họ dùng, phiên bản AutoCAD",KH,"1,5",,"Việc 0.2, R1"
+S0-03,0,Chuẩn bị,"Soạn thỏa thuận bảo mật và một trang mô tả cách xử lý bản vẽ: lưu ở đâu, ai xem, ẩn danh thế nào, xóa khi nào",Hai tài liệu đã được người có chuyên môn pháp lý xem qua,KH,1,,"Mục 13.2, CON-05"
+S0-04,0,Chuẩn bị,Ký thỏa thuận với một đến hai khách hàng thử nghiệm và nhận bản vẽ,"Từ 5 đến 10 bản vẽ mặt bằng đường ống thật, dạng DWG hoặc DXF, kèm đồng ý bằng văn bản",KH,1,"S0-02, S0-03","Việc 0.2, ASM-06"
+S0-05,0,Chuẩn bị,Tìm một kỹ sư đường ống làm bán thời gian. Thống nhất khối lượng hai đến ba ngày mỗi sprint,"Có người nhận lời, đã thống nhất việc và thù lao",KH,1,,"Q10, mục 12.7"
+S0-06,0,Chuẩn bị,"Tổ chức đo đường cơ sở: một họa viên dựng thủ công mô hình 3D từ một bản vẽ, ghi lại số giờ","Con số giờ công cho ít nhất một bản vẽ, kèm mô tả cách đo",KH,"0,5",S0-04,"Việc 0.4, Q7"
+S0-07,0,Chuẩn bị,Thêm nhóm công cụ tự động định tuyến vào trang đối thủ của bộ slide và vào tài liệu dự án. Thêm một câu định vị phân biệt,Bộ slide và tài liệu dự án đã cập nhật,KH,"0,5",S0-01,R5
+S0-08,0,Chuẩn bị,Cài hai phiên bản AutoCAD trên máy phát triển: một bản chạy .NET Framework 4.8 và một bản chạy .NET 8,Cả hai bản khởi động được. Ghi lại nguồn giấy phép,CAD,"0,5",,"Q2, NFR-CMP-02"
+S0-09,0,Chuẩn bị,"Mở `prototype/data/model_3d.dxf` trong AutoCAD. Kiểm tra hiển thị, layer, kích thước. Quay màn hình",Danh sách lỗi hiển thị nếu có. Một đoạn quay màn hình AutoCAD thật cho bộ slide,CAD,"0,5",S0-08,Việc 0.1
+S0-10,0,Chuẩn bị,"Viết plug-in tối thiểu, một dự án dựng ra hai bản cho hai nền .NET, có một lệnh in ra số đối tượng trong bản vẽ",Lệnh chạy được trên cả hai phiên bản AutoCAD từ cùng một bộ mã,CAD,"1,5",S0-08,"Mục 10.1, CON-01"
+S0-11,0,Chuẩn bị,"Họp chốt các quyết định phải có trước giai đoạn 1: Q2, Q4, Q5, Q8, Q10, Q11, Q13, Q14",Mục 14.2 của tài liệu dự án được cập nhật trạng thái từng câu,CAD,"0,5","S0-12, S0-13",Việc 0.5
+S0-12,0,Chuẩn bị,"Phân tích bản vẽ thật: quy ước layer, cách ghi nhãn, ngữ nghĩa cao độ, có ống xiên không, mức độ sạch. Đếm tỷ lệ ký hiệu là block so với nét rời. Ghi nhận có bảng chú giải ký hiệu không và chú thích của cấu kiện được ghi thế nào","Bản ghi nhận khác biệt so với sáu giả định ở mục 5.10. Mỗi giả định ghi rõ đúng, sai, hay chưa đủ dữ liệu. Có con số tỷ lệ ký hiệu nét rời để chốt Q14",LÕI,2,S0-04,"Việc 0.3, ASM-01 đến 05, Q14, mục 7.9.3"
+S0-13,0,Chuẩn bị,"Đánh giá hai đến ba thư viện đọc DXF cho .NET trên bản vẽ mẫu và bản vẽ thật. Xét giấy phép, tình trạng bảo trì, loại đối tượng đọc được, tốc độ",Bảng so sánh và thư viện được chọn,LÕI,2,,"Q11, FR-ING-02"
+S0-14,0,Chuẩn bị,Tạo kho mã theo mục 6.10. Tạo các dự án rỗng. Thiết lập dựng và kiểm thử tự động cho mỗi lần đẩy mã,"Một lần đẩy mã kích hoạt dựng và chạy kiểm thử, kết quả xanh",LÕI,"1,5",,Việc 0.6
+S0-15,0,Chuẩn bị,"Viết kiểm tra kiến trúc: dự án lõi không được tham chiếu thư viện CAD, giao diện hay mạng. Đưa quy ước mã và điều kiện ""xong"" vào kho",Thử thêm một tham chiếu cấm vào lõi thì dựng tự động báo đỏ,LÕI,"0,5",S0-14,"NFR-MNT-09, hạng mục 1.3c"
+S0-16,0,Chuẩn bị,Sửa bản vẽ mẫu theo góp ý của chuyên gia thành bản thứ hai. Giữ nguyên bản đầu để kiểm thử đối chứng. Dựng lại video và slide từ bản mới,`piping_plan_2d_v2.dxf` được chuyên gia chấp nhận. Video và slide mới. Bản đầu không đổi,LÕI,"1,5",S0-18,Mục 13.3
+S0-17,0,Chuẩn bị,"Tham gia họp chốt quyết định, chuẩn bị số liệu cho Q11, Q13 và Q14","Có đề xuất bằng văn bản cho Q11, Q13 và Q14",LÕI,"0,5","S0-12, S0-13",Việc 0.5
+S0-18,0,Chuẩn bị,Rà bản vẽ mẫu của prototype theo thực tế thiết kế đường ống. Ví dụ: ống hút từ bồn về bơm đang nằm trọn trong một mặt phẳng,"Danh sách điểm chưa đúng thực tế, kèm cách sửa",ỐNG,1,S0-05,Phản hồi 09/11/2026
+S0-19,0,Chuẩn bị,"Cùng phân tích bản vẽ thật, giải thích các quy ước ngành mà lập trình viên chưa biết",Ghi chú thuật ngữ và quy ước bổ sung vào bản phân tích,ỐNG,1,S0-04,Việc 0.3
+S1-01,1,GĐ1,"Viết các lớp của IR: mô hình, tuyến, đoạn chạy, đoạn ống, nút, cấu kiện, thiết bị, kết cấu, vấn đề, quyết định, nguồn gốc",Các lớp khớp bảng ở mục 7.4. Không có kiểu dữ liệu nào của CAD,LÕI,"1,5",S0-14,"Hạng mục 1.1, ADR-02"
+S1-02,1,GĐ1,"Tuần tự hóa IR ra JSON và đọc lại, có trường phiên bản lược đồ",Ví dụ ở mục 7.5 đọc vào rồi ghi ra cho kết quả giống hệt,LÕI,1,S1-01,"FR-EXP-03, NFR-CMP-06"
+S1-03,1,GĐ1,Viết tệp lược đồ JSON cho IR và kiểm thử đối chiếu,Tệp lược đồ trong kho. IR sai lược đồ bị từ chối kèm thông báo chỉ rõ trường sai,LÕI,"0,5",S1-02,Mục 6.12.2
+S1-04,1,GĐ1,"Thư viện hình học: điểm, véc-tơ 2D và 3D, hộp bao, so sánh có dung sai, khoảng cách điểm tới đoạn, giao hai đoạn, kiểm tra thẳng hàng","Kiểm thử đơn vị cho từng phép, gồm các ca biên: song song, trùng nhau, chạm đầu mút",LÕI,"1,5",S0-14,"Hạng mục 1.2, NFR-ACC-01"
+S1-05,1,GĐ1,Chỉ mục không gian để tìm đối tượng gần một điểm hoặc trong một vùng,Truy vấn trên 5.000 đoạn trả kết quả đúng như duyệt toàn bộ và nhanh hơn rõ rệt,LÕI,1,S1-04,NFR-PRF-01
+S1-06,1,GĐ1,"Định nghĩa đối tượng nguồn trung lập, bộ lọc và bản tóm tắt bản vẽ","Các lớp dùng chung cho mọi bộ đọc. Giữ mã định danh nguồn, layer, màu, kiểu nét, đường dẫn block",LÕI,"0,5",S1-01,"FR-ING-07, mục 10.4"
+S1-07,1,GĐ1,"Bộ đọc DXF: đường thẳng, polyline, cung, đường tròn, chữ một dòng và nhiều dòng, block kèm thuộc tính, đường dẫn",Đọc bản vẽ mẫu ra đúng 80 đối tượng như prototype. Đọc được bản vẽ thật mà không dừng giữa chừng,LÕI,"1,5","S1-06, S0-13","Hạng mục 1.4, FR-ING-02"
+S1-08,1,GĐ1,Nhận biết đơn vị bản vẽ và quy đổi về milimét. Không xác định được thì trả về trạng thái cần hỏi người dùng,"Kiểm thử với bản vẽ đơn vị milimét, mét, inch và không khai báo",LÕI,"0,5",S1-07,"FR-ING-04, R-GEN-02"
+S1-09,1,GĐ1,"Hoàn chỉnh dự án plug-in: cấu trúc gói `.bundle`, tệp khai báo, tự nạp khi mở AutoCAD",Chép thư mục gói vào máy là plug-in tự nạp trên cả hai phiên bản,CAD,1,S0-10,"Hạng mục 1.12, mục 11.3"
+S1-10,1,GĐ1,"Khung lệnh: lớp cơ sở có bắt ngoại lệ, khóa tài liệu, ghi nhật ký. Đăng ký `PA_SCAN` và `PA_PANEL`","Cố ý ném ngoại lệ trong lệnh thì AutoCAD không thoát, người dùng thấy thông báo rõ ràng",CAD,1,S1-09,"NFR-REL-01, NFR-USE-02"
+S1-11,1,GĐ1,"Bộ đọc AutoCAD: đường thẳng, polyline, cung, đường tròn, chữ, block kèm thuộc tính. Giữ handle",Trả về đối tượng trung lập cho mọi đối tượng thuộc các loại trên ở không gian mô hình,CAD,2,"S1-06, S1-10","FR-ING-01, FR-ING-07"
+S1-12,1,GĐ1,"Bộ đọc AutoCAD: đường dẫn, đường dẫn nhiều nhánh, kích thước",Đọc được ba loại trên. Block lồng nhau để giai đoạn 2,CAD,1,S1-11,FR-ING-01
+S1-13,1,GĐ1,"Bản tóm tắt bản vẽ: layer, block, kiểu chữ, số lượng theo loại, phạm vi tọa độ",`PA_SCAN` in bản tóm tắt ra dòng lệnh,CAD,"0,5",S1-11,FR-ING-09
+S1-14,1,GĐ1,Giới hạn vùng xử lý bằng cửa sổ chọn hoặc tập đối tượng đã chọn,Chỉ đối tượng trong vùng được đọc,CAD,"0,5",S1-11,FR-ING-05
+S1-15,1,GĐ1,"Thư viện nhật ký có cấu trúc: mỗi dòng một bản ghi JSON, có mã phiên",Một lần chạy `PA_SCAN` tạo tệp nhật ký có bản ghi phiên và bản ghi từng bước,CAD,"0,5",S0-14,"NFR-MNT-06, mục 11.5"
+S1-16,1,GĐ1,Công cụ so sánh hai bộ đọc: xuất đối tượng trung lập từ AutoCAD và từ DXF của cùng bản vẽ rồi so,Trên bản vẽ mẫu hai bộ đọc khớp nhau. Mọi khác biệt được liệt kê,CAD,1,"S1-07, S1-12",Mục 13.6
+S1-17,1,GĐ1,Dấu vân tay bản vẽ nguồn: băm nội dung trước và sau khi chạy để chứng minh không sửa bản vẽ,"Kiểm thử chạy `PA_SCAN` rồi so dấu vân tay, phải giống nhau",CAD,"0,5",S1-11,"NFR-REL-03, FR-ING-06"
+S1-18,1,GĐ1,"Lập đáp án cho bản vẽ mẫu thứ hai và cho bản vẽ thật đầu tiên: tuyến, DN, cao độ, kết nối",Hai thư mục trong bộ bản vẽ chuẩn có `expected.json` và `notes.md`,ỐNG,2,"S0-16, S0-04","Hạng mục 1.18, mục 13.2"
+S1-19,1,GĐ1,Theo dõi khách hàng thử nghiệm. Hỏi rõ phiên bản AutoCAD họ dùng và chính sách về dịch vụ AI bên ngoài,Bảng theo dõi cập nhật. Có câu trả lời cho Q2,KH,1,S0-02,"Q2, Q6, R7"
+S2-01,2,GĐ1,"Mô hình hồ sơ quy ước, lược đồ JSON, bộ nạp có kiểm tra",Hồ sơ ở mục 7.7 nạp được. Hồ sơ sai báo lỗi chỉ rõ dòng và trường,LÕI,1,S1-03,"Hạng mục 1.1, FR-PRF-01, 02"
+S2-02,2,GĐ1,"Viết hồ sơ mẫu cho bản vẽ mẫu, cả hai bản",Hai tệp hồ sơ trong `data/profiles/`,LÕI,"0,5",S2-01,FR-PRF-08
+S2-03,2,GĐ1,"Bộ phân loại: khớp theo tên layer có ký tự đại diện, tên block, loại đối tượng, màu, kiểu nét, mẫu văn bản",Trên bản vẽ mẫu mọi đối tượng được gán đúng vai trò. Kết quả không đổi giữa các lần chạy,LÕI,"1,5","S2-01, S1-07","Hạng mục 1.5, FR-CLS-01, 02"
+S2-04,2,GĐ1,"Báo cáo đối tượng chưa phân loại, gom theo layer",Có tỷ lệ tổng và bảng theo layer,LÕI,"0,5",S2-03,"FR-CLS-03, R-GEN-01"
+S2-05,2,GĐ1,"Đọc nhãn theo mẫu trong hồ sơ: tách số hiệu tuyến, DN, cao độ và trường tùy chọn. Bỏ mã định dạng của chữ nhiều dòng","11 nhãn của bản vẽ mẫu được tách đúng. Nhãn không khớp mẫu nào được ghi nhận, không bị bỏ qua",LÕI,1,S2-01,"Hạng mục 1.6, FR-REC-01"
+S2-06,2,GĐ1,"Làm sạch hình học: gộp đoạn nối tiếp thẳng hàng, bắt đầu mút gần nhau trong dung sai, loại đối tượng trùng","Kiểm thử trên các ca dựng sẵn: khe hở nhỏ, đoạn trùng, polyline bị cắt vụn",LÕI,1,"S1-04, S1-05",FR-ING-08
+S2-07,2,GĐ1,Dựng đoạn chạy từ polyline và chuỗi đoạn thẳng,11 đoạn chạy trên bản vẽ mẫu,LÕI,"0,5",S2-06,Hạng mục 1.6
+S2-08,2,GĐ1,"Gắn nhãn với đoạn chạy theo ba mức ưu tiên: đường dẫn chạm đoạn chạy, nhãn nằm trên hoặc song song sát, đoạn gần nhất trong bán kính",Trên bản vẽ mẫu 11 nhãn gắn đúng 11 đoạn chạy,LÕI,"1,5","S2-05, S2-07",FR-REC-02
+S2-09,2,GĐ1,Tính điểm tin cậy cho mỗi liên kết. Hai ứng viên có điểm gần nhau thì tạo vấn đề nhãn mơ hồ thay vì tự chọn,"Ca dựng sẵn có hai đoạn chạy cách đều một nhãn phải ra vấn đề, không ra liên kết",LÕI,"0,5",S2-08,"FR-REC-03, mục 9.4, NFR-ACC-06"
+S2-10,2,GĐ1,"Danh mục ống và phụ kiện: định dạng dữ liệu, bộ nạp, hàm tra theo loại, DN, tiêu chuẩn. Nhập bảng ống ASME B36.10 và phụ kiện hàn ASME B16.9 cho DN15 đến DN600","Tra được đường kính ngoài, bán kính co, kích thước tê. DN không có trả về kết quả rõ ràng, không ném lỗi",CAD,"1,5",S0-14,"Hạng mục 1.3, FR-CFG-03, FR-REC-17"
+S2-11,2,GĐ1,"Bảng điều khiển gắn trong AutoCAD: khung các thẻ Tổng quan, Vấn đề, Tuyến ống, Hồ sơ, Nhật ký. Tách phần hiển thị và phần dữ liệu để dùng lại cho Smart 3D","`PA_PANEL` mở bảng. Bảng nằm trong dự án giao diện dùng chung, không gọi API AutoCAD trực tiếp",CAD,2,S1-10,"Hạng mục 1.14, FR-REV-01"
+S2-12,2,GĐ1,"Nối `PA_SCAN` với lõi: đọc, phân loại, hiện kết quả ở thẻ Tổng quan",Thẻ Tổng quan hiện số đối tượng theo vai trò và tỷ lệ chưa phân loại,CAD,1,"S2-03, S2-11",UC-01
+S2-13,2,GĐ1,Tô sáng bằng đồ họa tạm thời theo danh sách handle. Phóng tới một vùng. Xóa tô sáng,Tô sáng không tạo đối tượng thật. Dấu vân tay bản vẽ không đổi,CAD,"1,5",S1-17,"FR-REV-02, mục 10.4"
+S2-14,2,GĐ1,Thanh tiến độ và nút hủy cho thao tác dài. Hàm đưa việc về luồng chính của AutoCAD,Thao tác dài hơn 2 giây có tiến độ và hủy được giữa chừng,CAD,1,S1-10,"NFR-PRF-05, CON-02"
+S2-15,2,GĐ1,"Ngữ cảnh phiên theo từng bản vẽ đang mở, không dùng biến tĩnh toàn cục. Xử lý sự kiện chuyển và đóng bản vẽ","Mở hai bản vẽ, quét cả hai, dữ liệu không lẫn nhau",CAD,1,S2-11,Mục 6.12.3 quy tắc 4
+S2-16,2,GĐ1,Kiểm tra bảng kích thước trong danh mục đối chiếu với tiêu chuẩn gốc,Bảng được ký xác nhận. Sai lệch được sửa,ỐNG,"0,5",S2-10,FR-CFG-03
+S2-17,2,GĐ1,Lập đáp án cho hai bản vẽ thật tiếp theo,Hai thư mục mới trong bộ bản vẽ chuẩn,ỐNG,2,S0-04,Hạng mục 1.18
+S2-18,2,GĐ1,Chạy phân loại và đọc nhãn trên các bản vẽ thật đã có. Ghi lại chỗ sai và nguyên nhân,Bảng lỗi theo loại. Tỷ lệ chưa phân loại của từng bản vẽ,KH,1,S2-08,"R2, mốc M1"
+S3-01,3,GĐ1,"Ngữ nghĩa cao độ: tâm ống, đáy ống, đỉnh ống. Quy đổi về cao độ tâm theo đường kính ngoài",Kiểm thử ba ngữ nghĩa với DN150. Thiếu khai báo thì tạo vấn đề chặn,LÕI,"0,5","S2-08, S2-10","FR-REC-07, R-ELV-05"
+S3-02,3,GĐ1,"Lan truyền thuộc tính: đoạn chạy không nhãn nối thẳng với đoạn có nhãn thì thừa hưởng tuyến và DN, có đánh dấu là suy ra",Ca dựng sẵn cho kết quả đúng và cờ suy ra được đặt,LÕI,1,S2-08,FR-REC-04
+S3-03,3,GĐ1,"Dựng đồ thị kết nối 3D: nút tại đầu mút, điểm gãy, điểm giao. Cạnh là đoạn ống thẳng",Trên bản vẽ mẫu ra 26 đoạn ống. Hai đoạn khác cao độ cắt nhau trên mặt bằng không bị nối nhầm,LÕI,2,"S2-07, S3-01","Hạng mục 1.7, FR-REC-05"
+S3-04,3,GĐ1,Suy ra ống đứng khi hai đoạn chạy khác cao độ có chung điểm trên mặt bằng. Đối chiếu ký hiệu ống đứng nếu có,3 ống đứng trên bản vẽ mẫu. Có vấn đề khi ký hiệu và hình học không khớp,LÕI,1,S3-03,"FR-REC-06, R-ELV-01, 02"
+S3-05,3,GĐ1,"Phân loại nút: co 90 độ, tê, đầu hở. Nút đầu chờ để Sprint 4",15 co và 3 tê trên bản vẽ mẫu,LÕI,1,S3-03,FR-REC-08
+S3-06,3,GĐ1,"Áp kích thước phụ kiện từ danh mục: tính phần co và tê chiếm chỗ, cắt đoạn ống thẳng tương ứng","Tổng chiều dài theo đường tâm bằng 115,9 m. Chiều dài từng đoạn thẳng sau khi trừ phụ kiện không âm",LÕI,1,"S3-05, S2-10","FR-REC-17, R-GEO-02"
+S3-07,3,GĐ1,"Ghi nguồn gốc cho mọi phần tử IR: đối tượng nguồn, quy tắc đã áp, điểm tin cậy, cờ suy ra",Không phần tử nào trong IR thiếu nguồn gốc,LÕI,"0,5",S3-03,FR-REC-16
+S3-08,3,GĐ1,"Cô lập lỗi: đối tượng gây lỗi thành một vấn đề, phần còn lại vẫn xử lý",Bản vẽ có một polyline hỏng vẫn ra IR cho các tuyến khác,LÕI,"0,5",S3-03,FR-REC-10
+S3-09,3,GĐ1,Chạy chuỗi nhận diện đến đồ thị trên bản vẽ thật. Ghi lại sai lệch so với đáp án,Bảng lỗi theo loại cho từng bản vẽ thật,LÕI,"0,5","S3-05, S1-18","R2, R3"
+S3-10,3,GĐ1,"Khung bộ dựng: giao diện dựng mô hình, tùy chọn dựng, xem trước số lượng theo loại mà không đổi bản vẽ","Xem trước trả đúng số ống, co, tê của IR. Dấu vân tay bản vẽ không đổi",CAD,1,S1-01,"Hạng mục 1.13, FR-BLD-06, 11"
+S3-11,3,GĐ1,"Dựng đoạn ống thẳng: solid hình trụ theo đường kính ngoài, đặt theo trục đoạn ống","Hộp bao của solid khớp tính toán trong 0,1 mm, cho cả ống ngang và ống đứng",CAD,1,S3-10,"FR-BLD-01, NFR-ACC-01"
+S3-12,3,GĐ1,Dựng co: quét tiết diện tròn theo cung tâm co,Co nối khít hai đoạn ống ở mọi hướng trong không gian,CAD,"1,5",S3-11,FR-BLD-01
+S3-13,3,GĐ1,Dựng tê: hợp hai hình trụ,Tê đúng hướng nhánh,CAD,"0,5",S3-11,FR-BLD-01
+S3-14,3,GĐ1,"Tổ chức layer theo tuyến và loại đối tượng, tên theo mẫu cấu hình được",Mỗi tuyến một nhóm layer. Đổi mẫu tên trong cấu hình thì tên layer đổi theo,CAD,"0,5",S3-11,FR-BLD-03
+S3-15,3,GĐ1,"Gắn dữ liệu vào từng solid: số hiệu tuyến, DN, loại, mã phần tử IR, handle nguồn 2D",Chọn một solid bất kỳ đọc lại được đủ năm trường,CAD,1,S3-11,"FR-BLD-04, mục 10.1.5"
+S3-16,3,GĐ1,Gói cả lần dựng vào một nhóm hoàn tác. Lỗi giữa chừng thì hủy toàn bộ,Một lần Undo đưa bản vẽ về trạng thái trước. Tiêm lỗi giữa chừng không để lại đối tượng dở dang,CAD,1,S3-11,"FR-BLD-05, NFR-REL-02"
+S3-17,3,GĐ1,"Dựng vào bản vẽ mới, tham chiếu bản 2D làm nền. Tùy chọn dựng vào chính bản đang mở trên layer riêng",Cả hai chế độ chạy được. Bản 2D gốc không đổi,CAD,"1,5",S3-16,"FR-BLD-02, ADR-08, Q5"
+S3-18,3,GĐ1,Lập đáp án cho hai bản vẽ thật tiếp theo. Rà danh sách luật giai đoạn 1 ở chương 9,"Hai thư mục mới. Ghi chú góp ý cho từng luật: giữ, sửa ngưỡng, hay bỏ",ỐNG,"2,5",S0-04,"Hạng mục 1.18, 1.9"
+S4-01,4,GĐ1,"Nhận diện van và cấu kiện nối tiếp từ block: tìm đoạn ống chứa nó, vị trí, hướng trục. Chia đoạn ống tại đó",7 van trên bản vẽ mẫu. Block không nằm trên ống nào thì tạo vấn đề,LÕI,"1,5",S3-03,"Hạng mục 1.8, FR-REC-09, R-GEO-06"
+S4-02,4,GĐ1,"Thư viện thiết bị: lược đồ tệp định nghĩa, bộ nạp ba lớp mặc định, công ty, dự án, lớp sau ghi đè lớp trước",Nạp được ví dụ ở mục 7.8.3. Tệp sai lược đồ báo lỗi rõ,LÕI,1,S2-01,"Hạng mục 1.3b, ADR-10"
+S4-03,4,GĐ1,"Bộ tính biểu thức cho thư viện thiết bị: bốn phép tính, dấu ngoặc, tên tham số. Không chạy mã bên ngoài","Kiểm thử gồm biểu thức sai cú pháp, tham số không tồn tại, chia cho không",LÕI,1,S4-02,Mục 7.8.3
+S4-04,4,GĐ1,"Nhận diện thiết bị theo `equipmentRules`: khớp theo hình, tên block, tiền tố số hiệu. Lấy tham số từ hình bao và nhãn. Viết định nghĩa cho bồn đứng, bơm và hộp bao dự phòng",2 bồn và 2 bơm trên bản vẽ mẫu. Loại chưa có định nghĩa thành hộp bao kèm cảnh báo,LÕI,"1,5","S4-03, S2-03","FR-REC-11, R-EQP-04, NFR-MNT-07"
+S4-05,4,GĐ1,Nhận diện đầu chờ: đầu ống kết thúc trên biên thiết bị. Ghi thiết bị được nối,8 đầu chờ và 5 đầu hở trên bản vẽ mẫu. Đầu ống gần thiết bị nhưng không chạm thì tạo vấn đề,LÕI,1,S4-04,"FR-REC-12, R-CON-05"
+S4-06,4,GĐ1,"Nhận diện giá đỡ: cột, dầm, cao độ mặt trên kết cấu",8 cột và 10 dầm trên bản vẽ mẫu,LÕI,"0,5",S2-03,FR-REC-13
+S4-07,4,GĐ1,"Khung bộ luật: giao diện một luật, bộ chạy, cấu trúc vấn đề, ba mức độ, bật tắt và đổi mức độ từ hồ sơ",Một luật mẫu chạy được. Đổi mức độ trong hồ sơ thì kết quả đổi theo,LÕI,1,S3-07,"Hạng mục 1.9, FR-CHK-01 đến 03, mục 9.2"
+S4-18,4,GĐ1,"Đọc thuộc tính của block thành thuộc tính cấu kiện theo ánh xạ trong hồ sơ: số hiệu, cấp áp và các trường khác. Ghi nguồn gốc cho từng thuộc tính","Van có thuộc tính số hiệu trong block thì số hiệu xuất hiện trong IR. Thuộc tính không có trong ánh xạ được bỏ qua, không gây lỗi",LÕI,"0,5",S4-01,"Hạng mục 1.8b, FR-REC-18, mục 7.9.5"
+S4-09,4,GĐ1,"Dựng van và mặt bích: tổ hợp solid đơn giản theo kích thước danh mục, hoặc chèn block 3D nếu có","Van đúng vị trí, đúng hướng trục. Đoạn ống hai bên được cắt đúng chiều dài van",CAD,"1,5","S4-01, S3-11","FR-BLD-01, mục 10.1.4"
+S4-10,4,GĐ1,"Dựng thiết bị từ định nghĩa: năm khối cơ bản hình trụ, hộp, nón, đáy cong, cầu. Tùy chọn chèn block 3D do người dùng cung cấp","Bồn, bơm dựng đúng kích thước. Thứ tự chọn cách dựng đúng mục 7.8.5",CAD,2,"S4-04, S3-10","Mục 7.8.5, FR-BLD-01"
+S4-11,4,GĐ1,Dựng kết cấu: cột và dầm dạng hộp theo tiết diện,Cột và dầm đúng cao độ mặt trên,CAD,"0,5",S4-06,FR-BLD-01
+S4-12,4,GĐ1,"Thẻ Vấn đề: danh sách có mức độ, mã luật, mô tả, gợi ý sửa. Bấm vào thì phóng tới và tô sáng đối tượng liên quan",Bấm từng vấn đề trên bản vẽ mẫu đều tới đúng chỗ,CAD,"1,5","S4-07, S2-13",FR-REV-02
+S4-13,4,GĐ1,"Lọc và sắp xếp danh sách vấn đề theo mức độ, mã luật, tuyến, trạng thái",Bốn tiêu chí lọc hoạt động và kết hợp được,CAD,"0,5",S4-12,FR-REV-04
+S4-14,4,GĐ1,"Thẻ Tổng quan: số liệu nhận diện, tóm tắt vấn đề, xem trước số đối tượng sẽ dựng",Số liệu khớp IR,CAD,1,"S3-10, S2-12",FR-BLD-06
+S4-15,4,GĐ1,"Nối `PA_CONVERT`, `PA_CHECK`, `PA_BUILD` thành quy trình. Còn vấn đề mức chặn thì không cho dựng",Bản vẽ có vấn đề chặn: nút dựng bị khóa kèm lý do,CAD,1,"S4-07, S3-17","UC-01, FR-CHK-02"
+S4-16,4,GĐ1,Lập đáp án cho hai bản vẽ thật tiếp theo. Rà hình dạng các thiết bị trong thư viện,Hai thư mục mới. Góp ý về tham số và đầu chờ của từng loại thiết bị,ỐNG,"2,5",S0-04,"Hạng mục 1.18, mục 7.8"
+S4-17,4,GĐ1,"Thống nhất với khách hàng lịch cài thử ở Sprint 6: máy nào, ai dùng, bản vẽ nào, đo gì",Lịch và danh sách bản vẽ thử được hai bên xác nhận,KH,1,S1-19,Hạng mục 1.19
+S5-01,5,GĐ1,Nhóm luật nhãn: R-TAG-01 đến 06,Mỗi luật có ít nhất một ca phát hiện đúng và một ca không báo nhầm,LÕI,1,S4-07,Mục 9.3
+S5-02,5,GĐ1,"Nhóm luật kết nối và hình học: R-CON-01 đến 05, R-GEO-01, 02, 04, 05, 06",Như trên,LÕI,"1,5",S4-07,Mục 9.3
+S5-03,5,GĐ1,"Các nhóm còn lại của giai đoạn 1: R-ELV-01, 02, 03, 05, R-EQP-01, 02, 04, R-CAT-01, 02, R-GEN-01, 02",Như trên. Bản vẽ mẫu sạch cho ra không vấn đề chặn,LÕI,1,S4-07,Mục 9.3
+S5-04,5,GĐ1,Kiểm thử đối chứng tự động với prototype trên bản vẽ mẫu bản đầu,Mọi chỉ số ở bảng mục 13.3 khớp. Chênh lệch chiều dài do khác bảng phụ kiện được giải thích bằng văn bản,LÕI,1,"S4-05, S4-06","Hạng mục 1.11, mục 13.3"
+S5-05,5,GĐ1,"Cơ chế quyết định: mô hình dữ liệu, lưu tách khỏi kết quả nhận diện, áp lên kết quả, khớp lại theo handle nguồn và dấu vân tay hình học. Quyết định không còn khớp được đánh dấu mồ côi","Sửa một nhãn, chạy lại nhận diện, chỉnh sửa vẫn được áp. Xóa đối tượng nguồn thì quyết định thành mồ côi và người dùng được báo",LÕI,2,S3-07,"Hạng mục 1.10, FR-REV-07, ADR-06"
+S5-06,5,GĐ1,"Lưu phiên: tệp đi kèm cạnh bản vẽ chứa IR, quyết định, vấn đề đã bỏ qua, hồ sơ đã dùng. Tự lưu sau mỗi thay đổi",Tắt tiến trình đột ngột rồi mở lại không mất chỉnh sửa nào,LÕI,1,S5-05,"FR-CFG-01, NFR-REL-05, Q4"
+S4-08,5,GĐ1,Chạy toàn bộ chuỗi trên bản vẽ thật. Thêm tệp định nghĩa cho các thiết bị gặp trong bản vẽ thật,Bảng lỗi theo loại. Ít nhất một thiết bị mới được thêm chỉ bằng dữ liệu,LÕI,"0,5","S4-04, S0-04","R2, mục 7.8.6"
+S5-08,5,GĐ1,"Thao tác sửa trên giao diện, phần một: gắn lại nhãn, nhập DN, nhập cao độ","Mỗi thao tác tạo một quyết định, chạy lại nhận diện và cập nhật danh sách vấn đề",CAD,"1,5","S5-05, S4-12","Hạng mục 1.14, FR-REV-03"
+S5-09,5,GĐ1,"Thao tác sửa, phần hai: đổi loại nút, nối hai đầu ống, tách tuyến, bỏ qua đối tượng",Như trên,CAD,"1,5",S5-08,FR-REV-03
+S5-10,5,GĐ1,"Bỏ qua một vấn đề, bắt buộc nhập lý do. Ghi vào nhật ký",Không nhập lý do thì không bỏ qua được. Vấn đề đã bỏ qua vẫn xem lại được,CAD,"0,5",S4-12,FR-CHK-06
+S5-11,5,GĐ1,"Thẻ Tuyến ống: danh sách tuyến kèm DN, chiều dài, số vấn đề. Bấm thì tô sáng cả tuyến",Số liệu khớp IR,CAD,1,S2-13,FR-REV-01
+S5-12,5,GĐ1,"Trình soạn hồ sơ: liệt kê layer và block của bản vẽ đang mở, cho gán vai trò",Tạo được hồ sơ của bản vẽ mẫu từ đầu chỉ bằng giao diện,CAD,2,"S2-11, S2-01","Hạng mục 1.15, FR-PRF-03"
+S5-13,5,GĐ1,"Trình soạn hồ sơ: nhập mẫu nhãn và thử ngay trên các nhãn của bản vẽ. Nhập, xuất hồ sơ ra tệp",Gõ mẫu nhãn thấy ngay bao nhiêu nhãn khớp và nhãn nào không,CAD,1,S5-12,"FR-PRF-03, FR-PRF-06"
+S5-14,5,GĐ1,"Chạy lại nhận diện và bộ luật sau mỗi quyết định, cập nhật giao diện",Sửa một vấn đề thì danh sách vấn đề cập nhật trong vài giây,CAD,"0,5",S5-08,UC-02
+S5-15,5,GĐ1,Lập đáp án cho hai bản vẽ thật tiếp theo. Chấm tỷ lệ cờ thừa của bộ luật trên các bản đã có đáp án,Bộ bản vẽ chuẩn đạt khoảng mười bản. Danh sách cờ thừa theo luật,ỐNG,"2,5",S5-03,"Hạng mục 1.18, mục 13.4"
+S5-16,5,GĐ1,"Soạn kịch bản thử nghiệm cho khách hàng: các bước, phiếu ghi thời gian, câu hỏi phỏng vấn sau khi dùng",Kịch bản và phiếu ghi được khách hàng xem trước,KH,1,S4-17,"Hạng mục 1.19, NFR-USE-01"
+S6-01,6,GĐ1,"Chạy thử hồ sơ và trả về chỉ số: tỷ lệ phân loại, tỷ lệ nhãn khớp mẫu, số đoạn chạy không nhãn, số vấn đề theo loại",Trình soạn hồ sơ hiện bốn chỉ số sau mỗi lần chạy thử,LÕI,1,S5-03,FR-PRF-04
+S6-02,6,GĐ1,"Xuất bảng khối lượng ra CSV và Excel: chiều dài ống theo tuyến và DN, số co, tê, van, mặt bích",Số liệu trên bản vẽ mẫu khớp IR,LÕI,1,S4-01,"Hạng mục 1.16, FR-EXP-01"
+S6-03,6,GĐ1,"Xuất báo cáo chuyển đổi: thống kê, danh sách vấn đề, vấn đề đã bỏ qua kèm lý do",Một tệp báo cáo đọc được mà không cần phần mềm,LÕI,1,S5-06,FR-EXP-02
+S6-04,6,GĐ1,"Công cụ dòng lệnh: xử lý nhiều bản vẽ DXF với một hồ sơ, xuất IR và báo cáo tổng hợp",Chạy trên cả bộ bản vẽ chuẩn bằng một lệnh,LÕI,1,S6-03,"Hạng mục 1.17, FR-CFG-04, mức tích hợp C"
+S6-05,6,GĐ1,"Bộ chấm điểm hồi quy: so IR với `expected.json`, tính các chỉ số ở mục 13.4, gồm tỷ lệ sai im lặng",Một lệnh in ra bảng chỉ số cho toàn bộ bộ bản vẽ chuẩn. Chạy trong dựng tự động,LÕI,"1,5","S6-04, S5-15","Mục 13.4, NFR-MNT-05"
+S5-07,6,GĐ1,Chạy bộ luật trên bản vẽ thật. Chỉnh ngưỡng theo góp ý của chuyên gia. Đo tỷ lệ cờ thừa,Bảng số vấn đề theo luật cho từng bản vẽ. Danh sách ngưỡng đã chỉnh,LÕI,"0,5","S5-03, S3-18","Mục 13.4, R2"
+S6-07,6,GĐ1,"Sửa lỗi phát hiện trong buổi thử với khách hàng, phần lõi",Các lỗi chặn quy trình đều được sửa hoặc có cách vòng,LÕI,"1,5",S6-12,Hạng mục 1.19
+S6-08,6,GĐ1,"Kiểm thử tích hợp AutoCAD theo bảng ở mục 13.6: đọc, dựng, dữ liệu thuộc tính, hoàn tác, lỗi giữa chừng, dấu vân tay, dựng lại, hai nền .NET",Tám ca chạy được bằng kịch bản trên hai phiên bản AutoCAD,CAD,2,S5-14,Mục 13.6
+S6-09,6,GĐ1,Nối `PA_EXPORT` và `PA_BATCH`. Thêm thẻ lệnh trên ribbon,Tám lệnh ở mục 5.8.1 đều gọi được từ ribbon,CAD,1,"S6-02, S6-04",Mục 5.8.1
+S6-10,6,GĐ1,"Tách chuỗi giao diện ra tệp tài nguyên, có tiếng Việt và tiếng Anh",Đổi ngôn ngữ trong cấu hình thì toàn bộ giao diện đổi,CAD,"0,5",S5-13,FR-CFG-05
+S6-11,6,GĐ1,"Gói cài thủ công: tệp nén chứa gói `.bundle`, hồ sơ mẫu, hướng dẫn cài hai trang",Người không viết mã cài được theo hướng dẫn,CAD,"0,5",S6-09,FR-LIC-03
+S6-12,6,GĐ1,"Cài tại khách hàng, cùng họ chạy ít nhất ba bản vẽ thật theo kịch bản, ghi thời gian duyệt và mọi chỗ vướng",Phiếu ghi cho từng bản vẽ. Danh sách lỗi và góp ý,CAD,2,"S6-11, S5-16","Hạng mục 1.19, mục 5.11"
+S6-13,6,GĐ1,"Sửa lỗi phát hiện trong buổi thử, phần plug-in và giao diện",Các lỗi chặn quy trình đều được sửa,CAD,"1,5",S6-12,Hạng mục 1.19
+S6-14,6,GĐ1,Rà nghiệm thu giai đoạn 1 theo mục 5.11. Lập lại kế hoạch chi tiết cho Sprint 7 đến 12,"Biên bản nghiệm thu ghi rõ đạt, chưa đạt. Kế hoạch giai đoạn 2 đã cập nhật",CAD,"0,5",S6-12,"Mục 5.11, mốc M4"
+S6-15,6,GĐ1,Chia bộ bản vẽ chuẩn thành phần phát triển và phần giữ lại. Ký xác nhận đáp án,Danh sách hai phần. Phần giữ lại không được dùng để chỉnh thuật toán,ỐNG,1,S5-15,Mục 13.2
+S6-16,6,GĐ1,"Tham gia buổi thử, đánh giá mô hình 3D kết quả theo con mắt người trong nghề","Nhận xét bằng văn bản: dùng được ở đâu, chưa dùng được ở đâu",ỐNG,1,S6-12,Mục 13.7 mục 6
+S6-17,6,GĐ1,Tổng hợp số đo: giờ công thủ công so với giờ công có công cụ. Phỏng vấn người dùng. Hỏi điều kiện để họ trả tiền,Một trang kết quả thử nghiệm. Đề xuất con số mục tiêu cho Q7,KH,2,"S6-12, S0-06","Q7, Q12"
+S7-01,7,GĐ2,"Khung hợp đồng công cụ: tên, mô tả, lược đồ vào và ra ở chế độ chặt, lớp quyền chỉ đọc, đề xuất, hành động. Kiểm tra tham số trước khi chạy",Một công cụ mẫu đăng ký được. Tham số sai lược đồ bị từ chối kèm thông báo mô hình hiểu được,LÕI,2,S6-14,"Hạng mục 2.1, mục 8.3, ADR-09"
+S7-02,7,GĐ2,"Các công cụ chỉ đọc trên bản vẽ: tóm tắt, danh sách layer, danh sách block, lấy mẫu đối tượng, lấy mẫu văn bản đã gom nhóm, truy vấn lân cận, ghi chú chung",Bảy công cụ ở mục 8.2 có kiểm thử. Kết quả có giới hạn kích thước,LÕI,2,S7-01,"Hạng mục 2.2, mục 8.2"
+S7-03,7,GĐ2,"Các công cụ chỉ đọc trên IR và danh mục: tổng quan IR, chi tiết phần tử, danh sách vấn đề, ngữ cảnh một vấn đề, tra danh mục",Năm công cụ có kiểm thử,LÕI,1,S7-01,Hạng mục 2.2
+S7-04,7,GĐ2,"Tiến trình Agent Host: ứng dụng chạy nền, vòng đời khởi động và tự tắt, giao thức JSON-RPC 2.0 qua kênh đặt tên giới hạn cho người dùng hiện tại",Hai tiến trình gọi nhau được. Tiến trình khác người dùng không kết nối được,LÕI,"1,5",S7-01,"Hạng mục 2.3, ADR-04, mục 11.2"
+S7-05,7,GĐ2,Lớp trừu tượng nhà cung cấp và bộ kết nối đầu tiên dùng thư viện chính thức của Anthropic cho C#. Mô hình mặc định theo mục 8.6,Một lượt hỏi đáp có gọi công cụ chạy trọn. Đổi mô hình chỉ bằng cấu hình,LÕI,"1,5",S7-04,"Hạng mục 2.4, mục 8.7, FR-AGT-10"
+S7-06,7,GĐ2,"Đầu plug-in của giao thức nội bộ: khởi chạy và dừng Agent Host, nhận lệnh gọi công cụ, đưa về luồng chính của AutoCAD, có giới hạn thời gian",Công cụ đọc bản vẽ chạy đúng luồng. AutoCAD không treo khi Agent Host chết,CAD,2,S7-04,"Mục 6.5, CON-02"
+S7-07,7,GĐ2,"Hộp thoại cài đặt: nhà cung cấp, mô hình, điểm cuối. Khóa truy cập lưu bằng cơ chế bảo vệ thông tin xác thực của Windows",Khóa không xuất hiện trong tệp cấu hình và nhật ký,CAD,1,S7-05,"NFR-SEC-04, NFR-SEC-08"
+S7-08,7,GĐ2,"Đọc đối tượng trong block lồng nhau và bản vẽ tham chiếu ngoài, ghi đường dẫn nguồn",Bản vẽ thật có ống nằm trong block được đọc đủ,CAD,"1,5",S1-12,FR-ING-03
+S7-09,7,GĐ2,"Cấu hình ba cấp máy, người dùng, dự án. Cấp sau ghi đè cấp trước",Kiểm thử ba cấp với cùng một khóa cấu hình,CAD,1,S5-06,FR-CFG-02
+S7-10,7,GĐ2,"Hồ sơ kế thừa: hồ sơ dự án kế thừa hồ sơ công ty, chỉ ghi phần khác",Hồ sơ con rỗng cho kết quả giống hồ sơ cha,CAD,1,S2-01,FR-PRF-05
+S7-11,7,GĐ2,Sửa các lỗi còn tồn từ buổi thử giai đoạn 1,Danh sách lỗi tồn về không hoặc được xếp ưu tiên lại,CAD,"1,5",S6-13,Hạng mục 1.19
+S7-12,7,GĐ2,"Lập tệp các chỗ mơ hồ và cách giải quyết đúng, kèm lý do, cho năm bản vẽ chuẩn đầu tiên","Năm tệp `ambiguities.json`. Có cả ca mà đáp án là ""không đủ căn cứ, phải hỏi người""",ỐNG,"2,5",S6-15,"Mục 13.2, 13.5"
+S7-13,7,GĐ2,Chốt với khách hàng thử nghiệm kiểu kết nối mô hình ngôn ngữ được phép. Kiểm tra điều kiện lưu dữ liệu của đúng mô hình và nền tảng,Câu trả lời bằng văn bản cho Q6. Phụ lục thỏa thuận về dữ liệu gửi tới mô hình,KH,1,S1-19,"Q6, R7, mục 8.6"
+S7-14,7,GĐ2,Tìm khách hàng thử nghiệm thứ hai có quy ước bản vẽ khác,Có nguồn bản vẽ thứ hai đồng ý cung cấp,KH,"1,5",S6-17,"Hạng mục 2.13, mục 13.2"
+S8-01,8,GĐ2,"Vòng lặp agent: gọi mô hình, thực thi các lệnh gọi công cụ, gửi mọi kết quả của một lượt trong cùng một tin nhắn, xử lý đủ các lý do dừng gồm cả từ chối",Một phiên nhiều bước chạy trọn. Mỗi lý do dừng có nhánh xử lý và kiểm thử,LÕI,2,S7-05,"Hạng mục 2.3, mục 8.4"
+S8-02,8,GĐ2,"Giới hạn phiên: số bước, số token, thời gian. Vượt thì dừng và báo cáo trạng thái","Phiên cố ý chạy dài bị dừng đúng ngưỡng, có bản tóm tắt",LÕI,"0,5",S8-01,FR-AGT-07
+S8-03,8,GĐ2,"Ghi vết: mỗi lệnh gọi công cụ và mỗi yêu cầu tới mô hình thành một bản ghi nhật ký, gồm số token vào, ra, đọc từ bộ nhớ đệm, thời gian, lý do dừng",Tái hiện được trình tự một phiên chỉ từ tệp nhật ký,LÕI,1,S8-01,"FR-AGT-08, mục 11.5"
+S8-04,8,GĐ2,Sắp xếp ngữ cảnh để dùng được bộ nhớ đệm lời nhắc theo mục 8.5. Đo số token đọc từ bộ nhớ đệm,"Từ yêu cầu thứ hai trong phiên, số token đọc từ bộ nhớ đệm lớn hơn không",LÕI,"0,5",S8-03,"Mục 8.5, R8"
+S8-05,8,GĐ2,"Hai công cụ của chế độ lập hồ sơ: ghi hồ sơ nháp, và chạy thử hồ sơ nháp trả về chỉ số kèm mẫu các ca không khớp",Hồ sơ nháp không có hiệu lực cho đến khi người dùng duyệt,LÕI,"1,5","S7-02, S6-01","Hạng mục 2.5, FR-PRF-07"
+S8-06,8,GĐ2,"Lời nhắc hệ thống và quy trình của chế độ lập hồ sơ, bản đầu. Chạy trên bản vẽ mẫu và hai bản vẽ thật","Trên bản vẽ mẫu, hồ sơ agent đề xuất cho kết quả nhận diện bằng hồ sơ viết tay",LÕI,1,S8-05,"FR-AGT-02, UC-03"
+S8-07,8,GĐ2,"Khung bộ đánh giá: chạy một ca nhiều lần, ghi số bước, token, thời gian, chi phí, lưu toàn bộ chuỗi lệnh gọi",Một lệnh chạy một ca năm lần và in bảng kết quả có trung bình và độ dao động,LÕI,"1,5",S8-03,"Hạng mục 2.9, mục 13.5"
+S8-08,8,GĐ2,"Thẻ Trò chuyện: dòng tin nhắn, hiển thị agent đang làm gì theo từng bước, nút dừng",Bấm dừng thì phiên dừng trong vài giây và trạng thái được giữ,CAD,"2,5",S7-06,"Hạng mục 2.7, FR-AGT-13"
+S8-09,8,GĐ2,"Màn hình duyệt hồ sơ đề xuất: từng ánh xạ kèm lý do, cho chấp nhận, sửa, từ chối",Hồ sơ chỉ được lưu sau khi người dùng bấm duyệt,CAD,2,"S8-05, S5-12","FR-PRF-07, FR-AGT-05"
+S8-10,8,GĐ2,"Chế độ tắt agent và mất kết nối: giao diện chuyển trạng thái rõ ràng, mọi chức năng không phải agent vẫn chạy","Rút mạng giữa phiên: có thông báo, không mất dữ liệu, chuyển đổi bằng hồ sơ vẫn chạy",CAD,1,S8-08,"FR-AGT-09, NFR-SEC-03"
+S8-11,8,GĐ2,Thử lại có giới hạn khi gọi mô hình lỗi. Hết lượt thì báo rõ và cho tiếp tục không có agent,"Kiểm thử với lỗi giả lập: quá tải, hết thời gian, sai khóa",CAD,1,S8-01,NFR-REL-06
+S8-12,8,GĐ2,Kiểm tra giao diện AutoCAD không treo quá một giây trong lúc agent chờ mô hình,"Thao tác phóng, xoay bản vẽ vẫn mượt khi phiên agent đang chạy",CAD,1,S8-08,NFR-PRF-04
+S8-13,8,GĐ2,"Xác định nguồn môi trường Smart 3D để phát triển: của khách hàng, của đối tác hay tự mua",Có đường truy cập cụ thể và ngày bắt đầu dùng được,CAD,"0,5",,"Q9, mục 10.3.3"
+S8-14,8,GĐ2,Hoàn tất tệp chỗ mơ hồ cho các bản vẽ chuẩn còn lại. Chấm các hồ sơ agent đề xuất,Đủ tệp cho toàn bộ bộ bản vẽ chuẩn. Danh sách ánh xạ agent làm sai,ỐNG,"2,5",S7-12,Mục 13.5
+S8-15,8,GĐ2,"Nhận bản vẽ từ nguồn quy ước thứ hai, ký thỏa thuận",Từ năm bản vẽ trở lên của nguồn thứ hai,KH,"1,5",S7-14,Hạng mục 2.13
+S9-01,9,GĐ2,"Các công cụ đề xuất: đề xuất quyết định, xem trước tác động của quyết định, đánh dấu cần người xem, hỏi người dùng có lựa chọn, kết thúc phiên có tóm tắt",Năm công cụ có kiểm thử. Đề xuất thiếu lý do hoặc điểm tin cậy bị từ chối,LÕI,2,"S7-03, S5-05","Hạng mục 2.6, mục 8.2"
+S9-02,9,GĐ2,Lời nhắc và quy trình của chế độ giải quyết mơ hồ. Mọi đề xuất ở trạng thái chờ duyệt,Agent xử lý các vấn đề của một bản vẽ thật từ đầu đến cuối. Không quyết định nào tự có hiệu lực,LÕI,"1,5",S9-01,"FR-AGT-03, 05, 06, UC-04"
+S9-03,9,GĐ2,Hàng rào an toàn: văn bản lấy từ bản vẽ luôn được bọc và đánh dấu là dữ liệu. Kiểm tra quyền ở lớp công cụ. Tạo bản vẽ kiểm thử có cài cắm chỉ dẫn,"Trên bản vẽ cài cắm, agent không làm theo chỉ dẫn và không có đề xuất nào xuất phát từ nó",LÕI,"1,5",S9-02,"Mục 8.8, NFR-SEC-05, 06"
+S9-04,9,GĐ2,"Bộ lọc dữ liệu gửi tới mô hình theo bảng ở mục 8.9: chỉ phần trích có cấu trúc, tối thiểu cho nhiệm vụ",Kiểm thử chứng minh tệp bản vẽ và các trường bị cấm không bao giờ nằm trong yêu cầu,LÕI,1,S8-03,"Mục 8.9, NFR-SEC-01"
+S9-05,9,GĐ2,Bộ ca đánh giá cho chế độ lập hồ sơ trên phần phát triển của bộ bản vẽ chuẩn. Chấm theo mục 13.5,"Bảng điểm: chỉ số nhận diện với hồ sơ của agent so với hồ sơ đúng, số ánh xạ phải sửa",LÕI,"1,5","S8-07, S8-14",Mục 13.5
+S9-06,9,GĐ2,Chạy đo lần đầu để lấy mốc so sánh. Ghi chi phí và thời gian,"Bảng mốc được lưu trong kho, mọi thay đổi sau này so với nó",LÕI,"0,5",S9-05,Mục 13.5
+S9-07,9,GĐ2,"Xuất ảnh một vùng bản vẽ cho agent, có đánh số các đối tượng đáng chú ý",Ảnh rõ ở vùng 20 m. Số trên ảnh khớp mã đối tượng trả về kèm,CAD,2,S7-06,"Hạng mục 2.8, FR-AGT-11"
+S9-08,9,GĐ2,"Màn hình duyệt quyết định đề xuất: lý do, điểm tin cậy, nguồn quyết định, chấp nhận hoặc từ chối. Phân biệt rõ phần tử do quy tắc, do agent, do người",Mỗi phần tử trên giao diện cho biết ai quyết định,CAD,2,"S9-01, S5-08","FR-REV-05, NFR-USE-04"
+S9-09,9,GĐ2,Duyệt hàng loạt các đề xuất trên ngưỡng tin cậy. Không cho duyệt hàng loạt dưới ngưỡng,Ngưỡng cấu hình được. Đề xuất dưới ngưỡng phải duyệt từng cái,CAD,"0,5",S9-08,"FR-REV-06, R4"
+S9-10,9,GĐ2,"Giao diện cho câu hỏi của agent: hiện câu hỏi có lựa chọn, phóng tới chỗ liên quan, gửi trả lời",Agent nhận được trả lời và tiếp tục phiên,CAD,1,"S8-08, S9-01",FR-AGT-06
+S9-11,9,GĐ2,"Màn hình ""Dữ liệu đã gửi"": toàn bộ nội dung gửi tới mô hình trong phiên, gồm cả ảnh",Nội dung khớp từng byte với nhật ký yêu cầu,CAD,1,S8-03,NFR-SEC-07
+S9-12,9,GĐ2,Khảo sát Smart 3D: viết mã thử tạo một tuyến và định tuyến một đoạn chạy hoàn toàn bằng mã,"Đoạn mã chạy được trong môi trường Smart 3D, hoặc danh sách cụ thể những gì API không cho làm",CAD,"1,5",S8-13,"Hạng mục 3.1, R6"
+S9-13,9,GĐ2,Lập đáp án và tệp chỗ mơ hồ cho bản vẽ của nguồn quy ước thứ hai,Từ ba thư mục mới trong bộ bản vẽ chuẩn,ỐNG,"2,5",S8-15,Hạng mục 2.13
+S9-14,9,GĐ2,Cho khách hàng thử nghiệm xem agent chạy. Ghi phản ứng về mức tin tưởng và về dữ liệu gửi đi,Ghi chú buổi làm việc. Danh sách lo ngại của khách hàng,KH,1,S9-02,"R4, R7"
+S10-01,10,GĐ2,Bộ ca đánh giá cho chế độ giải quyết mơ hồ và nhóm ca an toàn,"Bảng điểm: tỷ lệ đề xuất đúng, tỷ lệ sai với tin cậy cao, tỷ lệ hỏi đúng lúc, kết quả nhóm ca an toàn",LÕI,"1,5","S9-05, S9-13",Mục 13.5
+S10-02,10,GĐ2,"Phân tích lỗi từ chuỗi lệnh gọi đã lưu. Sửa lời nhắc và mô tả công cụ, vòng một. Chạy lại bộ đánh giá",Bảng so sánh trước và sau. Mỗi thay đổi được giữ đều có số liệu chứng minh,LÕI,2,S10-01,Mục 13.5
+S10-03,10,GĐ2,"So sánh các mô hình và mức nỗ lực suy luận trên bộ đánh giá: chất lượng, thời gian, chi phí theo việc hoàn thành",Bảng so sánh. Đề xuất mô hình và mức nỗ lực mặc định cho từng chế độ,LÕI,1,S10-01,"Mục 8.6, R8"
+S10-04,10,GĐ2,"Báo cáo chi phí và thời gian cho mỗi bản vẽ, tính từ nhật ký",Con số đo được thay cho mục để trống ở mục 14.3 của tài liệu dự án,LÕI,"0,5",S8-03,"Mục 14.3, R8"
+S10-05,10,GĐ2,"Mở rộng phân loại nút: co 45 độ, côn thu, tê thu",Ca kiểm thử cho từng loại. Luật R-CON-04 không báo nhầm tại côn thu,LÕI,2,S3-05,"Hạng mục 2.11, FR-REC-08"
+S10-15,10,GĐ2,"Công cụ đọc bảng chú giải ký hiệu: phát hiện vùng chú giải, trả về từng ô gồm tên block, chữ mô tả và ảnh. Đối tượng trong vùng chú giải không được coi là cấu kiện thật. Cập nhật lời nhắc chế độ lập hồ sơ để đọc chú giải trước","Trên bản vẽ có bảng chú giải, hồ sơ agent đề xuất ghi rõ ánh xạ nào lấy từ chú giải. Không có van lơ lửng sinh ra từ ký hiệu mẫu trong bảng",LÕI,1,"S7-02, S8-06","Hạng mục 2.11b, FR-PRF-09, mục 7.9.4"
+S10-07,10,GĐ2,"Dựng co 45 độ, côn thu, tê thu trong AutoCAD","Hộp bao khớp tính toán trong 0,1 mm",CAD,"1,5",S10-05,FR-BLD-01
+S10-08,10,GĐ2,Dựng lại từng phần: khi IR đổi thì chỉ xóa và dựng lại đối tượng 3D bị ảnh hưởng,"Sửa một tuyến trên mô hình 500 đoạn ống: chỉ tuyến đó được dựng lại, không tạo đối tượng trùng",CAD,2,S3-15,"Hạng mục 2.12, FR-BLD-07"
+S10-09,10,GĐ2,Liên kết hai chiều giữa đối tượng 3D và đối tượng 2D nguồn,"Chọn bên này thì bên kia được tô sáng, cả hai chiều",CAD,"1,5","S3-15, S2-13",FR-BLD-08
+S10-10,10,GĐ2,Phát hiện đối tượng 3D đã bị sửa tay sau khi dựng. Hỏi trước khi ghi đè,Di chuyển một ống bằng tay rồi dựng lại: có cảnh báo liệt kê đối tượng bị ảnh hưởng,CAD,"1,5",S10-08,FR-BLD-12
+S11-08,10,GĐ2,"Thêm định nghĩa thiết bị: bồn nằm, thiết bị trao đổi nhiệt. Kiểm thử nhận diện","Hai tệp định nghĩa mới, thêm mà không sửa mã",CAD,1,S4-04,"FR-REC-11, mục 7.8"
+S10-12,10,GĐ2,Viết báo cáo khảo sát Smart 3D theo sáu mục ở mục 10.3.3,Báo cáo kèm khuyến nghị về phạm vi giai đoạn 3,CAD,"0,5",S9-12,"Hạng mục 3.1, Q3"
+S10-13,10,GĐ2,"Mở rộng bộ bản vẽ chuẩn lên khoảng 15 bản, trong đó có bản vẽ có bảng chú giải. Bổ sung số hiệu và thuộc tính cấu kiện vào đáp án. Phân loại nguyên nhân các đề xuất sai của agent","Đáp án có thuộc tính cấu kiện để chấm việc gắn chú thích. Bảng nguyên nhân: thiếu thông tin, hiểu sai quy ước, sai kiến thức ngành",ỐNG,"2,5",S10-01,Hạng mục 2.13
+S10-14,10,GĐ2,"Chuẩn bị buổi thử nghiệm giai đoạn 2: khách hàng nào, bộ bản vẽ chưa từng gặp nào, đo gì",Lịch và bộ bản vẽ được xác nhận,KH,1,S9-14,Mục 5.11
+S11-01,11,GĐ2,"Chế độ lệnh sửa: lời nhắc, quy trình, dùng lại các công cụ đề xuất quyết định trên IR",Năm câu lệnh mẫu cho ra đúng quyết định. Yêu cầu ngoài khả năng được từ chối rõ ràng,LÕI,2,S9-01,"Hạng mục 2.10, FR-AGT-04, UC-06"
+S11-02,11,GĐ2,Bộ ca đánh giá cho chế độ lệnh sửa: câu lệnh kèm trạng thái IR mong đợi,Bảng điểm cho chế độ thứ ba,LÕI,1,S11-01,Mục 13.5
+S11-03,11,GĐ2,Ống vẽ bằng hai nét song song: suy ra đường tâm và đường kính ngoài theo tỷ lệ,Ca kiểm thử trên bản vẽ thật có ống hai nét. Trường hợp không chắc thì tạo vấn đề,LÕI,"2,5",S2-06,"Hạng mục 2.11, FR-CLS-04"
+S11-04,11,GĐ2,"Ghi chú chung: agent đọc và đề xuất thay đổi tương ứng trong hồ sơ, ví dụ ngữ nghĩa cao độ mặc định","Trên bản vẽ có ghi chú ""cao độ là đáy ống"", agent đề xuất đúng thiết lập",LÕI,1,S8-06,FR-REC-14
+S11-14,11,GĐ2,"Gắn chú thích chữ rời với cấu kiện: vai trò và mẫu chú thích trong hồ sơ, ba mức ưu tiên đường dẫn, nằm sát, gần nhất, điểm tin cậy và ngưỡng dùng chung với nhãn ống","Ca dựng sẵn: chú thích có đường dẫn gắn đúng. Hai van cách đều một chú thích thì ra vấn đề, không ra liên kết. Nhãn ống không bị lấy nhầm làm chú thích van",LÕI,"1,5","S4-18, S2-09","Hạng mục 2.11c, FR-REC-19, mục 7.9.5"
+S11-06,11,GĐ2,"Kiểm tra va chạm cứng ống với ống, ống với thiết bị, ống với kết cấu. Ba luật R-CLH-01 đến 03",Phát hiện đúng trên ca dựng sẵn. Không báo va chạm tại đầu chờ và tại nút nối,CAD,"2,5","S4-10, S4-11","Hạng mục 2.12, FR-CHK-05"
+S11-07,11,GĐ2,"Bốn luật còn lại của giai đoạn 2: R-CON-06, R-GEO-03, R-ELV-04, R-EQP-03",Mỗi luật có ca phát hiện đúng và ca không báo nhầm,CAD,1,S5-03,Mục 9.3
+S11-15,11,GĐ2,Ba luật chú thích cấu kiện: R-CMP-01 đến 03,Mỗi luật có ca phát hiện đúng và ca không báo nhầm,CAD,"0,5",S11-14,Mục 9.3
+S11-16,11,GĐ2,Hiển thị thuộc tính và nguồn gốc từng thuộc tính của cấu kiện trên bảng điều khiển. Cho gắn lại chú thích sang cấu kiện khác. Ghi số hiệu cấu kiện vào dữ liệu gắn trên đối tượng 3D và bảng khối lượng,"Người dùng thấy số hiệu van lấy từ thuộc tính block hay từ chữ rời, và sửa được liên kết sai",CAD,"0,5","S11-14, S5-08","FR-REC-19, NFR-USE-04"
+S11-09,11,GĐ2,Giao diện lệnh sửa trong thẻ Trò chuyện: xem trước thay đổi trước khi duyệt,Người dùng thấy phần tử nào đổi và vấn đề nào sinh ra hay mất đi,CAD,"1,5","S11-01, S9-08",FR-AGT-04
+S11-10,11,GĐ2,"Công cụ ẩn danh bản vẽ của khách hàng: bỏ khung tên, đổi số hiệu theo bảng ánh xạ",Bản vẽ sau ẩn danh không còn tên khách hàng và tên dự án. Hình học không đổi,CAD,1,S1-07,Mục 13.2
+S11-11,11,GĐ2,Mở rộng kiểm thử tích hợp AutoCAD cho các chức năng giai đoạn 2,"Thêm ca cho dựng lại từng phần, liên kết hai chiều, phát hiện sửa tay",CAD,1,S10-10,Mục 13.6
+S11-12,11,GĐ2,"Mở rộng bộ bản vẽ chuẩn lên từ 20 bản, từ ít nhất hai nguồn quy ước",Đủ 20 thư mục có đáp án và tệp chỗ mơ hồ,ỐNG,"2,5",S10-13,"Hạng mục 2.13, mục 5.11"
+S11-13,11,GĐ2,Hỏi khách hàng thử nghiệm về mức giá chấp nhận được và cách tính tiền họ muốn,Ghi chú từ ít nhất hai khách hàng,KH,1,S9-14,Q12
+S12-01,12,GĐ2,"Đo toàn bộ chỉ số nhận diện trên bộ bản vẽ chuẩn, tách phần phát triển và phần giữ lại","Bảng chỉ số so với mục tiêu ở mục 5.2, gồm tỷ lệ sai im lặng",LÕI,1,S11-12,"Mục 5.2, 13.4"
+S12-02,12,GĐ2,"Vòng tinh chỉnh agent thứ hai, tập trung vào nhóm lỗi lớn nhất từ S10-13",Bảng so sánh trước và sau trên phần phát triển,LÕI,2,"S10-02, S11-02",Mục 13.5
+S12-03,12,GĐ2,"Chỉnh ngưỡng tin cậy để cân bằng tỷ lệ sai im lặng và tỷ lệ cờ thừa, dựa trên thời gian duyệt đo được",Ngưỡng mặc định mới kèm số liệu giải thích,LÕI,1,S12-01,Mục 13.4
+S12-04,12,GĐ2,"Sửa lỗi phát hiện trong buổi thử nghiệm, phần lõi và agent",Không còn lỗi chặn quy trình,LÕI,2,S12-08,Mục 13.7
+S12-05,12,GĐ2,"Đo lại chi phí, thời gian, tỷ lệ dùng bộ nhớ đệm. Chốt mô hình mặc định",Cấu hình mặc định của bản phát hành,LÕI,"0,5",S12-02,Mục 8.6
+S12-06,12,GĐ2,Cập nhật chương 8 và 13 của tài liệu dự án bằng số liệu thật,Các mục đánh dấu đề xuất được thay bằng số đo,LÕI,"0,5",S12-01,Mục 14.3
+S12-07,12,GĐ2,"Soạn bản nháp khai báo năng lực của ứng dụng chủ, chuẩn bị cho bộ thích ứng thứ hai",Lớp khai báo năng lực có trong lõi. Bộ thích ứng AutoCAD khai báo đúng năng lực của mình,LÕI,1,S10-12,Mục 6.12.3 quy tắc 8
+S12-08,12,GĐ2,Thử nghiệm với khách hàng: agent lập hồ sơ cho bộ bản vẽ chưa từng gặp. Đo thời gian thiết lập so với soạn hồ sơ bằng tay,Số phút thiết lập của hai cách. Số ánh xạ người dùng phải sửa,CAD,2,S10-14,"Mục 5.11, mốc quyết định giai đoạn 2"
+S12-09,12,GĐ2,"Sửa lỗi phát hiện trong buổi thử nghiệm, phần plug-in và giao diện",Không còn lỗi chặn quy trình,CAD,2,S12-08,Mục 13.7
+S12-10,12,GĐ2,Chạy đủ sáu cổng chất lượng ở mục 13.7. Đóng gói bản 0.2,Biên bản từng cổng. Gói cài bản 0.2,CAD,1,"S12-04, S12-09",Mục 13.7
+S12-11,12,GĐ2,Kiểm tra chế độ không có agent vẫn chạy trọn quy trình,Toàn bộ kiểm thử giai đoạn 1 đạt khi tắt agent,CAD,"0,5",S12-10,"FR-AGT-09, mục 5.11"
+S12-12,12,GĐ2,Plug-in tối thiểu trong Smart 3D: nạp được lõi và bảng điều khiển dùng chung,Một lệnh trong Smart 3D mở bảng điều khiển và nạp một tệp IR,CAD,"1,5",S10-12,Hạng mục 3.2
+S12-13,12,GĐ2,Rà nghiệm thu giai đoạn 2. Chốt Q3. Lập lại kế hoạch chi tiết Sprint 13 đến 16,Biên bản nghiệm thu. Kế hoạch giai đoạn 3 đã chia nhỏ,CAD,1,S12-10,"Mục 5.11, Q3, mốc M6"
+S12-14,12,GĐ2,Ký xác nhận đáp án của toàn bộ bộ bản vẽ chuẩn. Đánh giá chất lượng đề xuất của agent trong buổi thử,Danh sách ký. Nhận xét bằng văn bản,ỐNG,2,S12-08,Mục 13.2
+S12-15,12,GĐ2,Tổng hợp kết quả thử nghiệm giai đoạn 2. Đề nghị khách hàng thử nghiệm chuyển sang hợp đồng trả tiền,Một trang kết quả. Phản hồi của khách hàng về đề nghị,KH,2,S12-08,"Q12, mốc quyết định giai đoạn 4"
+S13-01,13,GĐ3,"Hoàn chỉnh dự án plug-in Smart 3D: lệnh, nạp lõi, nạp bảng điều khiển dùng chung, nhật ký",Bảng điều khiển chạy trong Smart 3D với cùng mã giao diện của bản AutoCAD,CAD,2,S12-12,Hạng mục 3.2
+S13-02,13,GĐ3,Khai báo năng lực cho bộ thích ứng Smart 3D. Giao diện tự ẩn chức năng mà ứng dụng chủ không có,"Chức năng không hỗ trợ bị ẩn hoặc mờ kèm lý do, không gây lỗi",CAD,"1,5",S12-07,Mục 6.12.3
+S13-03,13,GĐ3,Giao diện ánh xạ tuyến và DN sang cấp ống của dự án. Lưu ánh xạ vào hồ sơ dự án,Mọi tuyến trong IR có cấp ống trước khi cho dựng. Cấp ống thiếu DN cần dùng thì báo vấn đề,CAD,"2,5",S13-01,"Hạng mục 3.3, FR-BLD-10"
+S13-04,13,GĐ3,"Đọc mô hình Smart 3D hiện có: hệ thống ống, tuyến, thiết bị và đầu chờ theo số hiệu","Danh sách thiết bị và đầu chờ hiện trên bảng điều khiển, khớp với thiết bị trong IR",CAD,2,S13-01,"Mục 10.3, mục 7.8.5 cách 1"
+S13-05,13,GĐ3,"Bộ kiểm thử chung cho bộ thích ứng: nạp bản vẽ chuẩn, dựng, so số lượng, tọa độ, thuộc tính với đáp án",Một bộ kiểm thử chạy được với bất kỳ bộ thích ứng nào cài đặt ba giao diện,LÕI,"2,5",S12-07,"Mục 6.12.4, NFR-MNT-02"
+S13-06,13,GĐ3,Chạy bộ kiểm thử chung trên bộ thích ứng AutoCAD và bộ thích ứng DXF. Vá các chỗ hợp đồng còn thiếu,Cả hai bộ thích ứng đạt. Danh sách thay đổi hợp đồng,LÕI,"1,5",S13-05,NFR-MNT-08
+S13-07,13,GĐ3,"Bổ sung IR cho cấp ống: trường cấp ống, kết quả ánh xạ, vấn đề khi thiếu",Lược đồ IR lên phiên bản mới. IR cũ vẫn đọc được,LÕI,"1,5",S13-03,NFR-CMP-06
+S13-08,13,GĐ3,"Xuất PCF, phần một: nghiên cứu định dạng, ghi ống thẳng, co, tê",Tệp PCF của bản vẽ mẫu mở được trong một phần mềm đọc PCF,LÕI,"2,5",S10-05,"Hạng mục 3.7, FR-EXP-04"
+S13-09,13,GĐ3,Cung cấp quy tắc chọn cấp ống theo lưu chất và DN. Rà bảng ánh xạ,Bảng quy tắc bằng văn bản cho dự án thử nghiệm,ỐNG,2,,Hạng mục 3.3
+S13-10,13,GĐ3,Thu xếp môi trường Smart 3D và dự án thử nghiệm của khách hàng cho Sprint 16,"Lịch, quyền truy cập, phiên bản Smart 3D được xác nhận",KH,1,,"NFR-CMP-05, hạng mục 3.8"
+S14-01,14,GĐ3,Tạo hệ thống ống và tuyến cho từng số hiệu tuyến trong IR,Cây hệ thống trong Smart 3D khớp danh sách tuyến của IR,CAD,2,S13-03,"Hạng mục 3.4, FR-BLD-10"
+S14-02,14,GĐ3,"Tạo đoạn chạy theo cấp ống và DN, định tuyến qua các điểm nút của IR",Đường tâm trong Smart 3D khớp IR trong dung sai,CAD,3,S14-01,Hạng mục 3.4
+S14-03,14,GĐ3,Đối chiếu phụ kiện do Smart 3D tự sinh với nút trong IR. Sai khác thành vấn đề,"Bảng đối chiếu co, tê theo tuyến",CAD,2,S14-02,Hạng mục 3.4
+S14-04,14,GĐ3,"Tiến độ, hủy giữa chừng và nhật ký cho quá trình dựng",Hủy giữa chừng không để lại đối tượng dở dang,CAD,1,S14-02,"NFR-PRF-05, NFR-REL-02"
+S14-05,14,GĐ3,"Xuất PCF, phần hai: van và cấu kiện nối tiếp, mỗi tuyến một tệp",Tệp PCF của một bản vẽ thật được chuyên gia kiểm tra,LÕI,2,S13-08,FR-EXP-04
+S14-06,14,GĐ3,Bộ lập trình tự dựng: từ IR sinh ra danh sách thao tác có thứ tự cho ứng dụng chủ dựng theo đoạn chạy. Phần này nằm ở lõi để dùng lại cho Plant 3D,"Bộ thích ứng Smart 3D chỉ thực thi danh sách, không tự suy luận thứ tự",LÕI,"2,5",S13-07,"NFR-MNT-02, mục 6.12"
+S14-07,14,GĐ3,"Khớp hệ tọa độ bản vẽ 2D với hệ tọa độ nhà máy: gốc, góc xoay, cao độ mốc",Người dùng nhập ba tham số hoặc chọn hai điểm tham chiếu. Kiểm thử quy đổi hai chiều,LÕI,"1,5",,Mục 10.3.3 mục 3
+S14-08,14,GĐ3,"Bảo trì bản AutoCAD đang chạy ở khách hàng: sửa lỗi, trả lời hỗ trợ",Lỗi được ghi nhận và xử lý trong sprint,LÕI,2,,Hạng mục 4.8
+S14-09,14,GĐ3,Kiểm tra mô hình Smart 3D kết quả theo con mắt người trong nghề,Nhận xét bằng văn bản,ỐNG,2,S14-02,Mục 13.7 mục 6
+S14-10,14,GĐ3,Duy trì quan hệ khách hàng. Cập nhật tiến độ Smart 3D cho khách hàng quan tâm,Bảng theo dõi cập nhật,KH,1,,
+S15-01,15,GĐ3,Chèn van và cấu kiện nối tiếp vào đoạn chạy theo cấp ống,Van đúng vị trí và đúng loại theo cấp ống,CAD,"2,5",S14-02,Hạng mục 3.4
+S15-02,15,GĐ3,"Nối đầu ống vào đầu chờ thiết bị có sẵn, khớp theo số hiệu thiết bị và vị trí. Không tạo thiết bị mới",Đầu ống kết nối thật với đầu chờ. Không khớp được thì báo vấn đề,CAD,"2,5",S13-04,Hạng mục 3.5
+S15-03,15,GĐ3,"Chiến lược gỡ bỏ: theo dõi mọi đối tượng đã tạo trong một phiên, gỡ khi lỗi và khi dựng lại",Gỡ bỏ không đụng tới đối tượng do người khác tạo,CAD,2,S14-04,Hạng mục 3.6
+S15-04,15,GĐ3,"Tô sáng và phóng tới vị trí trong Smart 3D, nếu API cho phép","Bấm vào vấn đề thì Smart 3D tới đúng chỗ, hoặc năng lực này được khai báo là không có",CAD,1,S13-02,Mục 10.4
+S15-05,15,GĐ3,Logic khớp đầu chờ trong lõi. Luật R-EQP-03 dùng dữ liệu đầu chờ thật,"Ca kiểm thử: khớp đúng, lệch DN, lệch vị trí",LÕI,"1,5",S13-04,Mục 9.3
+S15-06,15,GĐ3,Phương án dự phòng qua tệp trung gian cho phần mà API không làm được. Bỏ qua nếu S14 và S15 dựng được hoàn toàn bằng API,"Phần bị hạn chế được nhập qua tệp, hoặc quyết định không cần",LÕI,"2,5",S14-03,"R6, mục 10.3.3 mục 4"
+S15-07,15,GĐ3,Chạy bộ kiểm thử chung trên bộ thích ứng Smart 3D,Kết quả từng ca. Ca không đạt có giải thích,LÕI,2,"S13-05, S15-01",Mục 6.12.4
+S15-08,15,GĐ3,Bảo trì bản AutoCAD ở khách hàng,Lỗi được xử lý trong sprint,LÕI,2,,Hạng mục 4.8
+S15-09,15,GĐ3,Rà kết quả nối đầu chờ và loại van theo cấp ống,Nhận xét bằng văn bản,ỐNG,2,S15-02,
+S15-10,15,GĐ3,"Chuẩn bị buổi thử tại khách hàng: kịch bản, phiếu ghi, người tham gia",Kịch bản được khách hàng xác nhận,KH,1,S13-10,Hạng mục 3.8
+S16-01,16,GĐ3,Thử nghiệm trong môi trường Smart 3D của khách hàng với dự án và cấp ống của họ,Phiếu ghi cho từng bản vẽ. Danh sách lỗi,CAD,3,S15-10,"Hạng mục 3.8, mục 5.11"
+S16-02,16,GĐ3,"Sửa lỗi từ buổi thử, phần bộ thích ứng Smart 3D",Không còn lỗi chặn quy trình,CAD,"2,5",S16-01,
+S16-03,16,GĐ3,Ghi hình cùng một IR dựng trong hai phần mềm,Đoạn ghi hình dùng cho bán hàng và gọi vốn,CAD,1,S16-02,Mục 5.11
+S16-04,16,GĐ3,Rà nghiệm thu giai đoạn 3. Chốt phạm vi bản 1.0. Chia nhỏ lại Sprint 17 đến 24,Biên bản nghiệm thu. Kế hoạch giai đoạn 4 đã cập nhật,CAD,"1,5",S16-01,Mốc M7
+S16-05,16,GĐ3,"Sửa lỗi từ buổi thử, phần lõi",Không còn lỗi chặn quy trình,LÕI,"2,5",S16-01,
+S16-06,16,GĐ3,Hoàn tất xuất PCF và nối vào lệnh xuất,Xuất PCF từ cả AutoCAD và Smart 3D,LÕI,"1,5",S14-05,FR-EXP-04
+S16-07,16,GĐ3,Cập nhật mục 10.3 của tài liệu dự án bằng thông tin API đã kiểm chứng,Các nhãn cần xác minh ở mục 10.3 được gỡ hoặc sửa,LÕI,1,S16-01,Mục 14.3
+S16-08,16,GĐ3,Tìm hiểu công cụ làm bộ cài và thủ tục mua chứng thư ký số,"Lựa chọn công cụ. Đã nộp hồ sơ mua chứng thư, vì thủ tục xác minh có thể mất nhiều ngày",LÕI,1,,Hạng mục 4.1
+S16-09,16,GĐ3,Ghép nhiều tờ bản vẽ qua điểm nối tiếp. Chỉ làm nếu còn sức,Hai tờ có chung tuyến được nối thành một mô hình,LÕI,2,S3-03,FR-REC-15
+S16-10,16,GĐ3,"Tham gia buổi thử, đánh giá mô hình",Nhận xét bằng văn bản,ỐNG,2,S16-01,
+S16-11,16,GĐ3,Đàm phán hợp đồng trả tiền đầu tiên. Đề xuất mức giá,Bản chào giá đã gửi,KH,2,S12-15,Q12
+S17-01,17,GĐ4,"Bộ cài MSI cho plug-in AutoCAD, Agent Host, danh mục, thư viện thiết bị và hồ sơ mẫu","Cài trên máy sạch, mở AutoCAD là dùng được",CAD,3,S16-08,"Hạng mục 4.1, FR-LIC-03"
+S17-02,17,GĐ4,Ký số tệp thực thi và bộ cài trong quy trình dựng,Windows không cảnh báo nhà phát hành lạ,CAD,"1,5",S16-08,Mục 11.2
+S17-03,17,GĐ4,Cài đặt không tương tác cho triển khai hàng loạt. Gỡ cài và nâng cấp,"Cài, nâng cấp, gỡ bằng dòng lệnh trên máy sạch",CAD,"1,5",S17-01,FR-LIC-03
+S17-04,17,GĐ4,Hỗ trợ và sửa lỗi,Lỗi được xử lý trong sprint,CAD,2,,Hạng mục 4.8
+S17-05,17,GĐ4,"Quy trình phát hành: đánh số phiên bản, ghi chú phát hành, dựng tự động ra gói cài",Một nhãn phiên bản trên kho mã sinh ra gói cài đã ký,LÕI,"1,5",S17-02,Mục 11.6
+S17-06,17,GĐ4,"Chuyển đổi dữ liệu cũ: IR, hồ sơ, tệp phiên của phiên bản trước đọc được ở phiên bản mới",Kiểm thử với dữ liệu của bản 0.1 và 0.2,LÕI,2,,NFR-CMP-06
+S17-07,17,GĐ4,"Gói thông tin hỗ trợ: gom nhật ký và cấu hình, không chứa nội dung bản vẽ và khóa truy cập. Người dùng xem trước rồi tự gửi",Kiểm thử chứng minh gói không chứa hai loại dữ liệu trên,LÕI,"1,5",,"NFR-SEC-08, mục 11.2"
+S17-08,17,GĐ4,Hỗ trợ và sửa lỗi,Lỗi được xử lý trong sprint,LÕI,3,,Hạng mục 4.8
+S17-09,17,GĐ4,Tìm hiểu điều kiện chương trình nhà phát triển của Autodesk và Hexagon,Danh sách điều kiện và chi phí,KH,1,,R12
+S18-01,18,GĐ4,"Thiết kế cấp phép: định dạng khóa có chữ ký, theo người dùng hoặc theo máy, thời hạn",Tài liệu thiết kế được rà về bảo mật,LÕI,2,,"Hạng mục 4.2, FR-LIC-01"
+S18-02,18,GĐ4,"Dịch vụ kích hoạt tối thiểu: cấp khóa, kích hoạt, thu hồi",Kích hoạt và thu hồi chạy được từ đầu đến cuối,LÕI,3,S18-01,FR-LIC-01
+S18-03,18,GĐ4,Kích hoạt ngoại tuyến cho máy không có Internet,Kích hoạt được bằng trao đổi tệp,LÕI,2,S18-02,FR-LIC-02
+S18-04,18,GĐ4,Hỗ trợ và sửa lỗi,Lỗi được xử lý trong sprint,LÕI,1,,Hạng mục 4.8
+S18-05,18,GĐ4,Kiểm tra giấy phép trong plug-in. Giao diện nhập khóa. Hành xử khi hết hạn: không khóa dữ liệu của người dùng,Hết hạn thì vẫn mở và xuất được dữ liệu cũ,CAD,2,S18-02,FR-LIC-01
+S18-06,18,GĐ4,Chế độ dùng thử có thời hạn,Cài mới chạy được ở chế độ dùng thử,CAD,1,S18-05,
+S18-07,18,GĐ4,Kiểm thử cấp phép trên cả hai nền .NET và trong Smart 3D,Bảng kết quả,CAD,"1,5",S18-05,
+S18-08,18,GĐ4,Rà soát bảo mật cho cấp phép và lưu khóa truy cập,Danh sách điểm yếu đã xử lý,CAD,"1,5",S18-03,Mục 11.2
+S18-09,18,GĐ4,Hỗ trợ và sửa lỗi,Lỗi được xử lý trong sprint,CAD,2,,Hạng mục 4.8
+S18-10,18,GĐ4,Chốt tên sản phẩm. Kiểm tra trùng nhãn hiệu,Tên chính thức,KH,1,,Q1
+S19-01,19,GĐ4,Chế độ triển khai C: gọi mô hình qua tài khoản đám mây của khách hàng. Viết bộ kết nối cho nền tảng mà khách hàng đầu tiên dùng,Một phiên agent chạy trọn qua tài khoản của khách hàng,LÕI,3,S7-05,"Hạng mục 4.3, mục 11.1, NFR-SEC-02"
+S19-02,19,GĐ4,Chế độ triển khai D: Agent Host chạy trên máy chủ nội bộ dùng chung cho nhóm,Hai máy người dùng cùng dùng một Agent Host,LÕI,"2,5",S19-01,Mục 11.1
+S19-03,19,GĐ4,Rà lại mô hình mối đe dọa ở mục 11.2 với kiến trúc đã triển khai,Từng mối đe dọa có biện pháp đã kiểm chứng,LÕI,1,S19-02,Mục 11.2
+S19-04,19,GĐ4,Hỗ trợ và sửa lỗi,Lỗi được xử lý trong sprint,LÕI,"1,5",,Hạng mục 4.8
+S19-05,19,GĐ4,Khóa cấu hình kết nối mô hình ngôn ngữ ở cấp máy. Người dùng không đổi được,Người dùng thường không sửa được cấu hình đã khóa,CAD,"1,5",S7-09,FR-LIC-05
+S19-06,19,GĐ4,"Triển khai thử trong mạng nội bộ của một khách hàng, cùng quản trị viên của họ","Biên bản triển khai. Danh sách vướng mắc về tường lửa, quyền cài đặt",CAD,3,"S17-03, S19-01",Mục 5.11
+S19-07,19,GĐ4,"Thống kê sử dụng ẩn danh, mặc định tắt, không chứa nội dung bản vẽ",Chỉ gửi khi quản trị viên bật,CAD,"1,5",,FR-LIC-04
+S19-08,19,GĐ4,Hỗ trợ và sửa lỗi,Lỗi được xử lý trong sprint,CAD,2,,Hạng mục 4.8
+S19-09,19,GĐ4,"Soạn điều khoản sử dụng và chính sách dữ liệu, có người chuyên môn pháp lý xem",Hai tài liệu sẵn sàng cho hợp đồng,KH,2,,Q12
+S20-01,20,GĐ4,"Tài liệu người dùng: cài đặt, chuyển đổi một bản vẽ, duyệt và sửa, soạn hồ sơ, thêm thiết bị",Người mới làm theo tài liệu hoàn thành UC-01 trong 30 phút,CAD,3,,"Hạng mục 4.4, NFR-USE-01"
+S20-02,20,GĐ4,"Ba video hướng dẫn ngắn: bắt đầu nhanh, soạn hồ sơ, làm việc với agent",Ba video quay trên AutoCAD thật,CAD,2,S20-01,Hạng mục 4.4
+S20-03,20,GĐ4,"Rà toàn bộ thông báo lỗi: điều gì xảy ra, ở đâu, làm gì tiếp",Không còn thông báo chỉ có mã lỗi,CAD,1,,NFR-USE-02
+S20-04,20,GĐ4,Hỗ trợ và sửa lỗi,Lỗi được xử lý trong sprint,CAD,2,,Hạng mục 4.8
+S20-05,20,GĐ4,"Tài liệu quản trị: triển khai hàng loạt, bốn chế độ triển khai, cấp phép, dữ liệu gửi đi",Quản trị viên của khách hàng tự triển khai được,LÕI,2,S19-06,Hạng mục 4.4
+S20-06,20,GĐ4,"Tài liệu cho người tích hợp: các hợp đồng công khai ở mục 6.12.2, lược đồ JSON, ví dụ",Một người ngoài đội viết được chương trình đọc IR,LÕI,2,,NFR-MNT-08
+S20-07,20,GĐ4,"Bộ dữ liệu mẫu đi kèm bộ cài: bản vẽ mẫu, hồ sơ, kết quả mong đợi",Người dùng mới chạy thử được ngay sau khi cài,LÕI,1,,FR-PRF-08
+S20-08,20,GĐ4,Hỗ trợ và sửa lỗi,Lỗi được xử lý trong sprint,LÕI,3,,Hạng mục 4.8
+S20-09,20,GĐ4,Rà thuật ngữ đường ống trong giao diện và tài liệu,Danh sách thuật ngữ đã sửa,ỐNG,2,S20-01,NFR-USE-05
+S20-10,20,GĐ4,"Quy trình hỗ trợ: kênh tiếp nhận, phân loại, thời gian phản hồi","Quy trình bằng văn bản, khách hàng đầu tiên đã biết",KH,1,,Hạng mục 4.8
+S21-01,21,GĐ4,"Máy chủ MCP cục bộ cung cấp cùng bộ công cụ, dùng chung hợp đồng công cụ",Một ứng dụng AI bên ngoài gọi được công cụ chỉ đọc,LÕI,3,S7-01,"Hạng mục 4.5, FR-AGT-12, ADR-09"
+S21-02,21,GĐ4,"Phân quyền cho máy chủ MCP: mặc định chỉ đọc, công cụ đề xuất và hành động phải bật riêng",Kiểm thử từng lớp quyền,LÕI,"1,5",S21-01,NFR-SEC-06
+S21-03,21,GĐ4,Chế độ dịch vụ của công cụ dòng lệnh: ứng dụng không phải .NET gọi lõi qua JSON-RPC,Một kịch bản Python gửi DXF và nhận IR,LÕI,"2,5",S7-04,Mục 6.12.1 mức B
+S21-04,21,GĐ4,Hỗ trợ và sửa lỗi,Lỗi được xử lý trong sprint,LÕI,1,,Hạng mục 4.8
+S21-05,21,GĐ4,Đóng gói lõi và lớp công cụ thành gói thư viện có phiên bản,Một dự án mẫu ngoài kho mã tham chiếu gói và chạy được,CAD,"1,5",,Mục 6.12.1 mức A
+S21-06,21,GĐ4,"Dự án mẫu bộ thích ứng tối thiểu kèm hướng dẫn, làm khuôn cho ứng dụng chủ mới",Dự án mẫu đạt bộ kiểm thử chung,CAD,2,S13-05,Mục 6.12.4
+S21-07,21,GĐ4,Trình soạn định nghĩa thiết bị có giao diện và xem trước hình 3D,Tạo được một thiết bị mới không cần sửa tệp JSON bằng tay,CAD,"2,5",S4-10,Mục 7.8.7
+S21-08,21,GĐ4,Hỗ trợ và sửa lỗi,Lỗi được xử lý trong sprint,CAD,2,,Hạng mục 4.8
+S22-01,22,GĐ4,"Bộ dựng Plant 3D, phần một: khảo sát API, dựng ống và co bằng đối tượng ống thông minh. Chỉ làm khi có khách hàng cần",Một tuyến của bản vẽ mẫu dựng được trong Plant 3D,CAD,6,S14-06,"Hạng mục 4.6, FR-BLD-09"
+S22-02,22,GĐ4,Hỗ trợ và sửa lỗi,Lỗi được xử lý trong sprint,CAD,2,,Hạng mục 4.8
+S22-03,22,GĐ4,Nhận diện ký hiệu van vẽ bằng nét rời qua so khớp mẫu hình học. Chỉ làm khi bản vẽ của khách hàng cần,Ca kiểm thử trên bản vẽ thật,LÕI,5,,FR-CLS-05
+S22-04,22,GĐ4,Hỗ trợ và sửa lỗi,Lỗi được xử lý trong sprint,LÕI,3,,Hạng mục 4.8
+S23-01,23,GĐ4,Kiểm thử tương thích trên mọi phiên bản AutoCAD trong dải hỗ trợ,Bảng tương thích có kết quả từng phiên bản,CAD,"2,5",,NFR-CMP-01
+S23-02,23,GĐ4,Đo và tối ưu thời gian dựng 3D cho IR cỡ 500 đoạn ống,Dưới 60 giây hoặc có giải thích,CAD,"1,5",,NFR-PRF-03
+S23-03,23,GĐ4,Danh sách kiểm tra thủ công trên bản vẽ thật do người không viết mã thực hiện,Biên bản. Lỗi chặn được sửa,CAD,2,,Mục 13.7 mục 6
+S23-04,23,GĐ4,Hỗ trợ và sửa lỗi,Lỗi được xử lý trong sprint,CAD,2,,Hạng mục 4.8
+S23-05,23,GĐ4,"Đọc tệp DWG khi không có AutoCAD, qua bước chuyển sang DXF",Xử lý theo lô nhận tệp DWG,LÕI,2,,"Hạng mục 4.7, FR-ING-10"
+S23-06,23,GĐ4,Chạy đủ sáu cổng chất lượng trên bản ứng viên phát hành,Biên bản từng cổng,LÕI,2,S23-03,Mục 13.7
+S23-07,23,GĐ4,Chạy lại toàn bộ bộ đánh giá agent với mô hình mặc định hiện hành của nhà cung cấp,Bảng điểm. Quyết định giữ hay đổi mô hình mặc định,LÕI,1,,"R9, mục 13.5"
+S23-08,23,GĐ4,Hỗ trợ và sửa lỗi,Lỗi được xử lý trong sprint,LÕI,3,,Hạng mục 4.8
+S23-09,23,GĐ4,"Viết một bài tình huống khách hàng từ kết quả thử nghiệm, có sự đồng ý của khách",Bài viết dùng cho bán hàng,KH,2,S12-15,
+S24-01,24,GĐ4,"Phát hành bản 1.0: gói cài đã ký, ghi chú phát hành, tài liệu",Gói cài tải được. Khách hàng đầu tiên đã cài,CAD,"1,5",S23-06,Mốc M8
+S24-02,24,GĐ4,Cài đặt và đào tạo tại khách hàng trả tiền đầu tiên,Người dùng của khách tự chạy được UC-01,CAD,3,S24-01,Mục 5.11
+S24-03,24,GĐ4,Hỗ trợ và sửa lỗi sau phát hành,Lỗi chặn được sửa trong vòng một ngày làm việc,CAD,"3,5",S24-01,Hạng mục 4.8
+S24-04,24,GĐ4,Hỗ trợ và sửa lỗi sau phát hành,Như trên,LÕI,4,S24-01,Hạng mục 4.8
+S24-05,24,GĐ4,"Cập nhật tài liệu dự án lên bản 1.0: gỡ các nhãn đề xuất đã được kiểm chứng, ghi các quyết định đã chốt",Tài liệu dự án phản ánh đúng sản phẩm,LÕI,"1,5",,
+S24-06,24,GĐ4,Nhìn lại cả năm. Lập lộ trình năm thứ hai từ danh sách chờ và phản hồi khách hàng,"Lộ trình năm thứ hai, bản nháp",LÕI,"2,5",,
+S24-07,24,GĐ4,Ký hợp đồng trả tiền. Thu phản hồi sau một tuần dùng,Hợp đồng đã ký,KH,2,S16-11,Mục 5.11
+S6-06,Chờ,Danh sách chờ,Đo hiệu năng trên bản vẽ cỡ 5.000 đối tượng. Sửa các điểm chậm rõ rệt,"Bảng thời gian từng bước, so với mục tiêu ở mục 5.1",LÕI,1,S6-04,"NFR-PRF-01, 02"
+S10-06,Chờ,Danh sách chờ,Xuất mô hình 3D ra DXF khi chạy ngoài AutoCAD,Tệp mở được trong AutoCAD. Số đối tượng khớp IR,LÕI,1,S4-10,FR-EXP-05
+S10-11,Chờ,Danh sách chờ,"Trạng thái duyệt của mô hình: nháp, đã kiểm tra, đã duyệt. Ghi người duyệt và thời điểm",Trạng thái xuất hiện trong báo cáo chuyển đổi,CAD,1,S5-06,"FR-REV-08, UC-11"
+S11-05,Chờ,Danh sách chờ,Chạy lại bộ luật từng phần khi IR đổi cục bộ. Giao diện lập trình để thêm luật mà không sửa lõi,Sửa một tuyến chỉ chạy lại luật liên quan. Một luật mẫu nằm ngoài lõi nạp được,LÕI,"1,5",S5-03,"FR-CHK-04, FR-CHK-07"

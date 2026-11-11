@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "1.0",
+  "id": "sample-pump-station",
+  "version": 1,
+  "extends": "base-default",
+  "units": "mm",
+  "pipeStandard": "ASME-B36.10",
+  "fittingStandard": "ASME-B16.9",
+  "tolerances": {
+    "snap": 1.0,
+    "collinearDeg": 0.5,
+    "tagSearchRadius": 1500,
+    "leaderTouch": 10,
+    "tagAdjacentFactor": 2.5,
+    "unclassifiedWarning": 0.30
+  },
+  "roles": [
+    { "role": "pipe_centerline", "match": { "layer": "PIPE", "types": ["LWPOLYLINE", "LINE"] } },
+    { "role": "pipe_tag",        "match": { "layer": "PIPE-TAG", "types": ["TEXT", "MTEXT"] } },
+    { "role": "pipe_tag_leader", "match": { "layer": "PIPE-TAG", "types": ["LINE", "LEADER", "MULTILEADER"] } },
+    { "role": "riser_symbol",    "match": { "layer": "PIPE-RISER", "types": ["CIRCLE"] } },
+    { "role": "inline_component","match": { "layer": "VALVE", "types": ["INSERT"] } },
+    { "role": "component_tag",   "match": { "layer": "VALVE-TAG", "types": ["TEXT", "MTEXT"] } },
+    { "role": "legend",          "match": { "layer": "LEGEND" } },
+    { "role": "equipment",       "match": { "layer": "EQUIP" } },
+    { "role": "equipment_tag",   "match": { "layer": "EQUIP-TAG" } },
+    { "role": "structure",       "match": { "layer": "STRUCT" } },
+    { "role": "structure_tag",   "match": { "layer": "STRUCT-TAG" } },
+    { "role": "ignore",          "match": { "layer": "BORDER" } }
+  ],
+  "tagPatterns": [
+    {
+      "name": "line-dn-el",
+      "regex": "^\\s*(?<line>[A-Z]+-\\d+)\\s+DN\\s*(?<dn>\\d+)\\s+EL\\s*(?<el>[+-]?\\d+(?:\\.\\d+)?)\\s*$",
+      "elevationDatum": "CL"
+    },
+    {
+      "name": "line-dn",
+      "regex": "^\\s*(?<line>[A-Z]+-\\d+)\\s+DN\\s*(?<dn>\\d+)\\s*$"
+    }
+  ],
+  "blocks": [
+    { "name": "VALVE_GATE", "component": "valve_gate", "attributes": { "TAG": "tag", "RATING": "attributes.rating" } },
+    { "name": "COLUMN", "structure": "column" }
+  ],
+  "componentTagPatterns": [
+    { "name": "valve-tag", "regex": "^\\s*(?<tag>[A-Z]{1,3}V-\\d+)\\s*$", "searchRadius": 800 }
+  ],
+  "equipmentRules": [
+    { "match": { "shape": "circle" }, "type": "tank_vertical" },
+    { "match": { "shape": "closed_rectangle" }, "type": "pump" }
+  ],
+  "structureRules": { "tosPattern": "TOS\\s+EL\\s*(?<tos>[+-]?\\d+)" },
+  "rules": { "R-TAG-01": "blocker", "R-CLH-01": "warning" }
+}

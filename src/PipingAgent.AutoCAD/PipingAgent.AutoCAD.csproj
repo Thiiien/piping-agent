@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Một bộ mã, hai bản dựng:
+      net48           cho AutoCAD đến bản 2024, chạy trên .NET Framework 4.8
+      net8.0-windows  cho AutoCAD từ bản 2025, chạy trên .NET 8
+    Thư viện của AutoCAD chỉ dùng để biên dịch. Không chép vào thư mục kết quả và không phân phối lại.
+  -->
+  <PropertyGroup>
+    <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
+    <PlatformTarget>x64</PlatformTarget>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+    <!-- Chép cả thư viện NuGet của các dự án con (ACadSharp, PdfPig) vào thư mục kết quả; AutoCAD chỉ tìm DLL cạnh plug-in. -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <PackageReference Include="AutoCAD.NET" Version="24.3.0" ExcludeAssets="runtime" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
+    <PackageReference Include="AutoCAD.NET" Version="25.0.1" ExcludeAssets="runtime" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Hồ sơ quy ước và danh mục đi kèm plug-in, nằm cạnh tệp DLL. -->
+    <None Include="..\..\data\profiles\*.json" Link="profiles\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\data\catalog\*.json" Link="catalog\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\data\equipment\*.json" Link="equipment\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PipingAgent.Core\PipingAgent.Core.csproj" />
+    <ProjectReference Include="..\PipingAgent.Hosting\PipingAgent.Hosting.csproj" />
+    <ProjectReference Include="..\PipingAgent.UI\PipingAgent.UI.csproj" />
+    <ProjectReference Include="..\PipingAgent.Tools\PipingAgent.Tools.csproj" />
+    <!-- Isometric sang 3D: PA_ISO đọc tờ ISOGEN DWG, DXF hoặc PDF ngay trong AutoCAD, I1 và I3. -->
+    <ProjectReference Include="..\PipingAgent.Iso\PipingAgent.Iso.csproj" />
+    <!-- Agent Host là tiến trình riêng .NET 8, chỉ cần dựng trước và chép vào thư mục agenthost cạnh plug-in. -->
+    <ProjectReference Include="..\PipingAgent.AgentHost\PipingAgent.AgentHost.csproj" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=net8.0" SkipGetTargetFrameworkProperties="true" />
+  </ItemGroup>
+
+  <!-- Chỉ chạy trong lượt build của từng target; lượt ngoài của dự án đa target có OutDir rỗng và sẽ chép vào thư mục mã nguồn. -->
+  <Target Name="CopyAgentHost" AfterTargets="Build" Condition="'$(TargetFramework)' != ''">
+    <ItemGroup>
+      <AgentHostFiles Include="..\PipingAgent.AgentHost\bin\$(Configuration)\net8.0\**\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(AgentHostFiles)" DestinationFiles="@(AgentHostFiles->'$(OutDir)agenthost\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>

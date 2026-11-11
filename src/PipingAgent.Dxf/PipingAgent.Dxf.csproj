@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PipingAgent.Core\PipingAgent.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Chọn theo docs/DANH_GIA_THU_VIEN_DXF.md: thư viện duy nhất đọc đủ MULTILEADER và đọc được DWG. Quyết định Q11. -->
+    <PackageReference Include="ACadSharp" Version="3.8.35" />
+  </ItemGroup>
+
+</Project>

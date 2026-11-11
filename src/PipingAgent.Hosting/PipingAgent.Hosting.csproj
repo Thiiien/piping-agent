@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Lớp chủ dùng chung: những việc lõi không được làm theo mục 6.12.3, như đọc tệp hồ sơ và danh mục từ đĩa.
+    Mọi ứng dụng chủ (AutoCAD, dòng lệnh, Smart 3D sau này) dùng chung để không chép lại mã.
+  -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PipingAgent.Core\PipingAgent.Core.csproj" />
+    <ProjectReference Include="..\PipingAgent.Tools\PipingAgent.Tools.csproj" />
+    <!-- DPAPI cho khoá truy cập mô hình, NFR-SEC-04. -->
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="8.0.0" />
+  </ItemGroup>
+
+</Project>

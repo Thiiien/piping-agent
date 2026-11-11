@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "1.0",
+  "units": "mm",
+  "source": { "file": "piping_plan_2d.dxf", "fingerprint": "sha256:0000", "entityCount": 80 },
+  "profile": { "id": "sample-pump-station", "version": 1 },
+  "lines": [
+    { "id": "L-P-1011", "tag": "P-1011" }
+  ],
+  "runs": [
+    {
+      "id": "R-2A7", "lineId": "L-P-1011", "dn": 150,
+      "elevation": { "raw": 4100, "datum": "CL", "centerline": 4100 },
+      "planPoints": [[21500, 12000], [24900, 12000]],
+      "tagRef": { "text": "P-1011 DN150 EL+4100", "by": "leader", "sourceHandle": "1F3" },
+      "prov": { "sources": ["2A7"], "rule": "REC-RUN-POLYLINE", "confidence": 1.0, "decidedBy": "rule" }
+    }
+  ],
+  "segments": [
+    {
+      "id": "S-0012", "lineId": "L-P-1011", "runId": null, "kind": "riser",
+      "nodeA": "N-0031", "nodeB": "N-0032", "dn": 150, "od": 168.3,
+      "length": 3500, "trimA": 228.6, "trimB": 228.6,
+      "prov": { "sources": ["2A5", "2A7", "3C0"], "rule": "REC-RISER-ELEV-CHANGE",
+                "confidence": 0.95, "decidedBy": "rule", "inferred": true }
+    },
+    {
+      "id": "S-0013", "lineId": "L-P-1011", "runId": "R-2A7", "kind": "horizontal",
+      "nodeA": "N-0032", "nodeB": "N-0033", "dn": 150, "od": 168.3,
+      "length": 3400, "trimA": 228.6, "trimB": 0,
+      "prov": { "sources": ["2A7"], "rule": "REC-RUN-POLYLINE", "confidence": 1.0, "decidedBy": "rule" }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "N-0031", "position": [21500, 12000, 600], "kind": "nozzle",
+      "segments": ["S-0012"], "equipmentId": "E-P-101A", "nozzleId": "N1"
+    },
+    {
+      "id": "N-0032", "position": [21500, 12000, 4100], "kind": "elbow",
+      "segments": ["S-0012", "S-0013"],
+      "params": { "angleDeg": 90, "radius": 228.6 }, "catalogRef": "B16.9/ELL90LR/DN150"
+    },
+    {
+      "id": "N-0033", "position": [24900, 12000, 4100], "kind": "open_end",
+      "segments": ["S-0013"]
+    }
+  ],
+  "components": [
+    {
+      "id": "C-0001", "segmentId": "S-0013", "type": "valve_gate",
+      "position": [23000, 12000, 4100], "axis": [1, 0, 0], "dn": 150, "length": 403,
+      "tag": "V-1011",
+      "attributes": { "rating": { "value": "150#", "by": "adjacent", "sourceHandle": "1F9", "confidence": 0.85 } },
+      "prov": { "sources": ["1F7"], "rule": "REC-CMP-BLOCK", "confidence": 1.0, "decidedBy": "rule" }
+    }
+  ],
+  "equipment": [
+    {
+      "id": "E-P-101A", "tag": "P-101A", "type": "pump",
+      "geometry": { "origin": [21500, 11000, 0], "rotationDeg": 0, "params": { "L": 1200, "W": 800, "H": 600 } },
+      "nozzles": [ { "id": "N1", "position": [21500, 12000, 600], "direction": [0, 0, 1], "dn": 150 } ],
+      "prov": { "sources": ["0A1", "0A2"], "rule": "REC-EQP-RECT", "confidence": 0.9, "decidedBy": "rule" }
+    }
+  ],
+  "structures": [
+    {
+      "id": "ST-0001", "type": "column", "points": [[20000, 10000, 0], [20000, 10000, 6000]],
+      "section": "H300x300", "tos": 6000,
+      "prov": { "sources": ["0B1"], "rule": "REC-STR-COLUMN", "confidence": 1.0, "decidedBy": "rule" }
+    }
+  ],
+  "issues": [
+    {
+      "id": "I-0003", "ruleId": "R-TAG-02", "severity": "warning", "status": "open",
+      "elements": ["R-2A7"], "sources": ["1E0"], "position": [11050, 14300, 0],
+      "message": "Nhãn P-1001 có hai đoạn chạy ứng viên với điểm gần nhau.",
+      "suggestions": [ { "op": "assign_tag", "target": { "run": "R-2A7" }, "value": "P-1001" } ]
+    }
+  ],
+  "decisions": [
+    {
+      "id": "D-0001", "op": "set_dn", "target": { "run": "R-2A7", "source": "2A7" }, "value": 150,
+      "by": "agent", "status": "approved", "rationale": "Nhãn ghi DN150 và block van cùng cỡ.",
+      "confidence": 0.9, "at": "2026-11-10T09:00:00Z", "approvedBy": "user", "approvedAt": "2026-11-10T09:05:00Z"
+    }
+  ]
+}

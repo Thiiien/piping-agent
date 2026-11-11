@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0",
+  "id": "base-default",
+  "version": 1,
+  "extends": null,
+  "units": "mm",
+  "pipeStandard": "ASME-B36.10",
+  "fittingStandard": "ASME-B16.9",
+  "tolerances": {
+    "snap": 1.0,
+    "collinearDeg": 0.5,
+    "tagSearchRadius": 1500,
+    "leaderTouch": 10,
+    "tagAdjacentFactor": 2.5,
+    "unclassifiedWarning": 0.30
+  },
+  "roles": [
+    { "role": "dimension", "match": { "types": ["DIMENSION"] } },
+    { "role": "title_block", "match": { "layer": "*TITLE*" } },
+    { "role": "title_block", "match": { "layer": "*BORDER*" } },
+    { "role": "ignore", "match": { "layer": "DEFPOINTS" } },
+    { "role": "ignore", "match": { "layer": "*VIEWPORT*" } }
+  ],
+  "tagPatterns": [],
+  "blocks": [],
+  "componentTagPatterns": [],
+  "equipmentRules": [],
+  "structureRules": null,
+  "rules": {}
+}

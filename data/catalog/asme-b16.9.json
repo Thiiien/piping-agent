@@ -1,0 +1,893 @@
+{
+  "schemaVersion": "1.0",
+  "standard": "ASME-B16.9",
+  "title": "Factory-made wrought buttwelding fittings, DN15 đến DN600",
+  "units": "mm",
+  "verified": false,
+  "note": "Số liệu chép tay từ bảng tiêu chuẩn, chưa đối chiếu với bản gốc. Chuyên gia đường ống đối chiếu và đổi verified thành true ở việc S2-16. Mục RED không ghi dn2: chiều dài H áp cho mọi cỡ thu từ đầu lớn đó.",
+  "pipes": [],
+  "fittings": [
+    {
+      "type": "ELL90LR",
+      "dn": 15,
+      "dims": {
+        "A": 38
+      }
+    },
+    {
+      "type": "ELL45LR",
+      "dn": 15,
+      "dims": {
+        "B": 16
+      }
+    },
+    {
+      "type": "TEE",
+      "dn": 15,
+      "dims": {
+        "C": 25,
+        "M": 25
+      }
+    },
+    {
+      "type": "CAP",
+      "dn": 15,
+      "dims": {
+        "E": 25
+      }
+    },
+    {
+      "type": "ELL90LR",
+      "dn": 20,
+      "dims": {
+        "A": 29
+      }
+    },
+    {
+      "type": "ELL45LR",
+      "dn": 20,
+      "dims": {
+        "B": 11
+      }
+    },
+    {
+      "type": "TEE",
+      "dn": 20,
+      "dims": {
+        "C": 29,
+        "M": 29
+      }
+    },
+    {
+      "type": "RED",
+      "dn": 20,
+      "dims": {
+        "H": 38
+      }
+    },
+    {
+      "type": "CAP",
+      "dn": 20,
+      "dims": {
+        "E": 25
+      }
+    },
+    {
+      "type": "ELL90LR",
+      "dn": 25,
+      "dims": {
+        "A": 38
+      }
+    },
+    {
+      "type": "ELL90SR",
+      "dn": 25,
+      "dims": {
+        "A": 25
+      }
+    },
+    {
+      "type": "ELL45LR",
+      "dn": 25,
+      "dims": {
+        "B": 16
+      }
+    },
+    {
+      "type": "TEE",
+      "dn": 25,
+      "dims": {
+        "C": 38,
+        "M": 38
+      }
+    },
+    {
+      "type": "RED",
+      "dn": 25,
+      "dims": {
+        "H": 51
+      }
+    },
+    {
+      "type": "CAP",
+      "dn": 25,
+      "dims": {
+        "E": 38
+      }
+    },
+    {
+      "type": "ELL90LR",
+      "dn": 32,
+      "dims": {
+        "A": 48
+      }
+    },
+    {
+      "type": "ELL90SR",
+      "dn": 32,
+      "dims": {
+        "A": 32
+      }
+    },
+    {
+      "type": "ELL45LR",
+      "dn": 32,
+      "dims": {
+        "B": 20
+      }
+    },
+    {
+      "type": "TEE",
+      "dn": 32,
+      "dims": {
+        "C": 48,
+        "M": 48
+      }
+    },
+    {
+      "type": "RED",
+      "dn": 32,
+      "dims": {
+        "H": 51
+      }
+    },
+    {
+      "type": "CAP",
+      "dn": 32,
+      "dims": {
+        "E": 38
+      }
+    },
+    {
+      "type": "ELL90LR",
+      "dn": 40,
+      "dims": {
+        "A": 57
+      }
+    },
+    {
+      "type": "ELL90SR",
+      "dn": 40,
+      "dims": {
+        "A": 38
+      }
+    },
+    {
+      "type": "ELL45LR",
+      "dn": 40,
+      "dims": {
+        "B": 24
+      }
+    },
+    {
+      "type": "TEE",
+      "dn": 40,
+      "dims": {
+        "C": 57,
+        "M": 57
+      }
+    },
+    {
+      "type": "RED",
+      "dn": 40,
+      "dims": {
+        "H": 64
+      }
+    },
+    {
+      "type": "CAP",
+      "dn": 40,
+      "dims": {
+        "E": 38
+      }
+    },
+    {
+      "type": "ELL90LR",
+      "dn": 50,
+      "dims": {
+        "A": 76
+      }
+    },
+    {
+      "type": "ELL90SR",
+      "dn": 50,
+      "dims": {
+        "A": 51
+      }
+    },
+    {
+      "type": "ELL45LR",
+      "dn": 50,
+      "dims": {
+        "B": 32
+      }
+    },
+    {
+      "type": "TEE",
+      "dn": 50,
+      "dims": {
+        "C": 64,
+        "M": 64
+      }
+    },
+    {
+      "type": "RED",
+      "dn": 50,
+      "dims": {
+        "H": 76
+      }
+    },
+    {
+      "type": "CAP",
+      "dn": 50,
+      "dims": {
+        "E": 38
+      }
+    },
+    {
+      "type": "ELL90LR",
+      "dn": 65,
+      "dims": {
+        "A": 95
+      }
+    },
+    {
+      "type": "ELL90SR",
+      "dn": 65,
+      "dims": {
+        "A": 64
+      }
+    },
+    {
+      "type": "ELL45LR",
+      "dn": 65,
+      "dims": {
+        "B": 40
+      }
+    },
+    {
+      "type": "TEE",
+      "dn": 65,
+      "dims": {
+        "C": 76,
+        "M": 76
+      }
+    },
+    {
+      "type": "RED",
+      "dn": 65,
+      "dims": {
+        "H": 89
+      }
+    },
+    {
+      "type": "CAP",
+      "dn": 65,
+      "dims": {
+        "E": 38
+      }
+    },
+    {
+      "type": "ELL90LR",
+      "dn": 80,
+      "dims": {
+        "A": 114
+      }
+    },
+    {
+      "type": "ELL90SR",
+      "dn": 80,
+      "dims": {
+        "A": 76
+      }
+    },
+    {
+      "type": "ELL45LR",
+      "dn": 80,
+      "dims": {
+        "B": 48
+      }
+    },
+    {
+      "type": "TEE",
+      "dn": 80,
+      "dims": {
+        "C": 86,
+        "M": 86
+      }
+    },
+    {
+      "type": "RED",
+      "dn": 80,
+      "dims": {
+        "H": 89
+      }
+    },
+    {
+      "type": "CAP",
+      "dn": 80,
+      "dims": {
+        "E": 51
+      }
+    },
+    {
+      "type": "ELL90LR",
+      "dn": 90,
+      "dims": {
+        "A": 133
+      }
+    },
+    {
+      "type": "ELL90SR",
+      "dn": 90,
+      "dims": {
+        "A": 89
+      }
+    },
+    {
+      "type": "ELL45LR",
+      "dn": 90,
+      "dims": {
+        "B": 56
+      }
+    },
+    {
+      "type": "TEE",
+      "dn": 90,
+      "dims": {
+        "C": 95,
+        "M": 95
+      }
+    },
+    {
+      "type": "RED",
+      "dn": 90,
+      "dims": {
+        "H": 102
+      }
+    },
+    {
+      "type": "CAP",
+      "dn": 90,
+      "dims": {
+        "E": 64
+      }
+    },
+    {
+      "type": "ELL90LR",
+      "dn": 100,
+      "dims": {
+        "A": 152
+      }
+    },
+    {
+      "type": "ELL90SR",
+      "dn": 100,
+      "dims": {
+        "A": 102
+      }
+    },
+    {
+      "type": "ELL45LR",
+      "dn": 100,
+      "dims": {
+        "B": 64
+      }
+    },
+    {
+      "type": "TEE",
+      "dn": 100,
+      "dims": {
+        "C": 105,
+        "M": 105
+      }
+    },
+    {
+      "type": "RED",
+      "dn": 100,
+      "dims": {
+        "H": 102
+      }
+    },
+    {
+      "type": "CAP",
+      "dn": 100,
+      "dims": {
+        "E": 64
+      }
+    },
+    {
+      "type": "ELL90LR",
+      "dn": 125,
+      "dims": {
+        "A": 190
+      }
+    },
+    {
+      "type": "ELL90SR",
+      "dn": 125,
+      "dims": {
+        "A": 127
+      }
+    },
+    {
+      "type": "ELL45LR",
+      "dn": 125,
+      "dims": {
+        "B": 79
+      }
+    },
+    {
+      "type": "TEE",
+      "dn": 125,
+      "dims": {
+        "C": 124,
+        "M": 124
+      }
+    },
+    {
+      "type": "RED",
+      "dn": 125,
+      "dims": {
+        "H": 127
+      }
+    },
+    {
+      "type": "CAP",
+      "dn": 125,
+      "dims": {
+        "E": 76
+      }
+    },
+    {
+      "type": "ELL90LR",
+      "dn": 150,
+      "dims": {
+        "A": 229
+      }
+    },
+    {
+      "type": "ELL90SR",
+      "dn": 150,
+      "dims": {
+        "A": 152
+      }
+    },
+    {
+      "type": "ELL45LR",
+      "dn": 150,
+      "dims": {
+        "B": 95
+      }
+    },
+    {
+      "type": "TEE",
+      "dn": 150,
+      "dims": {
+        "C": 143,
+        "M": 143
+      }
+    },
+    {
+      "type": "RED",
+      "dn": 150,
+      "dims": {
+        "H": 140
+      }
+    },
+    {
+      "type": "CAP",
+      "dn": 150,
+      "dims": {
+        "E": 89
+      }
+    },
+    {
+      "type": "ELL90LR",
+      "dn": 200,
+      "dims": {
+        "A": 305
+      }
+    },
+    {
+      "type": "ELL90SR",
+      "dn": 200,
+      "dims": {
+        "A": 203
+      }
+    },
+    {
+      "type": "ELL45LR",
+      "dn": 200,
+      "dims": {
+        "B": 127
+      }
+    },
+    {
+      "type": "TEE",
+      "dn": 200,
+      "dims": {
+        "C": 178,
+        "M": 178
+      }
+    },
+    {
+      "type": "RED",
+      "dn": 200,
+      "dims": {
+        "H": 152
+      }
+    },
+    {
+      "type": "CAP",
+      "dn": 200,
+      "dims": {
+        "E": 102
+      }
+    },
+    {
+      "type": "ELL90LR",
+      "dn": 250,
+      "dims": {
+        "A": 381
+      }
+    },
+    {
+      "type": "ELL90SR",
+      "dn": 250,
+      "dims": {
+        "A": 254
+      }
+    },
+    {
+      "type": "ELL45LR",
+      "dn": 250,
+      "dims": {
+        "B": 159
+      }
+    },
+    {
+      "type": "TEE",
+      "dn": 250,
+      "dims": {
+        "C": 216,
+        "M": 216
+      }
+    },
+    {
+      "type": "RED",
+      "dn": 250,
+      "dims": {
+        "H": 178
+      }
+    },
+    {
+      "type": "CAP",
+      "dn": 250,
+      "dims": {
+        "E": 127
+      }
+    },
+    {
+      "type": "ELL90LR",
+      "dn": 300,
+      "dims": {
+        "A": 457
+      }
+    },
+    {
+      "type": "ELL90SR",
+      "dn": 300,
+      "dims": {
+        "A": 305
+      }
+    },
+    {
+      "type": "ELL45LR",
+      "dn": 300,
+      "dims": {
+        "B": 190
+      }
+    },
+    {
+      "type": "TEE",
+      "dn": 300,
+      "dims": {
+        "C": 254,
+        "M": 254
+      }
+    },
+    {
+      "type": "RED",
+      "dn": 300,
+      "dims": {
+        "H": 203
+      }
+    },
+    {
+      "type": "CAP",
+      "dn": 300,
+      "dims": {
+        "E": 152
+      }
+    },
+    {
+      "type": "ELL90LR",
+      "dn": 350,
+      "dims": {
+        "A": 533
+      }
+    },
+    {
+      "type": "ELL90SR",
+      "dn": 350,
+      "dims": {
+        "A": 356
+      }
+    },
+    {
+      "type": "ELL45LR",
+      "dn": 350,
+      "dims": {
+        "B": 222
+      }
+    },
+    {
+      "type": "TEE",
+      "dn": 350,
+      "dims": {
+        "C": 279,
+        "M": 279
+      }
+    },
+    {
+      "type": "RED",
+      "dn": 350,
+      "dims": {
+        "H": 330
+      }
+    },
+    {
+      "type": "CAP",
+      "dn": 350,
+      "dims": {
+        "E": 165
+      }
+    },
+    {
+      "type": "ELL90LR",
+      "dn": 400,
+      "dims": {
+        "A": 610
+      }
+    },
+    {
+      "type": "ELL90SR",
+      "dn": 400,
+      "dims": {
+        "A": 406
+      }
+    },
+    {
+      "type": "ELL45LR",
+      "dn": 400,
+      "dims": {
+        "B": 254
+      }
+    },
+    {
+      "type": "TEE",
+      "dn": 400,
+      "dims": {
+        "C": 305,
+        "M": 305
+      }
+    },
+    {
+      "type": "RED",
+      "dn": 400,
+      "dims": {
+        "H": 356
+      }
+    },
+    {
+      "type": "CAP",
+      "dn": 400,
+      "dims": {
+        "E": 178
+      }
+    },
+    {
+      "type": "ELL90LR",
+      "dn": 450,
+      "dims": {
+        "A": 686
+      }
+    },
+    {
+      "type": "ELL90SR",
+      "dn": 450,
+      "dims": {
+        "A": 457
+      }
+    },
+    {
+      "type": "ELL45LR",
+      "dn": 450,
+      "dims": {
+        "B": 286
+      }
+    },
+    {
+      "type": "TEE",
+      "dn": 450,
+      "dims": {
+        "C": 343,
+        "M": 343
+      }
+    },
+    {
+      "type": "RED",
+      "dn": 450,
+      "dims": {
+        "H": 381
+      }
+    },
+    {
+      "type": "CAP",
+      "dn": 450,
+      "dims": {
+        "E": 203
+      }
+    },
+    {
+      "type": "ELL90LR",
+      "dn": 500,
+      "dims": {
+        "A": 762
+      }
+    },
+    {
+      "type": "ELL90SR",
+      "dn": 500,
+      "dims": {
+        "A": 508
+      }
+    },
+    {
+      "type": "ELL45LR",
+      "dn": 500,
+      "dims": {
+        "B": 318
+      }
+    },
+    {
+      "type": "TEE",
+      "dn": 500,
+      "dims": {
+        "C": 381,
+        "M": 381
+      }
+    },
+    {
+      "type": "RED",
+      "dn": 500,
+      "dims": {
+        "H": 508
+      }
+    },
+    {
+      "type": "CAP",
+      "dn": 500,
+      "dims": {
+        "E": 229
+      }
+    },
+    {
+      "type": "ELL90LR",
+      "dn": 550,
+      "dims": {
+        "A": 838
+      }
+    },
+    {
+      "type": "ELL90SR",
+      "dn": 550,
+      "dims": {
+        "A": 559
+      }
+    },
+    {
+      "type": "ELL45LR",
+      "dn": 550,
+      "dims": {
+        "B": 349
+      }
+    },
+    {
+      "type": "TEE",
+      "dn": 550,
+      "dims": {
+        "C": 419,
+        "M": 419
+      }
+    },
+    {
+      "type": "RED",
+      "dn": 550,
+      "dims": {
+        "H": 508
+      }
+    },
+    {
+      "type": "CAP",
+      "dn": 550,
+      "dims": {
+        "E": 254
+      }
+    },
+    {
+      "type": "ELL90LR",
+      "dn": 600,
+      "dims": {
+        "A": 914
+      }
+    },
+    {
+      "type": "ELL90SR",
+      "dn": 600,
+      "dims": {
+        "A": 610
+      }
+    },
+    {
+      "type": "ELL45LR",
+      "dn": 600,
+      "dims": {
+        "B": 381
+      }
+    },
+    {
+      "type": "TEE",
+      "dn": 600,
+      "dims": {
+        "C": 432,
+        "M": 432
+      }
+    },
+    {
+      "type": "RED",
+      "dn": 600,
+      "dims": {
+        "H": 508
+      }
+    },
+    {
+      "type": "CAP",
+      "dn": 600,
+      "dims": {
+        "E": 267
+      }
+    }
+  ]
+}

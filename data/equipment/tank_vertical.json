@@ -1,0 +1,14 @@
+{
+  "id": "tank_vertical",
+  "name": "Bồn đứng",
+  "schemaVersion": "1.0",
+  "params": [
+    { "name": "D", "unit": "mm", "from": "footprint.diameter" },
+    { "name": "H", "unit": "mm", "from": "tag", "pattern": "H\\s*=\\s*(?<v>\\d+(?:\\.\\d+)?)", "default": 6000 }
+  ],
+  "body": [
+    { "shape": "cylinder", "axis": "z", "diameter": "D", "length": "H", "center": [0, 0, "H / 2"] }
+  ],
+  "nozzles": [],
+  "hosts": { "autocad": { "block3d": null } }
+}

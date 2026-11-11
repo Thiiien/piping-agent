@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0",
+  "id": "nsrp-preview",
+  "version": 1,
+  "extends": "nsrp-piping-layout",
+  "units": "mm",
+  "roles": [],
+  "tagPatterns": [],
+  "blocks": [],
+  "rules": {
+    "R-ELV-05": "warning",
+    "R-TAG-05": "warning",
+    "R-TAG-06": "warning",
+    "R-GEO-02": "warning",
+    "R-GEO-05": "warning",
+    "R-CON-04": "warning",
+    "R-CAT-01": "warning",
+    "R-GEO-04": "warning"
+  },
+  "elevationPatterns": [
+    {
+      "name": "el-only-assume-bop",
+      "regex": "^\\s*EL\\.?\\s*(?<el>[+-]?\\d[\\d,]*(?:\\.\\d+)?)\\s*$",
+      "elevationDatum": "BOP"
+    }
+  ],
+  "note": "Hồ sơ xem trước: hạ luật chặn xuống cảnh báo và GIẢ ĐỊNH chữ EL không ghi mốc là đáy ống BOP, như 318 trên 527 chữ cao độ của bản vẽ. Cần khách hàng xác nhận trước khi dùng chính thức."
+}

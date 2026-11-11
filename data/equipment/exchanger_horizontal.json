@@ -1,0 +1,23 @@
+{
+  "id": "exchanger_horizontal",
+  "name": "Thiết bị trao đổi nhiệt nằm ngang",
+  "schemaVersion": "1.0",
+  "params": [
+    { "name": "L",  "unit": "mm", "from": "footprint.length" },
+    { "name": "D",  "unit": "mm", "from": "footprint.width" },
+    { "name": "CL", "unit": "mm", "from": "tag", "pattern": "CL\\s+EL\\s*(?<v>[+-]?\\d+)", "default": 1500 }
+  ],
+  "body": [
+    { "shape": "cylinder", "axis": "x", "diameter": "D", "length": "L", "center": [0, 0, "CL"] },
+    { "shape": "box", "size": [300, "D * 0.8", "CL - D / 2"], "center": ["-L / 4", 0, "(CL - D / 2) / 2"] },
+    { "shape": "box", "size": [300, "D * 0.8", "CL - D / 2"], "center": ["L / 4", 0, "(CL - D / 2) / 2"] }
+  ],
+  "nozzles": [
+    { "name": "N1", "at": ["-L / 2 + 400", 0, "CL + D / 2 + 200"], "direction": "+z" },
+    { "name": "N2", "at": ["L / 2 - 400", 0, "CL - D / 2 - 200"], "direction": "-z" }
+  ],
+  "hosts": {
+    "autocad": { "block3d": null },
+    "s3d": { "mode": "match_existing" }
+  }
+}

@@ -1,0 +1,24 @@
+﻿# Build output
+bin/
+obj/
+dist/
+.vs/
+*.user
+TestResults/
+
+# Local environments
+.venv/
+node_modules/
+__pycache__/
+
+# Customer drawings before anonymisation and written consent. Never commit.
+data/private/*
+!data/private/README.md
+docs/dataTemplate/
+
+.agents/
+.claude/
+.cursor/
+
+# Sinh ra bởi target CopyAgentHost khi OutDir rỗng; không bao giờ commit.
+src/PipingAgent.AutoCAD/agenthost/
