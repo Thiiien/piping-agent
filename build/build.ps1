@@ -22,7 +22,7 @@ if ($SkipAutoCad -or -not (Test-Path (Join-Path $AcadDir "accoreconsole.exe"))) 
 }
 if (-not $Dwg) {
     $Dwg = Join-Path $root "docs\dataTemplate\A410B4001.dwg"
-    if (-not (Test-Path $Dwg)) { $Dwg = Join-Path $root "prototype\data\piping_plan_2d.dxf" }
+    if (-not (Test-Path $Dwg)) { $Dwg = Join-Path $root "tests\Dxf.Tests\Data\piping_plan_2d.dxf" }
 }
 Write-Host "Nap plug-in vao AutoCAD voi ban ve $Dwg"
 & (Join-Path $PSScriptRoot "test_plugin.ps1") -Dwg $Dwg -AcadDir $AcadDir

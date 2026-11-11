@@ -14,9 +14,5 @@ jobs:
           dotnet-version: |
             8.0.x
             9.0.x
-      - name: Restore
-        run: dotnet restore PipingAgent.sln
-      - name: Build
-        run: dotnet build PipingAgent.sln -c Release --no-restore
-      - name: Test
-        run: dotnet test PipingAgent.sln -c Release --no-build
+      - name: Build and test
+        run: build\build.ps1 -SkipAutoCad

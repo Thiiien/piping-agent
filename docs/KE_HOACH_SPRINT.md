@@ -1,3 +1,5 @@
+> **Tài liệu trước pivot.** Từ 10/11/2026 sản phẩm thu hẹp thành tờ isometric sang 3D, xem `docs/CHUYEN_HUONG_ISOMETRIC.md`. Tài liệu này mô tả hướng mặt bằng 2D cũ và chưa cập nhật; mã nguồn vẫn trích dẫn số mục của nó nên giữ nguyên.
+
 # Kế hoạch sprint dự án Piping Agent
 
 **Phân rã lộ trình 12 tháng thành 25 sprint và các việc nhỏ**

@@ -1,3 +1,5 @@
+> **Tài liệu trước pivot.** Từ 10/11/2026 sản phẩm thu hẹp thành tờ isometric sang 3D, xem `docs/CHUYEN_HUONG_ISOMETRIC.md`. Tài liệu này mô tả hướng mặt bằng 2D cũ và chưa cập nhật; mã nguồn vẫn trích dẫn số mục của nó nên giữ nguyên.
+
 # Tài liệu dự án Piping Agent
 
 **Agent AI dựng mô hình đường ống 3D từ bản vẽ 2D, chạy trong AutoCAD và Smart 3D**

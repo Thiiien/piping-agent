@@ -3,8 +3,6 @@
   <!-- Isometric sang 3D: bộ đọc PDF vector và đồ thị isometric. .NET Standard 2.0 để plug-in AutoCAD cả hai nền dùng được. -->
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

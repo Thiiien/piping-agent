@@ -209,7 +209,7 @@ namespace PipingAgent.Iso
     }
 
     /// <summary>
-    /// Đồ thị isometric trên giấy và toạ độ thật, I1 và I3. Thuật toán được thử trước bằng tools/iso_graph.py trên bản mẫu PDF,
+    /// Đồ thị isometric trên giấy và toạ độ thật, I1 và I3. Thuật toán được thử trước bằng một kịch bản Python nay đã gỡ trên bản mẫu PDF,
     /// rồi mở rộng cho bản ISOGEN: co vẽ bằng cung, cao độ FL và đáy ống, không có toạ độ mặt bằng, kích thước gắn theo hai đầu
     /// đường gióng, đoạn chéo 45 độ nằm ngang, nhánh đứng cụt, cấu kiện xếp chồng ngoài đầu hở.
     /// </summary>

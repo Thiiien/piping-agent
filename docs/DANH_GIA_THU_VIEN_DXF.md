@@ -26,8 +26,7 @@ Bộ đọc DXF nằm sau giao diện `IDrawingReader`, nên đổi thư viện 
 Chạy lại trên một tệp bất kỳ:
 
 ```bash
-.venv/Scripts/python tools/dxf_ground_truth.py <tệp.dxf> > truth.json
-dotnet run -c Release --project tools/DxfLibEval -- <tệp.dxf> truth.json
+# Công cụ đánh giá (tools/DxfLibEval, dxf_ground_truth.py) đã gỡ sau khi chọn xong ACadSharp.
 ```
 
 ## Kết quả đo

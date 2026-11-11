@@ -9,7 +9,7 @@
 
 ## 1. Khảo sát bản isometric mẫu `335-PA-286.pdf`
 
-Trích bằng `tools/iso_survey.py` và `tools/iso_extract.py`, ngày 10/11/2026.
+Trích ngày 10/11/2026 bằng hai kịch bản Python thử nghiệm, nay đã thay bằng `PipingAgent.Iso` và gỡ khỏi kho mã.
 
 | Thuộc tính | Kết quả |
 |---|---|
