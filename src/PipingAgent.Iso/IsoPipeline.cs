@@ -7,7 +7,6 @@ using PipingAgent.Core.Graph;
 using PipingAgent.Core.Ir;
 using PipingAgent.Core.Profile;
 using PipingAgent.Core.Rules;
-using PipingAgent.Core.Source;
 
 namespace PipingAgent.Iso
 {
@@ -51,7 +50,7 @@ namespace PipingAgent.Iso
             profile ??= DefaultProfile();
             var options = result.Isogen ? IsoOptions.ForIsogen() : new IsoOptions();
             // Cùng một bảng OD với GraphBuilder, thay cho bảng chép tay trong IsoGraph.
-            if (catalog != null) options.OdLookup = dn => catalog.PipeOd(profile.PipeStandard, dn) is { Found: true } od ? od.Value : (double?)null;
+            if (catalog != null) options.OdLookup = dn => catalog.PipeOd(profile.PipeStandard ?? "ASME-B36.10", dn) is { Found: true } od ? od.Value : (double?)null;
             var graph = new IsoGraph(options);
             result.Analysis = graph.Analyze(result.Page.Entities, result.Page.Width, result.Page.Height);
             var file = System.IO.Path.GetFileName(path);

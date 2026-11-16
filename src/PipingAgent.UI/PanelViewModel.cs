@@ -43,6 +43,73 @@ namespace PipingAgent.UI
 
         /// <summary>Ghi hồ sơ do trình soạn tạo ra tệp, hỏi đường dẫn. Trả về đường dẫn hoặc null.</summary>
         string? SaveProfileFile(string json);
+
+        /// <summary>Khởi chạy phiên làm việc với Agent (hỏi đáp hoặc đề xuất hồ sơ), S8-08.</summary>
+        void RunAgent(string mode, string? question);
+
+        /// <summary>Duyệt và lưu hồ sơ quy ước nháp vào tệp, nạp vào phiên làm việc, S8-09.</summary>
+        string? AcceptDraftProfile(string json);
+    }
+
+    public sealed class ChatMessageItem
+    {
+        public string Sender { get; set; } = string.Empty;
+
+        public string Text { get; set; } = string.Empty;
+
+        public string Timestamp { get; set; } = DateTime.Now.ToString("HH:mm:ss");
+
+        public string Role { get; set; } = "user";
+
+        public bool IsUser => Role == "user";
+
+        public bool IsAgent => Role == "agent";
+
+        public bool IsTool => Role == "tool";
+
+        public bool IsError => Role == "error";
+
+        public bool IsSystem => !IsUser && !IsAgent && !IsTool && !IsError;
+
+        public string Badge =>
+            IsUser ? "👤 Bạn" :
+            IsAgent ? "🤖 Piping AI" :
+            IsTool ? "⚙️ Công cụ CAD" :
+            IsError ? "⚠️ Lỗi hệ thống" : "ℹ️ Hệ thống";
+
+        public string DisplayHeader => $"{Badge} • {Timestamp}";
+    }
+
+    public sealed class DraftProfileSummaryItem : ObservableObject
+    {
+        public string ProfileId { get; set; } = string.Empty;
+
+        public string PipeStandard { get; set; } = string.Empty;
+
+        public int RolesCount { get; set; }
+
+        public int BlocksCount { get; set; }
+
+        public int TagPatternsCount { get; set; }
+
+        public double ClassificationRatio { get; set; }
+
+        public double TagMatchRatio { get; set; }
+
+        public int UnlabeledRuns { get; set; }
+
+        public int IssuesCount { get; set; }
+
+        public string RawJson { get; set; } = string.Empty;
+
+        public string ClassificationText => string.Format(CultureInfo.InvariantCulture, "{0:0.0%}", ClassificationRatio);
+
+        public string TagMatchText => string.Format(CultureInfo.InvariantCulture, "{0:0.0%}", TagMatchRatio);
+
+        public string Description =>
+            string.Format(CultureInfo.InvariantCulture,
+                "{0} ({1}): {2} vai trò, {3} block, {4} mẫu nhãn.\nChỉ số: Phân loại {5:0.0%}, Nhãn khớp {6:0.0%}, Chạy không nhãn {7}, Vấn đề {8}.",
+                ProfileId, PipeStandard, RolesCount, BlocksCount, TagPatternsCount, ClassificationRatio, TagMatchRatio, UnlabeledRuns, IssuesCount);
     }
 
     public sealed class LineRow
@@ -200,6 +267,14 @@ namespace PipingAgent.UI
         public PanelViewModel(IHostActions? host)
         {
             Host = host;
+            try
+            {
+                System.Windows.Data.BindingOperations.EnableCollectionSynchronization(ChatMessages, _chatMessagesLock);
+            }
+            catch
+            {
+                // Cho môi trường kiểm thử unit không có WPF
+            }
         }
 
         public IHostActions? Host { get; }
@@ -329,6 +404,136 @@ namespace PipingAgent.UI
             if (errors.Count > 0) return "Hồ sơ chưa hợp lệ: " + errors[0];
             var path = Host.SaveProfileFile(BuildProfileJson());
             return path == null ? "Đã huỷ." : "Đã ghi " + path;
+        }
+
+        // Thẻ Trò chuyện & Đề xuất hồ sơ, S8-08 và S8-09.
+        private string _chatInput = string.Empty;
+        private bool _isAgentRunning;
+        private string _agentCurrentStep = string.Empty;
+        private string _connectionStatusText = "🟢 MCP: 12 công cụ | Solar mini4 (Hermes)";
+        private DraftProfileSummaryItem? _draftProfile;
+
+        private readonly object _chatMessagesLock = new object();
+        public ObservableCollection<ChatMessageItem> ChatMessages { get; } = new ObservableCollection<ChatMessageItem>();
+
+        public string ChatInput { get => _chatInput; set => Set(ref _chatInput, value); }
+
+        public bool IsAgentRunning { get => _isAgentRunning; set => Set(ref _isAgentRunning, value); }
+
+        public string AgentCurrentStep { get => _agentCurrentStep; set => Set(ref _agentCurrentStep, value); }
+
+        public string ConnectionStatusText { get => _connectionStatusText; set => Set(ref _connectionStatusText, value); }
+
+        public DraftProfileSummaryItem? DraftProfile
+        {
+            get => _draftProfile;
+            set
+            {
+                if (Set(ref _draftProfile, value)) Raise(nameof(HasDraftProfile));
+            }
+        }
+
+        public bool HasDraftProfile => _draftProfile != null;
+
+        public void SendChatMessage()
+        {
+            if (string.IsNullOrWhiteSpace(ChatInput) || IsAgentRunning) return;
+            var q = ChatInput.Trim();
+            ChatInput = string.Empty;
+            AddChatMessage("Người dùng", q, "user");
+            IsAgentRunning = true;
+            AgentCurrentStep = "Đang gửi câu hỏi...";
+            Host?.RunAgent("qa", q);
+        }
+
+        public void SendSuggestedQuery(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query) || IsAgentRunning) return;
+            ChatInput = query.Trim();
+            SendChatMessage();
+        }
+
+        public void ClearChat()
+        {
+            lock (_chatMessagesLock)
+            {
+                ChatMessages.Clear();
+            }
+            AgentCurrentStep = string.Empty;
+            DraftProfile = null;
+        }
+
+        public void ProposeProfile()
+        {
+            if (IsAgentRunning) return;
+            AddChatMessage("Người dùng", "Đề xuất hồ sơ quy ước cho bản vẽ này.", "user");
+            IsAgentRunning = true;
+            AgentCurrentStep = "Bắt đầu khảo sát và đề xuất hồ sơ...";
+            Host?.RunAgent("profile", "Khảo sát bản vẽ và đề xuất hồ sơ quy ước tối ưu.");
+        }
+
+        public void AcceptDraftProfile()
+        {
+            if (DraftProfile == null) return;
+            var json = DraftProfile.RawJson;
+            var res = Host?.AcceptDraftProfile(json);
+            if (!string.IsNullOrEmpty(res))
+            {
+                AddChatMessage("Hệ thống", "Đã duyệt và áp dụng hồ sơ mới: " + res, "system");
+                DraftProfile = null;
+            }
+        }
+
+        public void RejectDraftProfile()
+        {
+            DraftProfile = null;
+            AddChatMessage("Hệ thống", "Đã từ chối hồ sơ đề xuất.", "system");
+        }
+
+        public void AddChatMessage(string sender, string text, string? role = null)
+        {
+            var r = role;
+            if (string.IsNullOrEmpty(r))
+            {
+                if (sender.IndexOf("Người dùng", StringComparison.OrdinalIgnoreCase) >= 0 || sender.IndexOf("User", StringComparison.OrdinalIgnoreCase) >= 0)
+                    r = "user";
+                else if (sender.IndexOf("Agent", StringComparison.OrdinalIgnoreCase) >= 0 || sender.IndexOf("AI", StringComparison.OrdinalIgnoreCase) >= 0)
+                    r = "agent";
+                else if (sender.IndexOf("Công cụ", StringComparison.OrdinalIgnoreCase) >= 0 || sender.IndexOf("Tool", StringComparison.OrdinalIgnoreCase) >= 0)
+                    r = "tool";
+                else if (sender.IndexOf("Lỗi", StringComparison.OrdinalIgnoreCase) >= 0 || sender.IndexOf("Error", StringComparison.OrdinalIgnoreCase) >= 0)
+                    r = "error";
+                else
+                    r = "system";
+            }
+
+            lock (_chatMessagesLock)
+            {
+                ChatMessages.Add(new ChatMessageItem
+                {
+                    Sender = sender,
+                    Text = text,
+                    Role = r!,
+                    Timestamp = DateTime.Now.ToString("HH:mm:ss")
+                });
+            }
+        }
+
+        public void SetDraftProfile(string profileId, string pipeStandard, int rolesCount, int blocksCount, int tagPatternsCount, double classificationRatio, double tagMatchRatio, int unlabeledRuns, int issuesCount, string rawJson)
+        {
+            DraftProfile = new DraftProfileSummaryItem
+            {
+                ProfileId = profileId,
+                PipeStandard = pipeStandard,
+                RolesCount = rolesCount,
+                BlocksCount = blocksCount,
+                TagPatternsCount = tagPatternsCount,
+                ClassificationRatio = classificationRatio,
+                TagMatchRatio = tagMatchRatio,
+                UnlabeledRuns = unlabeledRuns,
+                IssuesCount = issuesCount,
+                RawJson = rawJson,
+            };
         }
 
         public ObservableCollection<ProfileChoice> Profiles { get; } = new ObservableCollection<ProfileChoice>();

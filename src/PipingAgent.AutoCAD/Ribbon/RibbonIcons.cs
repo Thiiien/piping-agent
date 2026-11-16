@@ -131,6 +131,15 @@ namespace PipingAgent.AutoCAD.Ribbon
                 ("E16,16,9,9", Paint.Shape),
                 ("E16,16,3,3", Paint.Accent),
             },
+            // Cầu nối giao thức MCP: các nút mạng liên kết (Agent, Cầu nối CAD, Bản vẽ).
+            ["mcp"] = new[]
+            {
+                ("M11,18 L14.5,11 M21,18 L17.5,11", Paint.Stroke),
+                ("M12.5,22 H19.5", Paint.Accent),
+                ("E9,22,3.5,3.5", Paint.Shape),
+                ("E23,22,3.5,3.5", Paint.Shape),
+                ("E16,8,3.5,3.5", Paint.AccentFill),
+            },
             // Phích cắm: kiểm tra plug-in.
             ["hello"] = new[]
             {

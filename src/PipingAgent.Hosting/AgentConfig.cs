@@ -39,6 +39,9 @@ namespace PipingAgent.Hosting
 
         public double? Temperature { get; set; }
 
+        /// <summary>Cho phép Agent đề xuất và thực hiện các thao tác can thiệp thay đổi bản vẽ (Action Tools), mặc định false.</summary>
+        public bool? AllowAction { get; set; }
+
         /// <summary>Đường dẫn tệp thực thi Agent Host, mặc định thư mục <c>agenthost</c> cạnh plug-in.</summary>
         public string? HostExePath { get; set; }
 
@@ -94,6 +97,7 @@ namespace PipingAgent.Hosting
             MaxOutputTokens = 4000,
             TimeoutSec = 180,
             Temperature = 0,
+            AllowAction = false,
         };
 
         public void Merge(AgentConfig other)
@@ -107,6 +111,7 @@ namespace PipingAgent.Hosting
             if (other.MaxOutputTokens.HasValue) MaxOutputTokens = other.MaxOutputTokens;
             if (other.TimeoutSec.HasValue) TimeoutSec = other.TimeoutSec;
             if (other.Temperature.HasValue) Temperature = other.Temperature;
+            if (other.AllowAction.HasValue) AllowAction = other.AllowAction;
             if (other.HostExePath != null) HostExePath = other.HostExePath;
         }
 

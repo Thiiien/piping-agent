@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using Autodesk.AutoCAD.Runtime;
-using PipingAgent.Core;
 using PipingAgent.Core.Diagnostics;
 // Dùng Core.Application thay vì Application để plug-in nạp được cả trong accoreconsole,
 // nơi không có AcMgd.dll. Xem NFR-MNT-07.
@@ -26,6 +24,7 @@ using AcApp = Autodesk.AutoCAD.ApplicationServices.Core.Application;
 [assembly: CommandClass(typeof(PipingAgent.AutoCAD.Commands.RibbonCommand))]
 [assembly: CommandClass(typeof(PipingAgent.AutoCAD.Commands.AskCommand))]
 [assembly: CommandClass(typeof(PipingAgent.AutoCAD.Commands.AgentConfigCommand))]
+[assembly: CommandClass(typeof(PipingAgent.AutoCAD.Commands.McpBridgeCommand))]
 
 namespace PipingAgent.AutoCAD
 {
@@ -41,6 +40,9 @@ namespace PipingAgent.AutoCAD
 
         /// <summary>Phiên theo từng bản vẽ đang mở, S2-15. Null trước khi khởi tạo xong.</summary>
         public static Session.SessionManager? Sessions { get; private set; }
+
+        /// <summary>Máy chủ Live CAD Bridge phục vụ MCP Server và Hermes Agent, S21-01.</summary>
+        public static Session.LiveCadBridgeServer? LiveBridge { get; private set; }
 
         public void Initialize()
         {
@@ -58,6 +60,16 @@ namespace PipingAgent.AutoCAD
             }
 
             Sessions = new Session.SessionManager();
+            try
+            {
+                LiveBridge = new Session.LiveCadBridgeServer();
+                LiveBridge.Start();
+            }
+            catch (System.Exception ex)
+            {
+                Log?.Error("live_bridge_start_failed", ex, null);
+            }
+
             if (Commands.PanelHost.IsGuiAvailable())
             {
                 try { InstallRibbon(); }
@@ -65,7 +77,7 @@ namespace PipingAgent.AutoCAD
             }
 
             var doc = AcApp.DocumentManager.MdiActiveDocument;
-            doc?.Editor.WriteMessage($"\nPiping Agent {Version} đã nạp. Lệnh: PA_ISO, PA_BUILD, PA_BUILDIR, PA_PORT, PA_CONVERT, PA_SCAN, PA_SCANWINDOW, PA_CHECK, PA_FIX, PA_WAIVE, PA_RERUN, PA_PANEL, PA_ASK, PA_AGENTCONFIG, PA_RIBBON, PA_HELLO.\n");
+            doc?.Editor.WriteMessage($"\nPiping Agent {Version} đã nạp. Lệnh: PA_ISO, PA_BUILD, PA_BUILDIR, PA_PORT, PA_CONVERT, PA_SCAN, PA_SCANWINDOW, PA_CHECK, PA_FIX, PA_WAIVE, PA_RERUN, PA_PANEL, PA_ASK, PA_AGENTCONFIG, PA_MCP, PA_RIBBON, PA_HELLO.\n");
         }
 
         /// <summary>Tách riêng để JIT không nạp AdWindows trong accoreconsole.</summary>
@@ -74,6 +86,8 @@ namespace PipingAgent.AutoCAD
 
         public void Terminate()
         {
+            LiveBridge?.Dispose();
+            LiveBridge = null;
             Sessions?.Dispose();
             Sessions = null;
             Log?.Dispose();

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
@@ -84,15 +83,31 @@ namespace PipingAgent.AutoCAD.Session
                 var args = parameters.HasValue && parameters.Value.TryGetProperty("args", out var a) ? a : JsonDocument.Parse("{}").RootElement;
                 var sw = Stopwatch.StartNew();
                 var result = registry.Invoke(name, args, context);
-                onToolCall?.Invoke(name, args, sw.ElapsedMilliseconds);
-                return JsonRpcPeer.ToElement(new { result = JsonDocument.Parse(result.ToModelText()).RootElement });
+                try { onToolCall?.Invoke(name, args, sw.ElapsedMilliseconds); } catch { }
+                JsonElement resElement;
+                try
+                {
+                    resElement = JsonDocument.Parse(result.ToModelText()).RootElement;
+                }
+                catch
+                {
+                    resElement = JsonRpcPeer.ToElement(new { raw = result.ToModelText() });
+                }
+                return JsonRpcPeer.ToElement(new { result = resElement });
             };
             _peer.NotificationHandler = (method, parameters) =>
             {
                 if (method == "event.step" && onStep != null)
                 {
-                    var tool = parameters.HasValue && parameters.Value.TryGetProperty("tool", out var t) ? t.GetString() : "?";
-                    onStep(tool ?? "?");
+                    try
+                    {
+                        var tool = parameters.HasValue && parameters.Value.TryGetProperty("tool", out var t) ? t.GetString() : "?";
+                        onStep(tool ?? "?");
+                    }
+                    catch
+                    {
+                        // Không làm đứt phiên khi callback giao diện gặp lỗi
+                    }
                 }
             };
             var reply = _peer.RequestAndPump("session.start", new { mode, question, context = sessionContext }, timeout);

@@ -79,6 +79,25 @@ namespace PipingAgent.AutoCAD.Ribbon
             Themed.Clear();
             var tab = new RibbonTab { Title = "Piping Agent", Id = TabId, KeyTip = "PA" };
 
+            // Trợ lý AI: trung tâm tương tác thông minh và điều khiển chính.
+            var ai = Panel("Trợ lý AI");
+            ai.Items.Add(Large(new Spec
+            {
+                Command = "PA_ASK", Icon = "ask", Title = "Trò chuyện\nAI", KeyTip = "AI",
+                Tip = "Trò chuyện và hỏi đáp AI thông minh về bản vẽ CAD hiện tại.",
+                More = "Hỗ trợ tìm kiếm phụ kiện, thống kê van, kiểm tra xung đột tuyến ống và tương tác thông minh qua máy chủ Live CAD Bridge.",
+            }));
+            ai.Items.Add(Large(new Spec
+            {
+                Command = "PA_PANEL", Icon = "panel", Title = "Bảng\nđiều khiển", KeyTip = "BD",
+                Tip = "Mở bảng điều khiển: Tổng quan, Vấn đề, Tuyến ống, Hồ sơ, Nhật ký và Trò chuyện.",
+                More = "Bấm một dòng ở thẻ Tuyến ống hoặc Vấn đề thì bản vẽ sẽ tự động phóng tới và tô sáng đối tượng.",
+            }));
+            ai.Items.Add(Column(
+                new Spec { Command = "PA_AGENTCONFIG", Icon = "config", Title = "Cấu hình AI", KeyTip = "CH", Tip = "Cấu hình điểm cuối LLM, mô hình AI (Hermes / OpenAI / Ollama) và khóa API." },
+                new Spec { Command = "PA_MCP", Icon = "mcp", Title = "Cầu nối MCP", KeyTip = "MC", Tip = "Kiểm tra trạng thái máy chủ Live CAD Bridge (MCP) kết nối trực tiếp với AI Agent.", More = "Hiển thị trạng thái kênh Named Pipe, số đối tượng trong bộ nhớ và mô hình IR." }));
+            tab.Panels.Add(new RibbonPanel { Source = ai });
+
             // Isometric sang 3D: luồng chính của sản phẩm.
             var iso = Panel("Isometric sang 3D");
             iso.Items.Add(Large(new Spec
@@ -123,22 +142,15 @@ namespace PipingAgent.AutoCAD.Ribbon
             }));
             plan.Items.Add(Column(
                 new Spec { Command = "PA_FIX", Icon = "fix", Title = "Sửa", KeyTip = "SU", Tip = "Sửa kết quả nhận diện: nhãn, DN, cao độ, nút, cấu kiện, nối, tách." },
-                new Spec { Command = "PA_WAIVE", Icon = "waive", Title = "Bỏ qua", KeyTip = "BQ", Tip = "Bỏ qua một vấn đề kèm lý do, lưu trong tệp phiên." },
+                new Spec { Command = "PA_WAIVE", Icon = "waive", Title = "Miễn trừ", KeyTip = "MT", Tip = "Bỏ qua một vấn đề kèm lý do, lưu trong tệp phiên." },
                 new Spec { Command = "PA_RERUN", Icon = "rerun", Title = "Chạy lại", KeyTip = "CL", Tip = "Chạy lại nhận diện với các quyết định đã lưu." }));
             tab.Panels.Add(new RibbonPanel { Source = plan });
 
-            // Trợ lý và tiện ích.
-            var tools = Panel("Trợ lý");
-            tools.Items.Add(Large(new Spec
-            {
-                Command = "PA_PANEL", Icon = "panel", Title = "Bảng\nđiều khiển", KeyTip = "BD",
-                Tip = "Mở bảng điều khiển: Tổng quan, Vấn đề, Tuyến ống, Hồ sơ, Nhật ký.",
-                More = "Bấm một dòng ở thẻ Tuyến ống hoặc Vấn đề thì bản vẽ phóng tới và tô sáng.",
-            }));
+            // Tiện ích: kiểm tra hệ thống và làm mới Ribbon.
+            var tools = Panel("Tiện ích");
             tools.Items.Add(Column(
-                new Spec { Command = "PA_ASK", Icon = "ask", Title = "Hỏi agent", KeyTip = "HA", Tip = "Hỏi agent về bản vẽ đang mở." },
-                new Spec { Command = "PA_AGENTCONFIG", Icon = "config", Title = "Cấu hình agent", KeyTip = "CH", Tip = "Chọn điểm cuối và mô hình cho agent." },
-                new Spec { Command = "PA_HELLO", Icon = "hello", Title = "Kiểm tra plug-in", KeyTip = "KP", Tip = "In phiên bản và đường dẫn nhật ký." }));
+                new Spec { Command = "PA_HELLO", Icon = "hello", Title = "Kiểm tra hệ thống", KeyTip = "HT", Tip = "In phiên bản plug-in, môi trường thực thi và đường dẫn nhật ký." },
+                new Spec { Command = "PA_RIBBON", Icon = "rerun", Title = "Làm mới Ribbon", KeyTip = "RB", Tip = "Hiện lại thẻ ribbon Piping Agent nếu bị mất sau khi đổi workspace." }));
             tab.Panels.Add(new RibbonPanel { Source = tools });
 
             ribbon.Tabs.Add(tab);

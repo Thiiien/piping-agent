@@ -55,23 +55,6 @@ namespace PipingAgent.Core.Geometry
         public bool ContainsInterior(Point2 p, Tolerance tolerance) =>
             Contains(p, tolerance) && !A.IsSame(p, tolerance) && !B.IsSame(p, tolerance);
 
-        public bool TouchesEndpoint(Point2 p, Tolerance tolerance) => A.IsSame(p, tolerance) || B.IsSame(p, tolerance);
-
-        /// <summary>
-        /// Hai đoạn nằm trên cùng một đường thẳng trong dung sai độ dài: mọi đầu mút của đoạn này cách đường thẳng
-        /// chứa đoạn kia không quá dung sai, và ngược lại. Không dùng dung sai góc, vì đoạn ngắn lệch vài phần trăm mm
-        /// vẫn phải coi là thẳng hàng.
-        /// </summary>
-        public bool IsCollinearWith(Segment2 other, Tolerance tolerance)
-        {
-            if (IsDegenerate(tolerance) || other.IsDegenerate(tolerance)) return false;
-            var eps = tolerance.Length;
-            return GeometryOps.DistancePointToLine(other.A, A, B) <= eps
-                && GeometryOps.DistancePointToLine(other.B, A, B) <= eps
-                && GeometryOps.DistancePointToLine(A, other.A, other.B) <= eps
-                && GeometryOps.DistancePointToLine(B, other.A, other.B) <= eps;
-        }
-
         public bool Equals(Segment2 other) => A.Equals(other.A) && B.Equals(other.B);
         public override bool Equals(object? obj) => obj is Segment2 s && Equals(s);
         public override int GetHashCode() => unchecked(A.GetHashCode() * 397 ^ B.GetHashCode());

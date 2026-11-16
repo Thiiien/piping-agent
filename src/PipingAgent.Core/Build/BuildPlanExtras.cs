@@ -246,6 +246,7 @@ namespace PipingAgent.Core.Build
 
                     var ff = Catalog.ComponentDims.ValveFaceToFace(c.Type, c.Dn);
                     if (fromDefault && ff.HasValue) item.Length = ff.Value + 2 * Catalog.ComponentDims.Gasket;
+                    if (c.Attributes != null && c.Attributes.TryGetValue("branch", out var bd)) item.BranchDirection = ParseVector(bd.Value);
                     break;
                 }
 
@@ -265,6 +266,7 @@ namespace PipingAgent.Core.Build
 
                     var ff = Catalog.ComponentDims.ValveFaceToFace(c.Type, c.Dn);
                     if (fromDefault && ff.HasValue) item.Length = ff.Value;
+                    if (c.Attributes != null && c.Attributes.TryGetValue("branch", out var bd)) item.BranchDirection = ParseVector(bd.Value);
                     break;
                 }
 

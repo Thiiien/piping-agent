@@ -7,7 +7,6 @@ using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Runtime;
 using PipingAgent.AutoCAD.Builder;
 using PipingAgent.Core.Build;
-using PipingAgent.Core.Rules;
 using PipingAgent.Core.Ir;
 
 namespace PipingAgent.AutoCAD.Commands

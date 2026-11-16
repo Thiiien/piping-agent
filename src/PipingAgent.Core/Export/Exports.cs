@@ -78,15 +78,15 @@ namespace PipingAgent.Core.Export
             var sb = new StringBuilder();
             sb.Append('﻿');
             sb.AppendLine(string.Join(separator.ToString(), "Tuyến", "DN", "Ống (m)", "Co", "Tê", "Van", "Mặt bích", "Cấu kiện khác"));
-            foreach (var r in Rows(model))
+            var rows = Rows(model);
+            foreach (var r in rows)
             {
                 sb.AppendLine(string.Join(separator.ToString(), Csv(r.Line), r.Dn.ToString(CultureInfo.InvariantCulture),
                     r.PipeLengthM.ToString("0.00", CultureInfo.InvariantCulture), r.Elbows, r.Tees, r.Valves, r.Flanges, r.OtherComponents));
             }
 
-            var total = Rows(model);
-            sb.AppendLine(string.Join(separator.ToString(), "Tổng", string.Empty, total.Sum(r => r.PipeLengthM).ToString("0.00", CultureInfo.InvariantCulture),
-                total.Sum(r => r.Elbows), total.Sum(r => r.Tees), total.Sum(r => r.Valves), total.Sum(r => r.Flanges), total.Sum(r => r.OtherComponents)));
+            sb.AppendLine(string.Join(separator.ToString(), "Tổng", string.Empty, rows.Sum(r => r.PipeLengthM).ToString("0.00", CultureInfo.InvariantCulture),
+                rows.Sum(r => r.Elbows), rows.Sum(r => r.Tees), rows.Sum(r => r.Valves), rows.Sum(r => r.Flanges), rows.Sum(r => r.OtherComponents)));
             return sb.ToString();
         }
 
@@ -240,7 +240,8 @@ namespace PipingAgent.Core.Export
             var got = new HashSet<string>(model.Lines.Select(l => l.Tag), StringComparer.OrdinalIgnoreCase);
             foreach (var l in expected.Lines) if (!got.Contains(l)) s.MissingLines.Add(l);
             if (expected.Lines.Count > 0) foreach (var l in got) if (!expected.Lines.Contains(l, StringComparer.OrdinalIgnoreCase)) s.ExtraLines.Add(l);
-            var byLine = model.Lines.ToDictionary(l => l.Tag, l => model.Segments.Where(x => x.LineId == l.Id).Sum(x => x.Length) / 1000.0, StringComparer.OrdinalIgnoreCase);
+            var byLine = model.Lines.GroupBy(l => l.Tag, StringComparer.OrdinalIgnoreCase)
+                .ToDictionary(g => g.Key, g => model.Segments.Where(x => g.Any(l => l.Id == x.LineId)).Sum(x => x.Length) / 1000.0, StringComparer.OrdinalIgnoreCase);
             foreach (var kv in expected.LineLengthM) CheckLength("tuyến " + kv.Key, kv.Value, byLine.TryGetValue(kv.Key, out var v) ? v : 0);
             return s;
         }

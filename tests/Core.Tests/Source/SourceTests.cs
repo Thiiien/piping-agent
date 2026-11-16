@@ -49,15 +49,6 @@ public class DrawingUnitsTests
         Assert.Equal(needsConfirmation, r.NeedsConfirmation);
         Assert.False(string.IsNullOrWhiteSpace(r.Note));
     }
-
-    [Theory]
-    [InlineData(180_000, 80_000, DeclaredUnit.Millimeters)]
-    [InlineData(180, 80, DeclaredUnit.Meters)]
-    [InlineData(1, 1, DeclaredUnit.Unitless)]
-    public void Guess_from_extent_is_only_a_hint(double w, double h, DeclaredUnit expected)
-    {
-        Assert.Equal(expected, DrawingUnits.GuessFromExtent(w, h));
-    }
 }
 
 public class DrawingFingerprintTests

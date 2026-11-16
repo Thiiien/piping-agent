@@ -40,6 +40,8 @@
     <ProjectReference Include="..\PipingAgent.Iso\PipingAgent.Iso.csproj" />
     <!-- Agent Host là tiến trình riêng .NET 8, chỉ cần dựng trước và chép vào thư mục agenthost cạnh plug-in. -->
     <ProjectReference Include="..\PipingAgent.AgentHost\PipingAgent.AgentHost.csproj" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=net8.0" SkipGetTargetFrameworkProperties="true" />
+    <!-- Máy chủ MCP là tiến trình riêng .NET 8, chép vào thư mục mcp cạnh plug-in, S21-01. -->
+    <ProjectReference Include="..\PipingAgent.Mcp\PipingAgent.Mcp.csproj" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=net8.0-windows" SkipGetTargetFrameworkProperties="true" />
   </ItemGroup>
 
   <!-- Chỉ chạy trong lượt build của từng target; lượt ngoài của dự án đa target có OutDir rỗng và sẽ chép vào thư mục mã nguồn. -->
@@ -48,6 +50,13 @@
       <AgentHostFiles Include="..\PipingAgent.AgentHost\bin\$(Configuration)\net8.0\**\*" />
     </ItemGroup>
     <Copy SourceFiles="@(AgentHostFiles)" DestinationFiles="@(AgentHostFiles->'$(OutDir)agenthost\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Name="CopyMcp" AfterTargets="Build" Condition="'$(TargetFramework)' != ''">
+    <ItemGroup>
+      <McpFiles Include="..\PipingAgent.Mcp\bin\$(Configuration)\net8.0-windows\**\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(McpFiles)" DestinationFiles="@(McpFiles->'$(OutDir)mcp\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
   </Target>
 
 </Project>

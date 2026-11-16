@@ -55,13 +55,15 @@ public sealed class OpenAiCompatibleProvider : ILlmProvider
     private readonly string _endpoint;
     private readonly int _maxOutputTokens;
     private readonly double _temperature;
+    private readonly Action<string>? _log;
 
-    public OpenAiCompatibleProvider(string endpoint, string model, string apiKey, int maxOutputTokens, double temperature, int timeoutSec)
+    public OpenAiCompatibleProvider(string endpoint, string model, string apiKey, int maxOutputTokens, double temperature, int timeoutSec, Action<string>? log = null)
     {
         _endpoint = endpoint.TrimEnd('/');
         Model = model;
         _maxOutputTokens = maxOutputTokens;
         _temperature = temperature;
+        _log = log;
         _http = new HttpClient { Timeout = TimeSpan.FromSeconds(Math.Max(30, timeoutSec)) };
         _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", string.IsNullOrEmpty(apiKey) ? "none" : apiKey);
         _http.DefaultRequestHeaders.UserAgent.ParseAdd("PipingAgent/0.1");
@@ -85,46 +87,95 @@ public sealed class OpenAiCompatibleProvider : ILlmProvider
         }
 
         var json = JsonSerializer.Serialize(body, ToolJson.Options);
-        using var content = new StringContent(json, new UTF8Encoding(false), "application/json");
-        using var response = await _http.PostAsync(_endpoint + "/chat/completions", content, cancellation).ConfigureAwait(false);
-        var text = await response.Content.ReadAsStringAsync(cancellation).ConfigureAwait(false);
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new InvalidOperationException($"Mô hình trả về HTTP {(int)response.StatusCode}: {Trim(text, 500)}");
-        }
+        const int maxRetries = 3;
+        var attempt = 0;
 
-        using var doc = JsonDocument.Parse(text);
-        var root = doc.RootElement;
-        var choice = root.GetProperty("choices")[0];
-        var message = choice.GetProperty("message");
-        var turn = new LlmTurn
+        while (true)
         {
-            FinishReason = choice.TryGetProperty("finish_reason", out var fr) ? fr.GetString() ?? string.Empty : string.Empty,
-            RawAssistantMessage = message.Clone(),
-        };
-        if (message.TryGetProperty("content", out var c) && c.ValueKind == JsonValueKind.String) turn.Text = c.GetString();
-        if (message.TryGetProperty("tool_calls", out var calls) && calls.ValueKind == JsonValueKind.Array)
-        {
-            foreach (var call in calls.EnumerateArray())
+            attempt++;
+            using var content = new StringContent(json, new UTF8Encoding(false), "application/json");
+            HttpResponseMessage response;
+            try
             {
-                var fn = call.GetProperty("function");
-                turn.ToolCalls.Add(new LlmToolCall
+                response = await _http.PostAsync(_endpoint + "/chat/completions", content, cancellation).ConfigureAwait(false);
+            }
+            catch (HttpRequestException ex)
+            {
+                if (attempt <= maxRetries && !cancellation.IsCancellationRequested)
                 {
-                    Id = call.TryGetProperty("id", out var id) ? id.GetString() ?? string.Empty : string.Empty,
-                    Name = fn.GetProperty("name").GetString() ?? string.Empty,
-                    ArgumentsJson = fn.TryGetProperty("arguments", out var args) ? (args.ValueKind == JsonValueKind.String ? args.GetString() ?? "{}" : args.GetRawText()) : "{}",
-                });
+                    var delaySec = Math.Pow(2, attempt); // 2s, 4s, 8s
+                    _log?.Invoke($"Lỗi kết nối HTTP: {ex.Message}. Đang thử lại lần {attempt}/{maxRetries} sau {delaySec}s...");
+                    await Task.Delay(TimeSpan.FromSeconds(delaySec), cancellation).ConfigureAwait(false);
+                    continue;
+                }
+
+                var hint = _endpoint.Contains("8645")
+                    ? " Không kết nối được Hermes Proxy tại 127.0.0.1:8645. Hãy kiểm tra ứng dụng Hermes và đảm bảo Hermes Proxy đang chạy."
+                    : string.Empty;
+                throw new InvalidOperationException($"Không kết nối được tới điểm cuối {_endpoint}: {ex.Message}.{hint}", ex);
+            }
+
+            using (response)
+            {
+                var text = await response.Content.ReadAsStringAsync(cancellation).ConfigureAwait(false);
+                var statusCode = (int)response.StatusCode;
+
+                // Các mã lỗi tạm thời: 429 (Too Many Requests / Upstream Capacity), 502, 503, 504
+                if ((statusCode == 429 || statusCode == 502 || statusCode == 503 || statusCode == 504) && attempt <= maxRetries && !cancellation.IsCancellationRequested)
+                {
+                    var delaySec = Math.Pow(2, attempt); // 2s, 4s, 8s
+                    if (response.Headers.RetryAfter != null && response.Headers.RetryAfter.Delta.HasValue)
+                    {
+                        delaySec = Math.Max(1.0, Math.Min(30.0, response.Headers.RetryAfter.Delta.Value.TotalSeconds));
+                    }
+
+                    _log?.Invoke($"Mô hình trả về HTTP {statusCode} ({Trim(text, 120)}). Đang tự động thử lại lần {attempt}/{maxRetries} sau {delaySec}s...");
+                    await Task.Delay(TimeSpan.FromSeconds(delaySec), cancellation).ConfigureAwait(false);
+                    continue;
+                }
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var capacityNotice = statusCode == 429
+                        ? " (Máy chủ mô hình đang quá tải lưu lượng tạm thời. Vui lòng thử lại sau vài giây hoặc chọn mô hình khác trong PA_AGENTCONFIG)"
+                        : string.Empty;
+                    throw new InvalidOperationException($"Mô hình trả về HTTP {statusCode}: {Trim(text, 500)}{capacityNotice}");
+                }
+
+                using var doc = JsonDocument.Parse(text);
+                var root = doc.RootElement;
+                var choice = root.GetProperty("choices")[0];
+                var message = choice.GetProperty("message");
+                var turn = new LlmTurn
+                {
+                    FinishReason = choice.TryGetProperty("finish_reason", out var fr) ? fr.GetString() ?? string.Empty : string.Empty,
+                    RawAssistantMessage = message.Clone(),
+                };
+                if (message.TryGetProperty("content", out var c) && c.ValueKind == JsonValueKind.String) turn.Text = c.GetString();
+                if (message.TryGetProperty("tool_calls", out var calls) && calls.ValueKind == JsonValueKind.Array)
+                {
+                    foreach (var call in calls.EnumerateArray())
+                    {
+                        var fn = call.GetProperty("function");
+                        turn.ToolCalls.Add(new LlmToolCall
+                        {
+                            Id = call.TryGetProperty("id", out var id) ? id.GetString() ?? string.Empty : string.Empty,
+                            Name = fn.GetProperty("name").GetString() ?? string.Empty,
+                            ArgumentsJson = fn.TryGetProperty("arguments", out var args) ? (args.ValueKind == JsonValueKind.String ? args.GetString() ?? "{}" : args.GetRawText()) : "{}",
+                        });
+                    }
+                }
+
+                if (root.TryGetProperty("usage", out var usage))
+                {
+                    turn.InputTokens = usage.TryGetProperty("prompt_tokens", out var pt) ? pt.GetInt32() : 0;
+                    turn.OutputTokens = usage.TryGetProperty("completion_tokens", out var ct) ? ct.GetInt32() : 0;
+                    if (usage.TryGetProperty("prompt_tokens_details", out var d) && d.TryGetProperty("cached_tokens", out var cached)) turn.CachedTokens = cached.GetInt32();
+                }
+
+                return turn;
             }
         }
-
-        if (root.TryGetProperty("usage", out var usage))
-        {
-            turn.InputTokens = usage.TryGetProperty("prompt_tokens", out var pt) ? pt.GetInt32() : 0;
-            turn.OutputTokens = usage.TryGetProperty("completion_tokens", out var ct) ? ct.GetInt32() : 0;
-            if (usage.TryGetProperty("prompt_tokens_details", out var d) && d.TryGetProperty("cached_tokens", out var cached)) turn.CachedTokens = cached.GetInt32();
-        }
-
-        return turn;
     }
 
     public object ToolResultMessage(LlmToolCall call, string resultJson) => new { role = "tool", tool_call_id = call.Id, content = resultJson };

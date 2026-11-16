@@ -54,12 +54,12 @@ Chuỗi xử lý mới, các bước có dấu * dùng lại mã đã có:
 
 ## 4. Kế hoạch
 
-| Sprint | Mục tiêu | Trình diễn |
-|---|---|---|
-| I1 | Bộ đọc PDF vector ra `SourceEntity`; phân loại nét ống, chữ, kích thước; đồ thị trên giấy cho bản mẫu | Dòng lệnh in chuỗi 12 đoạn với trục và kích thước đã gán, tổng khớp neo |
-| I2 | Dựng toạ độ thật từ neo và kích thước; IR 3D; luật khép kín; `PA_BUILD` cho ra ống, co, tê đúng toạ độ E, N, EL | Mở isometric mẫu trong AutoCAD, dựng 3D, toạ độ đầu cuối trùng neo trong 5 mm |
-| I3 | Phụ kiện từ bảng vật tư: côn, mặt bích, van, sockolet; đầu vào DWG isometric; hồ sơ quy ước cho isometric | Hai bản isometric, một PDF một DWG, dựng đủ phụ kiện; bảng vật tư sinh ra khớp bảng trên tờ |
-| I4 | Nhiều tờ nối tiếp qua `SEE ISO`; xuất sang bản vẽ 3D chung; agent giải quyết chỗ mơ hồ; chạy trên bộ isometric thật của khách hàng | Ba tờ nối thành một tuyến liền trong một bản vẽ 3D |
+| Sprint | Mục tiêu | Trình diễn | Trạng thái |
+|---|---|---|---|
+| I1 | Bộ đọc PDF vector ra `SourceEntity`; phân loại nét ống, chữ, kích thước; đồ thị trên giấy cho bản mẫu | Dòng lệnh in chuỗi 12 đoạn với trục và kích thước đã gán, tổng khớp neo | Hoàn thành (10/11/2026) |
+| I2 | Dựng toạ độ thật từ neo và kích thước; IR 3D; luật khép kín; `PA_BUILD` cho ra ống, co, tê đúng toạ độ E, N, EL | Mở isometric mẫu trong AutoCAD, dựng 3D, toạ độ đầu cuối trùng neo trong 5 mm | Hoàn thành (10/11/2026) |
+| I3 | Phụ kiện từ bảng vật tư: côn, mặt bích, van, sockolet; đầu vào DWG isometric; hồ sơ quy ước cho isometric | Hai bản isometric, một PDF một DWG, dựng đủ phụ kiện; bảng vật tư sinh ra khớp bảng trên tờ | Hoàn thành (10/11/2026) |
+| I4 | Nhiều tờ nối tiếp qua `SEE ISO`; xuất sang bản vẽ 3D chung; kiểm thử tự động, bù trừ khe gioăng, xoay tay van, phát hiện thông minh | Ba tờ nối thành một tuyến liền trong một bản vẽ 3D, kiểm thử tự động toàn diện `Iso.Tests` xanh | Hoàn thành (13/11/2026) |
 
 Mỗi sprint hai tuần theo nhịp cũ, nhưng với tốc độ làm ngày 10/11 thì I1 và I2 có thể xong trong vài ngày nếu có thêm vài bản isometric mẫu.
 
@@ -148,7 +148,7 @@ Kết quả: `3E204-1-250A+350A-3D.dwg` 35 khối, 15 ống, 5 co, 2 tê, 13 c�
 
 Cách tự kiểm tra hình: `STLOUT` từng khối trong accoreconsole sau khi dời cả bản vẽ về góc dương, vì `STLOUT` hợp nhất các khối chạm nhau và thất bại khi cổ mặt bích đồng trục với ống, và dịch toạ độ âm; rồi vẽ lại bằng matplotlib.
 
-Giới hạn: vị trí tương đối hai tờ cần tờ 600A hoặc người cho toạ độ; bảng JIS 10K chưa ký xác nhận; chưa có gioăng, bu lông, giá đỡ; tay quay van bướm chưa theo ghi chú `ORIENT HANDLE WEST`; chưa có kiểm thử tự động cho `IsoGraph`.
+Giới hạn: vị trí tương đối hai tờ cần tờ 600A hoặc người cho toạ độ; bảng JIS 10K chưa ký xác nhận; chưa có gioăng, bu lông, giá đỡ. (Các điểm về tay quay van bướm `ORIENT HANDLE WEST` và kiểm thử tự động cho `IsoGraph` đã hoàn thành ngày 13/11/2026, xem mục 11).
 
 ### 10.1 Lệnh PA_ISO trong AutoCAD
 
@@ -164,6 +164,33 @@ AutoCAD thuần không có khái niệm nối giữa hai khối như port trong 
 
 ### 10.3 Thẻ ribbon
 
-`Ribbon/PipingRibbon.cs` tạo thẻ `Piping Agent` bằng AdWindows theo quy ước panel chuẩn của AutoCAD: `RibbonButton` lớn chữ dưới cho lệnh chính, `RibbonRowPanel` với `RibbonRowBreak` xếp cột nhỏ ba hàng cho lệnh phụ, `RibbonSplitButton` cho lệnh có chế độ (`PA_BUILD` Moi/Hientai/Xemtruoc, `PA_CONVERT` cả bản vẽ hoặc `PA_SCANWINDOW`), `RibbonToolTip` có tiêu đề, nội dung và phần mở rộng, `KeyTip` cho từng nút. Mỗi nút gửi `_.PA_xxx ` vào dòng lệnh qua `SendStringToExecute`; nút tách đặt chế độ vào `Commands/CommandPresets` trước khi gửi và lệnh lấy ra ở đầu `Run`, thay vì gửi từ khoá theo dòng lệnh để không còn từ thừa khi lệnh dừng sớm.
+`Ribbon/PipingRibbon.cs` tạo thẻ `Piping Agent` bằng AdWindows theo quy ước panel chuẩn của AutoCAD và nguyên tắc UI/UX Pro Max (dòng thị giác F-pattern từ trái sang phải, phân cấp nút lớn/nhỏ):
+1. **Panel "Trợ lý AI"**: Đặt vị trí đầu tiên bên trái làm trung tâm tương tác AI. Gồm 2 nút lớn 32 px `PA_ASK` (Trò chuyện AI) và `PA_PANEL` (Bảng điều khiển), cùng cột 2 hàng `PA_AGENTCONFIG` (Cấu hình AI) và `PA_MCP` (Cầu nối MCP Live CAD Bridge).
+2. **Panel "Isometric sang 3D"**: Luồng xử lý chính từ tờ ISO. Gồm nút lớn `PA_ISO` (Đọc tờ ISO), nút tách `PA_BUILD` (Dựng 3D với 3 chế độ Bản vẽ mới / Bản đang mở / Xem trước), và cột 2 hàng `PA_PORT` (Cổng nối), `PA_BUILDIR` (Nạp IR).
+3. **Panel "Mặt bằng"**: Quy trình xử lý mặt bằng 2D. Gồm nút tách `PA_CONVERT` (Nhận diện Cả bản vẽ / Cửa sổ `PA_SCANWINDOW`), nút lớn `PA_CHECK` (Kiểm tra luật), và cột 3 hàng `PA_FIX` (Sửa), `PA_WAIVE` (Miễn trừ), `PA_RERUN` (Chạy lại).
+4. **Panel "Tiện ích"**: Cột 2 hàng tiện ích hệ thống gồm `PA_HELLO` (Kiểm tra hệ thống) và `PA_RIBBON` (Làm mới Ribbon khi đổi Workspace).
 
-`Ribbon/RibbonIcons.cs` vẽ 15 biểu tượng bằng hình học WPF trên lưới 32 đơn vị nét 2, phong cách biểu tượng mặc định của AutoCAD: nét xám `#4A4A4A`, nhấn xanh Autodesk `#0696D7`, cảnh báo cam, mặt trắng; nền tối (`COLORTHEME` = 0) đổi sang nét `#D9D9D9` nhấn `#40B4FF`. Đổi `COLORTHEME` thì chỉ vẽ lại ảnh, đổi `WSCURRENT` thì tạo lại thẻ. Bộ biểu tượng đã xem bằng chương trình dựng ảnh ngoài AutoCAD ở cả hai nền. Mọi chỗ chạm AdWindows nằm trong phương thức `NoInlining` sau kiểm tra `IsGuiAvailable`, để accoreconsole vẫn nạp được; đã thử headless. Phần hiện thật trên ribbon AutoCAD chưa tự kiểm tra được, người dùng xác nhận. Lệnh `PA_RIBBON` hiện lại thẻ.
+Mỗi nút đều có 2 tầng tooltip (`RibbonToolTip` có tiêu đề, nội dung ngắn gọn và phần mở rộng), `KeyTip` 2 ký tự độc nhất không trùng lặp. Mỗi nút gửi `_.PA_xxx ` vào dòng lệnh qua `SendStringToExecute`; nút tách đặt chế độ vào `Commands/CommandPresets` trước khi gửi.
+
+`Ribbon/RibbonIcons.cs` vẽ 15 biểu tượng hình học WPF vector trên lưới 32 đơn vị nét 2, phong cách biểu tượng mặc định của AutoCAD: nét xám `#4A4A4A`, nhấn xanh Autodesk `#0696D7`, cảnh báo cam, mặt trắng; nền tối (`COLORTHEME` = 0) đổi sang nét `#D9D9D9` nhấn `#40B4FF`. Tự động lắng nghe `COLORTHEME` để đổi bảng màu và `WSCURRENT` để tái tạo thẻ. Lệnh `PA_RIBBON` cho phép người dùng kích hoạt lại thẻ bất kỳ lúc nào.
+
+## 11. Hoàn tất Sprint I4 và kiểm thử tự động, ngày 13/11/2026
+
+Bốn hạng mục then chốt của Sprint I4 đã hoàn thành và kiểm chứng:
+
+1. **Bộ kiểm thử tự động toàn diện `Iso.Tests` (`tests/Iso.Tests`)**:
+   - Thêm dự án xUnit kiểm thử riêng cho hệ isometric, tham chiếu `PipingAgent.Iso`, `PipingAgent.Core`, `PipingAgent.Dxf`, `PipingAgent.Hosting`.
+   - 8 bài kiểm thử tự động phủ kín: `IsoDxfReaderTests` (nhận diện ISOGEN, bóc tách DWG), `IsoPdfReaderTests` (bóc tách vector PDF), `IsoPipelineTests` (chạy trọn vẹn từ PDF `335-PA-286` kiểm tra khép kín sai số < 5mm, DWG `250A` trích xuất BOM/phụ kiện, DWG `350A` bóc tách đoạn lệch 45° 761mm), `IsoMergeTests` (gộp nhiều tờ với tiền tố `s1-`, `s2-`, tạo ống tham chiếu stub độ tin cậy 0.3, sinh báo cáo đối chiếu).
+   - Tổng kiểm thử toàn giải pháp đạt **263/263 kiểm thử xanh** (Architecture: 6, Core: 221, Dxf: 28, Iso: 8), 0 lỗi, 0 cảnh báo.
+
+2. **Bóc tách ghi chú xoay tay van (`ORIENT HANDLE <DIR>`)**:
+   - `IsoGraph` tự động quét các ghi chú văn bản dạng `ORIENT HANDLE WEST/EAST/NORTH/SOUTH/UP/DOWN` gần ô thứ tự van (bán kính < 60 điểm), gán thuộc tính `handle_orient` và vectơ `branch` cho cấu kiện.
+   - `BuildPlanExtras` nạp hướng nhánh cho van, và `AcadBuilder` xoay cổ van, hộp số và tay quay theo đúng hướng thực tế trên bản vẽ 3D. Đã kiểm chứng thực tế trên tờ `3E204-1-350A-SUS_02`.
+
+3. **Tự động phát hiện và cảnh báo thông minh giữa 2D và Isometric**:
+   - `PA_SCAN` / `PA_CONVERT` kiểm tra `IsoDxfReader.LooksLikeIsogen` (lớp `PIPE` kết hợp `DIMLINES`/`ISOTEXT`/`MATLIST`). Nếu phát hiện bản vẽ là isometric ISOGEN, lệnh chủ động cảnh báo và gợi ý người dùng chuyển sang lệnh `PA_ISO` để tránh chạy sai mô hình 2D.
+   - `PA_ISO` nhắc người dùng nếu bản vẽ không mang đặc trưng ISOGEN để gợi ý dùng `PA_SCAN`.
+
+4. **Từ điển thuật ngữ miền `GLOSSARY.md`**:
+   - Khởi tạo `GLOSSARY.md` tại gốc kho mã theo phương pháp Domain Modeling, chuẩn hóa ngôn ngữ giao tiếp thống nhất giữa hai miền bình đồ mặt bằng (2D Layout) và không gian trục đo (Isometric/ISOGEN).
+

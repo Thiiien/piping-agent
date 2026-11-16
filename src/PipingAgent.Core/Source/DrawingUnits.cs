@@ -95,20 +95,6 @@ namespace PipingAgent.Core.Source
             }
         }
 
-        /// <summary>
-        /// Gợi ý đơn vị từ kích thước bản vẽ khi không khai báo. Mặt bằng đường ống thường rộng 10 đến 500 m.
-        /// Chỉ là gợi ý để hỏi người dùng, không tự quyết.
-        /// </summary>
-        public static DeclaredUnit GuessFromExtent(double width, double height)
-        {
-            var size = Math.Max(width, height);
-            if (size <= 0 || double.IsNaN(size) || double.IsInfinity(size)) return DeclaredUnit.Unitless;
-            if (size >= 5_000) return DeclaredUnit.Millimeters;     // 5 m trở lên tính bằng mm
-            if (size >= 500) return DeclaredUnit.Centimeters;
-            if (size >= 5) return DeclaredUnit.Meters;              // 5 đến 500 m tính bằng m
-            return DeclaredUnit.Unitless;
-        }
-
         public static string Name(DeclaredUnit unit)
         {
             switch (unit)

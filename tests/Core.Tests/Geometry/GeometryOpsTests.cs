@@ -94,7 +94,6 @@ public class GeometryOpsTests
     {
         var seg = Seg(0, 0, 10, 0);
         Assert.Equal(expected, seg.DistanceTo(new Point2(px, py)), 9);
-        Assert.Equal(expected, GeometryOps.DistancePointToSegment(new Point2(px, py), seg.A, seg.B), 9);
     }
 
     [Fact]
@@ -111,27 +110,7 @@ public class GeometryOpsTests
         Assert.True(seg.Contains(new Point2(50, 0.005), Tol));
         Assert.True(seg.ContainsInterior(new Point2(50, 0), Tol));
         Assert.False(seg.ContainsInterior(new Point2(100, 0), Tol));
-        Assert.True(seg.TouchesEndpoint(new Point2(100.004, 0), Tol));
         Assert.False(seg.Contains(new Point2(50, 0.02), Tol));
-    }
-
-    [Fact]
-    public void Collinearity_of_three_points()
-    {
-        Assert.True(GeometryOps.AreCollinear(new Point2(0, 0), new Point2(5, 5), new Point2(10, 10), Tol));
-        Assert.False(GeometryOps.AreCollinear(new Point2(0, 0), new Point2(5, 5.1), new Point2(10, 10), Tol));
-        // Hai điểm trùng nhau luôn thẳng hàng với điểm thứ ba.
-        Assert.True(GeometryOps.AreCollinear(new Point2(0, 0), new Point2(0, 0), new Point2(7, -3), Tol));
-        // Điểm giữa lệch nhỏ nhưng hai đầu rất xa: lấy cặp xa nhất làm trục.
-        Assert.True(GeometryOps.AreCollinear(new Point2(0, 0), new Point2(50000, 0.005), new Point2(100000, 0), Tol));
-    }
-
-    [Fact]
-    public void Segments_collinear_check()
-    {
-        Assert.True(Seg(0, 0, 10, 0).IsCollinearWith(Seg(20, 0, 30, 0.005), Tol));
-        Assert.False(Seg(0, 0, 10, 0).IsCollinearWith(Seg(20, 1, 30, 1), Tol));
-        Assert.False(Seg(0, 0, 10, 0).IsCollinearWith(Seg(5, 5, 5, 5), Tol));
     }
 
     [Fact]

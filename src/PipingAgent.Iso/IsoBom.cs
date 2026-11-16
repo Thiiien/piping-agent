@@ -38,6 +38,9 @@ namespace PipingAgent.Iso
         public Point2? Target { get; set; }
 
         public string Handle { get; set; } = string.Empty;
+
+        /// <summary>Ghi chú gắn kèm nếu có, ví dụ hướng tay van ORIENT HANDLE WEST.</summary>
+        public string? Note { get; set; }
     }
 
     /// <summary>Đọc bảng vật tư và ô số thứ tự, I3. Hai bố cục đã gặp: bảng DESCRIPTION, SIZE, QTY cỡ inch và bảng ISOGEN PT.NO, DESCRIPTION, SIZE(MM), Q'TY.</summary>

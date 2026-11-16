@@ -67,9 +67,6 @@ namespace PipingAgent.Core.Geometry
             return Math.Abs(d.Cross(p - lineA)) / l;
         }
 
-        /// <summary>Khoảng cách từ điểm tới đoạn thẳng.</summary>
-        public static double DistancePointToSegment(Point2 p, Point2 a, Point2 b) => new Segment2(a, b).DistanceTo(p);
-
         /// <summary>Khoảng cách ngắn nhất giữa hai đoạn thẳng. Bằng 0 nếu cắt nhau.</summary>
         public static double DistanceSegmentToSegment(Segment2 s, Segment2 t)
         {
@@ -98,18 +95,6 @@ namespace PipingAgent.Core.Geometry
             d = Math.Min(d, DistanceSegmentToSegment(s, new Segment2(c2, c3)));
             d = Math.Min(d, DistanceSegmentToSegment(s, new Segment2(c3, c0)));
             return d;
-        }
-
-        /// <summary>Ba điểm thẳng hàng trong dung sai. Hai điểm trùng nhau luôn thẳng hàng với điểm thứ ba.</summary>
-        public static bool AreCollinear(Point2 a, Point2 b, Point2 c, Tolerance tolerance)
-        {
-            // Lấy cặp xa nhau nhất làm đường thẳng để tránh sai số khi hai điểm sát nhau.
-            var ab = a.DistanceTo(b);
-            var bc = b.DistanceTo(c);
-            var ac = a.DistanceTo(c);
-            if (ab >= bc && ab >= ac) return DistancePointToLine(c, a, b) <= tolerance.Length;
-            if (bc >= ab && bc >= ac) return DistancePointToLine(a, b, c) <= tolerance.Length;
-            return DistancePointToLine(b, a, c) <= tolerance.Length;
         }
 
         /// <summary>

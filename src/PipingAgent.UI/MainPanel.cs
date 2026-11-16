@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace PipingAgent.UI
 {
@@ -54,6 +56,7 @@ namespace PipingAgent.UI
 
             var tabs = new TabControl();
             tabs.Items.Add(new TabItem { Header = "Tổng quan", Content = BuildOverview() });
+            tabs.Items.Add(new TabItem { Header = "Trò chuyện", Content = BuildChat() });
             tabs.Items.Add(new TabItem { Header = "Vấn đề", Content = BuildIssues() });
             tabs.Items.Add(new TabItem { Header = "Tuyến ống", Content = BuildLines() });
             tabs.Items.Add(new TabItem { Header = "Đoạn chạy", Content = BuildRuns() });
@@ -103,6 +106,8 @@ namespace PipingAgent.UI
             panel.Children.Add(grid);
             return panel;
         }
+
+        private UIElement BuildChat() => new ChatView(Model);
 
         private UIElement BuildIssues()
         {
@@ -258,21 +263,21 @@ namespace PipingAgent.UI
             list.SetBinding(ItemsControl.ItemsSourceProperty, new Binding(itemsPath));
             return list;
         }
+    }
 
-        private sealed class NotConverter : IValueConverter
-        {
-            public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) => !(value is bool b && b);
+    internal sealed class NotConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) => !(value is bool b && b);
 
-            public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) => !(value is bool b && b);
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) => !(value is bool b && b);
+    }
 
-        private sealed class BoolToVisibilityConverter : IValueConverter
-        {
-            public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) =>
-                value is bool b && b ? Visibility.Visible : Visibility.Collapsed;
+    internal sealed class BoolToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) =>
+            value is bool b && b ? Visibility.Visible : Visibility.Collapsed;
 
-            public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) =>
-                value is Visibility v && v == Visibility.Visible;
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) =>
+            value is Visibility v && v == Visibility.Visible;
     }
 }

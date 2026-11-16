@@ -217,13 +217,14 @@ namespace PipingAgent.AutoCAD.Builder
             double Dim(string key, double fallback) => c.Dims.TryGetValue(key, out var v) && v > 0 ? v * k : fallback * k;
             var pipeR = c.Od / 2 * k;
             var up = Math.Abs(axis.Z) < 0.9 ? AcVector3d.ZAxis : AcVector3d.XAxis;
+            var dir = c.BranchDirection.HasValue ? V(c.BranchDirection.Value).GetNormal() : up;
 
             switch (c.Type)
             {
                 case "flange":
                     return Flange(c, center, axis, length, Dim, pipeR);
                 case "valve_butterfly":
-                    return ButterflyValve(center, axis, up, length, Dim, pipeR);
+                    return ButterflyValve(center, axis, dir, length, Dim, pipeR);
                 case "reducer":
                 {
                     var body = new Solid3d();
@@ -236,7 +237,6 @@ namespace PipingAgent.AutoCAD.Builder
                 case "nipple":
                 case "instrument":
                 {
-                    var dir = c.BranchDirection.HasValue ? V(c.BranchDirection.Value).GetNormal() : up;
                     var bossR = Dim("BOSSOD", Math.Max(c.Od * 0.3, 30)) / 2;
                     var bossLen = Dim("BOSSLEN", Math.Max(20, c.Dn * 0.5));
                     var runR = Dim("RUNOD", c.Od) / 2;
@@ -250,7 +250,7 @@ namespace PipingAgent.AutoCAD.Builder
                 }
 
                 default:
-                    return FlangedValve(c, center, axis, up, length, Dim, pipeR);
+                    return FlangedValve(c, center, axis, dir, length, Dim, pipeR);
             }
         }
 

@@ -360,6 +360,23 @@ namespace PipingAgent.Iso
             r.Callouts.AddRange(IsoBom.ReadCallouts(texts, thinPairs, box => IsBoxed(box, thin), box => FollowLeader(box, thin, r), pageWidth));
             AssignSegmentSizes(r);
 
+            // 5b. Ghi chú xoay tay van gần ô số thứ tự, ví dụ: ORIENT HANDLE WEST
+            var byItemMap = r.Bom.ToDictionary(b => b.Item, b => b);
+            foreach (var t in texts.Where(t => t.Text != null && Regex.IsMatch(t.Text, @"\b(?:ORIENT\s+)?HANDLE\s+(NORTH|SOUTH|EAST|WEST|UP|DOWN)\b", RegexOptions.IgnoreCase)))
+            {
+                var m = Regex.Match(t.Text!, @"\b(?:ORIENT\s+)?HANDLE\s+(NORTH|SOUTH|EAST|WEST|UP|DOWN)\b", RegexOptions.IgnoreCase);
+                var dirName = m.Groups[1].Value.ToUpperInvariant();
+                r.Notes.Add(t.Text!);
+                var tp = t.Center!.Value.Plan;
+                var nearCallout = r.Callouts.Where(c => byItemMap.TryGetValue(c.Item, out var b) && b.Type.StartsWith("valve", StringComparison.Ordinal))
+                    .OrderBy(c => c.BoxAt.DistanceTo(tp))
+                    .FirstOrDefault();
+                if (nearCallout != null && nearCallout.BoxAt.DistanceTo(tp) < 60)
+                {
+                    nearCallout.Note = dirName;
+                }
+            }
+
             // 6. Kích thước: đường kích thước có hai đầu gióng về hai đỉnh của mạng thì là khoảng cách giữa hai đỉnh đó.
             AssignDimensions(r, thin, texts, pageWidth, pageHeight);
             ResolveSpans(r);
@@ -1465,6 +1482,26 @@ namespace PipingAgent.Iso
                 ["length"] = new AttributeValue { Value = length.ToString(CultureInfo.InvariantCulture), By = catalog.HasValue ? ComponentDims.Source : "default" },
             };
             if (row.Dn2.HasValue) attributes["dn2"] = new AttributeValue { Value = row.Dn2.Value.ToString(CultureInfo.InvariantCulture), By = "bom" };
+            if (!string.IsNullOrEmpty(call.Note))
+            {
+                attributes["handle_orient"] = new AttributeValue { Value = call.Note!, By = "text" };
+                Vector3? v = null;
+                switch (call.Note!.ToUpperInvariant())
+                {
+                    case "WEST": v = new Vector3(-1, 0, 0); break;
+                    case "EAST": v = new Vector3(1, 0, 0); break;
+                    case "NORTH": v = new Vector3(0, 1, 0); break;
+                    case "SOUTH": v = new Vector3(0, -1, 0); break;
+                    case "UP": v = new Vector3(0, 0, 1); break;
+                    case "DOWN": v = new Vector3(0, 0, -1); break;
+                }
+
+                if (v.HasValue)
+                {
+                    attributes["branch"] = new AttributeValue { Value = string.Format(CultureInfo.InvariantCulture, "{0},{1},{2}", v.Value.X, v.Value.Y, v.Value.Z), By = "text" };
+                }
+            }
+
             return new Component
             {
                 Id = "cmp-" + n.ToString("000", CultureInfo.InvariantCulture),
@@ -1499,7 +1536,7 @@ namespace PipingAgent.Iso
                 u = u.Normalized();
                 Component? bestC = null;
                 var bestScore = double.MaxValue;
-                foreach (var c in model.Components.Where(c => c.Attributes["length"].By == "default" || c.Attributes["length"].By == ComponentDims.Source))
+                foreach (var c in model.Components.Where(c => c.Attributes != null && c.Attributes.TryGetValue("length", out var la) && (la.By == "default" || la.By == ComponentDims.Source)))
                 {
                     var target = targets[c.Id];
                     foreach (var ax in new[] { IsoAxis.East, IsoAxis.North, IsoAxis.Up })
@@ -1522,6 +1559,7 @@ namespace PipingAgent.Iso
 
                 if (bestC == null) continue;
                 bestC.Length = d.Value;
+                bestC.Attributes ??= new Dictionary<string, AttributeValue>(StringComparer.Ordinal);
                 bestC.Attributes["length"] = new AttributeValue { Value = d.Value.ToString(CultureInfo.InvariantCulture), By = "dimension", SourceHandle = d.Handle };
             }
         }

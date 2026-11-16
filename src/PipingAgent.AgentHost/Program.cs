@@ -39,15 +39,26 @@ if (!config.Enabled)
     return 3;
 }
 
-ILlmProvider provider = new OpenAiCompatibleProvider(config.Endpoint!, config.Model!, config.ResolveApiKey(), config.MaxOutputTokens ?? 4000, config.Temperature ?? 0, config.TimeoutSec ?? 180);
-var registry = ReadOnlyTools.Register(new ToolRegistry());
+ILlmProvider provider = new OpenAiCompatibleProvider(
+    config.Endpoint!,
+    config.Model!,
+    config.ResolveApiKey(),
+    config.MaxOutputTokens ?? 4000,
+    config.Temperature ?? 0,
+    config.TimeoutSec ?? 180,
+    msg => Log(new { ev = "llm_retry", message = msg }));
+var registry = ActionTools.Register(ProfileDraftTools.Register(ReadOnlyTools.Register(new ToolRegistry())));
 Log(new { ev = "host_start", config = config.Describe(), tools = registry.Tools.Count });
 
 var selfTest = Arg("--selftest");
 if (selfTest != null)
 {
     // Chế độ tự thử: công cụ chạy ngay trong tiến trình trên một tệp DXF, không cần AutoCAD. Dùng cho kiểm thử tích hợp.
-    var context = new ToolContext();
+    var context = new ToolContext
+    {
+        AllowAction = true,
+        ApplyMutationExecutor = p => (true, "Đã áp dụng đề xuất trong chế độ selftest."),
+    };
     var drawing = Arg("--drawing");
     if (drawing != null)
     {

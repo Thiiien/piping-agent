@@ -13,6 +13,7 @@ using PipingAgent.Core.Geometry;
 using PipingAgent.Core.Ir;
 using PipingAgent.Core.Recognition;
 using PipingAgent.Core.Source;
+using PipingAgent.Iso;
 
 namespace PipingAgent.AutoCAD.Commands
 {
@@ -66,6 +67,21 @@ namespace PipingAgent.AutoCAD.Commands
             var selected = SelectedHandles(context.Editor);
             var reader = new AcadDrawingReader(context.Database, context.Transaction, onlyHandles: selected);
             var entities = Report(context, reader, selected == null ? "cả không gian mô hình" : $"{selected.Count} đối tượng đã chọn", null);
+            if (selected == null && IsoDxfReader.LooksLikeIsogen(entities))
+            {
+                context.Write("Piping Agent: Bản vẽ có đặc trưng Isometric ISOGEN (các lớp PIPE, DIMLINES, ISOTEXT, MATLIST). Khuyến nghị chạy lệnh PA_ISO để xử lý chính xác.");
+                var pko = new PromptKeywordOptions("\nBản vẽ có dạng Isometric. Vẫn tiếp tục quét 2D Layout? [Tieptuc/Huy] ") { AllowNone = true };
+                pko.Keywords.Add("Tieptuc");
+                pko.Keywords.Add("Huy");
+                pko.Keywords.Default = "Huy";
+                var res = context.Editor.GetKeywords(pko);
+                if (res.Status != PromptStatus.OK || res.StringResult != "Tieptuc")
+                {
+                    context.Write("Piping Agent: Đã hủy quét 2D. Hãy gõ lệnh PA_ISO để xử lý bản vẽ isometric này.");
+                    return;
+                }
+            }
+
             Recognize(context, reader, entities);
         }
 

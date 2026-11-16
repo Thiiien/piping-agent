@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -24,6 +23,27 @@ namespace PipingAgent.Tools
         public PipeCatalog? Catalog { get; set; }
 
         public ConventionProfile? Profile { get; set; }
+
+        /// <summary>Hồ sơ quy ước nháp do agent đề xuất và lưu tạm trong phiên, S8-05.</summary>
+        public ConventionProfile? DraftProfile { get; set; }
+
+        /// <summary>Hàm chạy thử hồ sơ nháp để tính chỉ số tuỳ biến nếu có.</summary>
+        public Func<ConventionProfile, object>? TestProfileRunner { get; set; }
+
+        /// <summary>Cờ bảo mật cho phép công cụ can thiệp bản vẽ (Action Tools), mặc định false (ADR-12).</summary>
+        public bool AllowAction { get; set; }
+
+        /// <summary>Bảng các đề xuất can thiệp bản vẽ đang lưu trong bộ nhớ tạm theo ProposalId.</summary>
+        public Dictionary<string, MutationProposal> Proposals { get; } = new Dictionary<string, MutationProposal>(StringComparer.OrdinalIgnoreCase);
+
+        /// <summary>Bộ thực thi đề xuất can thiệp trên luồng chính AutoCAD.</summary>
+        public Func<MutationProposal, (bool Ok, string Message)>? ApplyMutationExecutor { get; set; }
+
+        /// <summary>Đường dẫn hoặc tên bản vẽ hiện tại (Document Target Binding, ADR-14).</summary>
+        public string? DocumentPath { get; set; }
+
+        /// <summary>Dấu vân tay hình học của bản vẽ (ADR-14).</summary>
+        public string? DocumentFingerprint { get; set; }
     }
 
     /// <summary>Bảy công cụ chỉ đọc trên bản vẽ và năm công cụ trên IR và danh mục, S7-02 và S7-03, mục 8.2.</summary>
@@ -173,7 +193,7 @@ namespace PipingAgent.Tools
             if (center == null || !center.Bounds.HasValue) return ToolResult.Fail($"Không có đối tượng handle '{handle}'.", "Lấy handle từ drawing_sample_entities hoặc drawing_sample_texts.");
             var box = center.Bounds.Value.Expand(radius);
             var near = c.Entities.Where(e => e != center && e.Bounds.HasValue && e.Bounds.Value.Intersects(box))
-                .Select(e => new { dist = Math.Round(center.Bounds.Value.DistanceTo(e.Bounds.Value.Center), 1), e })
+                .Select(e => new { dist = Math.Round(center.Bounds.Value.DistanceTo(e.Bounds!.Value.Center), 1), e })
                 .Where(x => x.dist <= radius)
                 .OrderBy(x => x.dist).ThenBy(x => x.e.Handle, StringComparer.Ordinal).ToList();
             return ToolResult.Success(new { center = Brief(center), total = near.Count, entities = near.Take(limit).Select(x => new { distanceMm = x.dist, entity = Brief(x.e) }) });

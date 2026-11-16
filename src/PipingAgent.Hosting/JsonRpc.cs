@@ -173,7 +173,14 @@ namespace PipingAgent.Hosting
 
             if (msg.IsNotification)
             {
-                NotificationHandler?.Invoke(msg.Method!, msg.Params);
+                try
+                {
+                    NotificationHandler?.Invoke(msg.Method!, msg.Params);
+                }
+                catch
+                {
+                    // Thông báo ngoại vi không được làm đứt luồng JSON-RPC
+                }
                 return;
             }
 

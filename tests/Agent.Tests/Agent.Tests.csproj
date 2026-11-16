@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="xunit" Version="2.5.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\PipingAgent.Core\PipingAgent.Core.csproj" />
+    <ProjectReference Include="..\..\src\PipingAgent.Tools\PipingAgent.Tools.csproj" />
+    <ProjectReference Include="..\..\src\PipingAgent.Hosting\PipingAgent.Hosting.csproj" />
+    <ProjectReference Include="..\..\src\PipingAgent.Dxf\PipingAgent.Dxf.csproj" />
+    <ProjectReference Include="..\..\src\PipingAgent.AgentHost\PipingAgent.AgentHost.csproj" />
+    <ProjectReference Include="..\..\src\PipingAgent.UI\PipingAgent.UI.csproj" />
+    <ProjectReference Include="..\..\src\PipingAgent.Mcp\PipingAgent.Mcp.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\data\profiles\*.json" Link="profiles\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\data\catalog\*.json" Link="catalog\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\Dxf.Tests\Data\piping_plan_2d.dxf" Link="Data\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

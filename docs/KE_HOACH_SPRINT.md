@@ -1,4 +1,4 @@
-> **Tài liệu trước pivot.** Từ 10/11/2026 sản phẩm thu hẹp thành tờ isometric sang 3D, xem `docs/CHUYEN_HUONG_ISOMETRIC.md`. Tài liệu này mô tả hướng mặt bằng 2D cũ và chưa cập nhật; mã nguồn vẫn trích dẫn số mục của nó nên giữ nguyên.
+> **Tài liệu trước pivot.** Từ 10/11/2026 sản phẩm thu hẹp thành tờ isometric sang 3D (các sprint I1 đến I4 đã hoàn thành toàn diện, xem `docs/CHUYEN_HUONG_ISOMETRIC.md`). Các sprint giai đoạn 2 (Agent AI, Sprint 7+) sẽ tiếp tục triển khai trên nền mô hình Isometric và Piping IR. Tài liệu này mô tả hướng mặt bằng 2D cũ và chưa cập nhật; mã nguồn vẫn trích dẫn số mục của nó nên giữ nguyên.
 
 # Kế hoạch sprint dự án Piping Agent
 
@@ -632,9 +632,11 @@ Kết quả so hai bộ đọc đã đạt tiêu chí trình diễn cuối sprin
 
 ### Sprint 8: vòng lặp agent và chế độ lập hồ sơ
 
+**Trạng thái: HOÀN TẤT** (Toàn bộ 279 bài kiểm tra tự động vượt qua 100%, 0 lỗi, 0 cảnh báo).
+
 **Mục tiêu.** Agent tự khảo sát một bản vẽ và đề xuất hồ sơ quy ước. Người dùng theo dõi từng bước và duyệt.
 
-**Trình diễn cuối sprint.** Mở bản vẽ mẫu, không có hồ sơ. Bấm "Đề xuất hồ sơ". Thẻ Trò chuyện hiện từng bước agent làm. Kết thúc, người dùng xem hồ sơ đề xuất kèm lý do từng ánh xạ, duyệt, rồi chạy chuyển đổi.
+**Trình diễn cuối sprint.** Mở bản vẽ mẫu, không có hồ sơ. Bấm "Đề xuất hồ sơ". Thẻ Trò chuyện hiện từng bước agent làm. Kết thúc, người dùng xem hồ sơ đề xuất kèm lý do từng ánh xạ, duyệt, rồi chạy chuyển đổi. Đã kiểm thử tự động 100% offline bằng `MockLlmProvider` và kiểm thử UI logic `PanelViewModelTests`.
 
 | Mã | Việc | Kết quả phải có | Vai trò | Công | Phụ thuộc | Truy vết |
 |---|---|---|---|---|---|---|

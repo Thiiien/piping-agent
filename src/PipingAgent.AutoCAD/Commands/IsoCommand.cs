@@ -4,9 +4,6 @@ using System.Linq;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Runtime;
 using PipingAgent.Core.Ir;
-using PipingAgent.Core.Recognition;
-using PipingAgent.Core.Rules;
-using PipingAgent.Core.Source;
 using PipingAgent.Iso;
 
 namespace PipingAgent.AutoCAD.Commands
@@ -42,6 +39,10 @@ namespace PipingAgent.AutoCAD.Commands
             // Hồ sơ của phiên là hồ sơ mặt bằng 2D; tờ iso dùng hồ sơ iso-default như CLI để hai đường cho cùng kết quả.
             var run = IsoPipeline.Run(path, PluginApp.Sessions?.Catalog);
             var r = run.Analysis;
+            if (!run.Isogen && r.Segments.Count == 0)
+            {
+                context.Write("Piping Agent: Bản vẽ không có đặc trưng Isometric ISOGEN. Nếu đây là bình đồ mặt bằng 2D, hãy dùng lệnh PA_SCAN hoặc PA_CONVERT.");
+            }
             context.Write($"Piping Agent: {Path.GetFileName(path)} {(run.IsDwg ? "DWG/DXF" : "PDF")}{(run.Isogen ? " kiểu ISOGEN" : "")}, tuyến {r.LineTag}, DN{r.Dn}, nét ống {r.Segments.Count(s => !s.Bridged)}, góc co {r.Corners}, neo {r.Anchors.Count}.");
             context.Write($"Piping Agent: đồ thị 3D {run.GraphStats}; cấu kiện {run.Model.Components.Count}, bảng vật tư {r.Bom.Count} dòng.");
 
